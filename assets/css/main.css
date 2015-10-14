@@ -1,0 +1,134 @@
+/* Bootstrap CSS */
+@import url("./bootstrap.min.css");
+
+/* Audiowide font family */
+@font-face 
+{
+  font-family: 'Audiowide';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/Audiowide-Regular.ttf');
+}
+
+body {font-family: 'Audiowide';}
+
+/* Reduced Home Icon */
+.icon-home
+{
+    background: url('../images/site/ship-icon.png') 0 0 no-repeat;
+    background-size:30px 30px;
+    height: 30px;
+    line-height: 30px;
+    width: 30px;
+    vertical-align: middle;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    border-bottom-width: 10px;
+}
+
+.navbar-brand 
+{ 
+    padding: 10px 15px;
+    padding-top: 7px;
+    border-bottom-width: 10px;
+    margin-bottom: 2px;
+    margin-left: 0px!important;
+}
+
+/* Content Styling */
+.buffer { margin-top: 51px; }
+
+ul, ol { list-style-type: square; }
+
+.panel-body { padding: 20px; }
+.big-panel { min-height:300px!important; }
+.panel { margin-bottom: 0; }
+
+.container-fluid > section > .panel { width: 95%; }
+.container-fluid { width: 100%; padding: 0; }
+
+#product-form { font-size: 80%; }
+#product-form select { font-size: 95%; }
+
+.color-panel { display:flex;justify-content:center;align-items:center; padding: 50px 100px; }
+.color-panel.dark-green-panel { background-color: #369A41; }
+.color-panel.med-green-panel { background-color: #81b33a; }
+.color-panel.light-green-panel { background-color: #57EC67; }
+.color-panel.white-panel { background-color: #FFFFFF; }
+
+/* Toggling styles */
+.flip:hover { cursor:pointer; }
+.faq-panel { display:none; }
+.toggle-panel { margin-bottom: 15px; }
+
+/* Input and validation styles */
+.focus-input { background-color: #EEF6FF; }
+.has-error input { background-color: #F6D3D3; }
+.has-success input { background-color: #D4F5D3; }
+
+/* Success page styles */
+#success-table td.heading { font-weight: bold; }
+
+/* Image captions */
+div.desc
+{
+    background-color: #000000;
+    color: #FFFFFF;
+    font-family:'Audiowide';
+    opacity: 0.3;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    width: 100%;
+}
+
+.wrapper
+{
+    width: 100%;
+    padding: 0px;
+}
+
+.img-container { padding:0 15px; }
+.no-padding { padding:0px; }
+
+/* Image animation */
+
+.animate-button
+{
+    font-family: 'Audiowide';
+    font-size: 5em;
+    min-height:200px;
+    border: 10px solid!important;
+    border-color: #d9534f!important;
+    background: url("../img/Mars-Mountain.jpg") no-repeat center center; 
+    background-size: cover;
+    white-space: normal;
+    line-height:1em;
+}
+
+.animate-button:hover
+{
+    filter: grayscale(20%);
+    -webkit-filter: grayscale(20%);
+    -moz-filter: grayscale(20%);
+    -o-filter: grayscale(20%);
+    -ms-filter: grayscale(20%);
+}
+
+.animate-button:active
+{
+    filter: grayscale(50%);
+    -webkit-filter: grayscale(50%);
+    -moz-filter: grayscale(50%);
+    -o-filter: grayscale(50%);
+    -ms-filter: grayscale(50%);
+    background: url("../img/Mars-Mountain.jpg") no-repeat center center; 
+    background-size: cover;
+}
+
+
+.desc.colony { height: 100%; font-size: 2em; }
+img.colony { position: relative; opacity: 0.10;  }
+
+img.dismissable-desc:hover { cursor: pointer; }

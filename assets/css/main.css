@@ -1,14 +1,6 @@
 /* Bootstrap and Fonts CSS */
 @import url("./bootstrap.min.css");
-
-/* Audiowide font family */
-@font-face 
-{
-  font-family: 'Audiowide';
-  font-style: normal;
-  font-weight: 400;
-  src: url('../fonts/Audiowide-Regular.ttf');
-}
+@import url("./fonts.css");
 
 body {font-family: 'Audiowide';}
 

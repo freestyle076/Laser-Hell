@@ -27,7 +27,6 @@ Splash.prototype =
     loadScripts: function() 
     {
         // Vendor libraries
-        game.load.script('WebFont', 'vendor/webfontloader.min.js');
         
         // Game States
         game.load.script('gamemenu','src/states/gamemenu.js');
@@ -69,7 +68,7 @@ Splash.prototype =
         
         // Backgrounds
         game.load.image('game', 'assets/backgrounds/game.png');
-        game.load.image('main-screen', 'assets/backgrounds/main-screen.png');
+        game.load.image('game-menu', 'assets/backgrounds/main-screen.png');
         
         // Objects
         
@@ -83,14 +82,13 @@ Splash.prototype =
     // ===========================================================================================================================
     loadFonts: function() 
     {
-        WebFontConfig = 
-        {
+        WebFont.load
+        ({ 
             custom: 
             {
-                families: ['Spac3Tech'],
-                urls: ['assets/css/fonts.css']
+              families: ['Tron']
             }
-        };
+        });
     },
     
     // ===========================================================================================================================
@@ -127,14 +125,15 @@ Splash.prototype =
         // Load everything
         this.loadScripts();
         this.loadImages();
-        this.loadFonts();
         this.loadSounds();
+        this.loadFonts();
+        
     },
     
     // ===========================================================================================================================
     // CREATE
     // --------------------------------------------------------------------------------------------------------------------------
-    // Called after everything is ready
+    // Called after everything is ready. Changes label, adds other states, and loads next screen.
     // ===========================================================================================================================
     create: function() 
     {
@@ -150,8 +149,8 @@ Splash.prototype =
         // Load next screen
         setTimeout(function() 
         {
-            //game.state.start("GameMenu");
-        }, 5000);
+            game.state.start("GameMenu");
+        }, 1500);
     },
     
     // ===========================================================================================================================
@@ -179,7 +178,5 @@ Splash.prototype =
         music.play();
     }
 };
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

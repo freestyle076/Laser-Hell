@@ -1,8 +1,17 @@
-/* Spac3Tech font family */
+/* Import font families */
+
 @font-face 
 {
-  font-family: 'Spac3Tech';
-  font-style: normal;
-  font-weight: 400;
-  src: url('../fonts/spac3tech.ttf');
+    font-family: 'Tron';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/tron.otf');
+}
+
+@font-face 
+{
+    font-family: 'Audiowide';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/Audiowide-Regular.ttf');
 }

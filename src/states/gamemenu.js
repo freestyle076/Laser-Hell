@@ -109,7 +109,7 @@ GameMenu.prototype =
         });
         
         // Create options menu option
-        this.addMenuOption("Options", function (target) 
+        this.addMenuOption("Options and Controls", function (target) 
         {
             console.log('You clicked Options!');
         });

@@ -48,8 +48,8 @@ Splash.prototype =
     loadSounds: function() 
     {
         // Music
-        game.load.audio('game-music', 'assets/sounds/music/game-music.mp3');
-        game.load.audio('menu-music', 'assets/sounds/music/menu-music.mp3');
+        game.load.audio('game-music', 'assets/sounds/music/game-music.ogg');
+        game.load.audio('menu-music', 'assets/sounds/music/menu-music.ogg');
         
         // UI Sounds
         
@@ -101,7 +101,7 @@ Splash.prototype =
         // Make loading bar, logo, and status text objects
         this.loadingBar = game.make.sprite(game.world.centerX-(256/2), 400, "loading");
         this.logo = game.make.sprite(game.world.centerX, 100, 'brand');
-        this.status = game.make.text(game.world.centerX, 380, 'Loading...', {fill: "white", font:"30px Audiowide" });
+        this.status = game.make.text(game.world.centerX, 380, 'Loading Assets...', {fill: "white", font:"30px Audiowide" });
         
         // Center these objects (loading bar doesn't need it or it will load from center)
         gameUtils.centerGameObjects([this.logo, this.status]);
@@ -133,24 +133,39 @@ Splash.prototype =
     // ===========================================================================================================================
     // CREATE
     // --------------------------------------------------------------------------------------------------------------------------
-    // Called after everything is ready. Changes label, adds other states, and loads next screen.
+    // Called after everything is ready. Changes label, adds other states, and starts music.
     // ===========================================================================================================================
     create: function() 
     {
-        // Change loading to ready
-        this.status.setText('Ready!');
+        // Change loading to decoding
+        this.status.setText('Decoding Music...');
         
         // Add game states
         this.addGameStates();
         
         // Start music
         this.addGameMusic();
-
-        // Load next screen
-        setTimeout(function() 
+    },
+   
+    // ===========================================================================================================================
+    // UPDATE
+    // --------------------------------------------------------------------------------------------------------------------------
+    // Method that's called over and over again that will make the game stay on this screen until the music is decoded.
+    // ===========================================================================================================================
+    update: function()
+    {
+        // Only move to the next state when the music is decoded
+        if(this.cache.isSoundDecoded('menu-music'))
         {
-            game.state.start("GameMenu");
-        }, 1500);
+            // Set status to ready
+            this.status.setText('Ready!');
+            
+            // Set a small timeout so you see the label being changed
+            setTimeout(function() 
+            {
+                game.state.start("GameMenu");
+            }, 500);
+        }
     },
     
     // ===========================================================================================================================

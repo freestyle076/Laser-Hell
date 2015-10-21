@@ -16,15 +16,29 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game'), Engine = function () 
 Engine.prototype = 
 {
 
-    preload: function () 
+    // ===========================================================================================================================
+    // PRELOAD
+    // --------------------------------------------------------------------------------------------------------------------------
+    // Pre-loads the splash screen's assets
+    // ===========================================================================================================================
+    preload: function() 
     {
-        game.load.image('universe',    'assetsbackgrounds/main-screen.png');
-        game.load.image('loading',  'assets/images/progree-bar.png');
-        game.load.image('brand',    'assets/images/polymorphix-gaming-icon.png');
-        game.load.script('splash',  'states/splash.js');
+        // Loas splash screen assets
+        game.load.image('loading', 'assets/images/ui/progress-bar.png');
+        game.load.image('brand', 'assets/images/ui/polymorphix-banner.png');
+        
+        // Loas splash screen scripts
+        game.load.script('webFont', 'vendor/webfontloader.min.js');
+        game.load.script('splash', 'src/states/splash.js');
+        game.load.script('gameUtils', 'src/utility/game.utils.js');
     },
 
-    create: function () 
+    // ===========================================================================================================================
+    // CREATE
+    // --------------------------------------------------------------------------------------------------------------------------
+    // 
+    // ===========================================================================================================================
+    create: function() 
     {
         game.state.add('Splash', Splash);
         game.state.start('Splash');

@@ -1,4 +1,4 @@
-/* Bootstrap CSS */
+/* Bootstrap and Fonts CSS */
 @import url("./bootstrap.min.css");
 
 /* Audiowide font family */
@@ -35,6 +35,17 @@ body {font-family: 'Audiowide';}
     margin-left: 0px!important;
 }
 
+.navbar-dark
+{
+    background-color: #212E3B;
+    border-color: transparent;
+}
+
+.navbar-dark a { color: #FFF;}
+
+.container-canvas { margin: 0 auto; width: 805px; border: 3px double #000; }
+.container-main { margin-top: 20px; }
+
 /* Content Styling */
 .buffer { margin-top: 51px; }
 
@@ -46,9 +57,6 @@ ul, ol { list-style-type: square; }
 
 .container-fluid > section > .panel { width: 95%; }
 .container-fluid { width: 100%; padding: 0; }
-
-#product-form { font-size: 80%; }
-#product-form select { font-size: 95%; }
 
 .color-panel { display:flex;justify-content:center;align-items:center; padding: 50px 100px; }
 .color-panel.dark-green-panel { background-color: #369A41; }
@@ -65,9 +73,6 @@ ul, ol { list-style-type: square; }
 .focus-input { background-color: #EEF6FF; }
 .has-error input { background-color: #F6D3D3; }
 .has-success input { background-color: #D4F5D3; }
-
-/* Success page styles */
-#success-table td.heading { font-weight: bold; }
 
 /* Image captions */
 div.desc
@@ -91,44 +96,5 @@ div.desc
 
 .img-container { padding:0 15px; }
 .no-padding { padding:0px; }
-
-/* Image animation */
-
-.animate-button
-{
-    font-family: 'Audiowide';
-    font-size: 5em;
-    min-height:200px;
-    border: 10px solid!important;
-    border-color: #d9534f!important;
-    background: url("../img/Mars-Mountain.jpg") no-repeat center center; 
-    background-size: cover;
-    white-space: normal;
-    line-height:1em;
-}
-
-.animate-button:hover
-{
-    filter: grayscale(20%);
-    -webkit-filter: grayscale(20%);
-    -moz-filter: grayscale(20%);
-    -o-filter: grayscale(20%);
-    -ms-filter: grayscale(20%);
-}
-
-.animate-button:active
-{
-    filter: grayscale(50%);
-    -webkit-filter: grayscale(50%);
-    -moz-filter: grayscale(50%);
-    -o-filter: grayscale(50%);
-    -ms-filter: grayscale(50%);
-    background: url("../img/Mars-Mountain.jpg") no-repeat center center; 
-    background-size: cover;
-}
-
-
-.desc.colony { height: 100%; font-size: 2em; }
-img.colony { position: relative; opacity: 0.10;  }
 
 img.dismissable-desc:hover { cursor: pointer; }

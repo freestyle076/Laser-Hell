@@ -1,0 +1,8 @@
+/* Spac3Tech font family */
+@font-face 
+{
+  font-family: 'Spac3Tech';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/spac3tech.ttf');
+}

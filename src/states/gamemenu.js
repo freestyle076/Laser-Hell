@@ -106,6 +106,8 @@ GameMenu.prototype =
         this.addMenuOption("Launch", function (target) 
         {
             console.log('You clicked Launch!!');
+            game.state.start("Game");
+            
         });
         
         // Create options menu option

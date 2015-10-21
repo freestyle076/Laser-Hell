@@ -65,10 +65,15 @@ Splash.prototype =
     loadImages: function() 
     {
         // UI
+        game.load.image('menu-icon','assets/images/ui/menu-icon.png');
+        game.load.image('primary-icon','assets/images/ui/primary.png');
+        game.load.image('secondary-icon','assets/images/ui/secondary.png');
+        
         
         // Backgrounds
         game.load.image('game', 'assets/backgrounds/game.png');
         game.load.image('game-menu', 'assets/backgrounds/main-screen.png');
+        
         
         // Objects
         

@@ -49,12 +49,12 @@ Game.prototype =
         game.background.autoScroll(0,50);
         
         // create hud group, add hud sprites
-        /*
+        
         this.hud = game.add.group();
-        game.add.sprite(game.width - 80,game.height - 175,'primary-weapon-hud',this.hud).scale.setTo(0.5,0.5);
-        game.add.sprite(game.width - 80,game.height - 85,'secondary-weapon-hud',this.hud).scale.setTo(0.5,0.5);
-        game.add.sprite(game.width - 80,10,'menu-hud',this.hud).scale.setTo(0.5,0.5);
-        */
+        game.add.sprite(game.width - 80,game.height - 175,'primary-icon',this.hud).scale.setTo(0.75,0.75);
+        game.add.sprite(game.width - 80,game.height - 85,'secondary-icon',this.hud).scale.setTo(0.75,0.75);
+        game.add.sprite(game.width - 80,10,'menu-icon',this.hud).scale.setTo(0.75,0.75);
+        
     }
 };
 

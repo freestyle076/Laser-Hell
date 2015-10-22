@@ -64,20 +64,24 @@ Splash.prototype =
     // ===========================================================================================================================
     loadImages: function() 
     {
-        // UI
-        game.load.image('menu-icon','assets/images/ui/menu-icon.png');
-        game.load.image('primary-icon','assets/images/ui/primary.png');
-        game.load.image('secondary-icon','assets/images/ui/secondary.png');
-        
-        
         // Backgrounds
         game.load.image('game', 'assets/backgrounds/game.png');
         game.load.image('game-menu', 'assets/backgrounds/main-screen.png');
         
+        // UI
+        game.load.atlasJSONHash('ui-atlas', 'assets/images/game/ui.png', 'assets/images/game/ui.json');
         
-        // Objects
+        // Asteroids
+        game.load.atlasJSONHash('asteroids-atlas', 'assets/images/game/asteroids.png', 'assets/images/game/asteroids.json');
+        
+        // Projectiles
+        game.load.atlasJSONHash('projectiles-atlas', 'assets/images/game/projectiles.png', 'assets/images/game/projectiles.json');
+        
+        // Pickups
+        game.load.atlasJSONHash('pickups-atlas', 'assets/images/game/pickups.png', 'assets/images/game/pickups.json');
         
         // Ships
+        game.load.atlasJSONHash('ships-atlas', 'assets/images/game/ships.png', 'assets/images/game/ships.json');
     },
 
     // ===========================================================================================================================
@@ -128,11 +132,10 @@ Splash.prototype =
         this.load.setPreloadSprite(this.loadingBar);
 
         // Load everything
-        this.loadScripts();
-        this.loadImages();
-        this.loadSounds();
-        this.loadFonts();
-        
+        this.status.setText('Loading Scripts...'); this.loadScripts();
+        this.status.setText('Loading Images...'); this.loadImages();
+        this.status.setText('Decoding Sounds...'); this.loadSounds();
+        this.status.setText('Decoding Fonts...'); this.loadFonts();
     },
     
     // ===========================================================================================================================

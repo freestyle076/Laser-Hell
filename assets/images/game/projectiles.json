@@ -739,10 +739,10 @@
 "meta": {
 	"app": "http://www.codeandweb.com/texturepacker",
 	"version": "1.0",
-	"image": "projectiles-spritesheet.png",
+	"image": "projectiles.png",
 	"format": "RGBA8888",
 	"size": {"w":1050,"h":255},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:ed618244a09de1a3998bf5536dba9eac:5a22746e7d90f4117c96214ae03efaec:b1b4043e12f35ee51ad83b66d3418a89$"
+	"smartupdate": "$TexturePacker:SmartUpdate:6b3d2a10600c19cd040d5b6f0719e6ac:5a22746e7d90f4117c96214ae03efaec:9b6e6842273e8724f51d1457138f1678$"
 }
 }

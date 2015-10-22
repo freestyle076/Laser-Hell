@@ -363,10 +363,10 @@
 "meta": {
 	"app": "http://www.codeandweb.com/texturepacker",
 	"version": "1.0",
-	"image": "asteroid-spritesheet.png",
+	"image": "asteroids.png",
 	"format": "RGBA8888",
 	"size": {"w":493,"h":107},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:589041b0dc343f55d3744b07ea0c5c1d:1b1239dae4eba1a963d23712132be08c:02ce400720dcbaa087531e3d5b4aec60$"
+	"smartupdate": "$TexturePacker:SmartUpdate:d624975e71f67f0ec74a7a81be1a9fbe:1b1239dae4eba1a963d23712132be08c:3cb2167982f406a3d6627570b02f9be7$"
 }
 }

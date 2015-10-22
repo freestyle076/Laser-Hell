@@ -35,10 +35,10 @@
 "meta": {
 	"app": "http://www.codeandweb.com/texturepacker",
 	"version": "1.0",
-	"image": "ship-spritesheet.png",
+	"image": "ships.png",
 	"format": "RGBA8888",
 	"size": {"w":202,"h":756},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:91b482823364747fa9448cf124a7c37d:0b2e109a646f21774be1be237628c973:d0dee12c06428a323042399f9c4912cf$"
+	"smartupdate": "$TexturePacker:SmartUpdate:a05328bffff319fcd876191a5730e596:0b2e109a646f21774be1be237628c973:78154fe33c5dfc8c7f67f0a3677ac0ac$"
 }
 }

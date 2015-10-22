@@ -35,10 +35,10 @@
 "meta": {
 	"app": "http://www.codeandweb.com/texturepacker",
 	"version": "1.0",
-	"image": "pickup-spritesheet.png",
+	"image": "pickups.png",
 	"format": "RGBA8888",
 	"size": {"w":526,"h":133},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:7c670db7c72a72c20817280a4965954a:1a191b88b96f0c941c5bf000242b8006:cdb21007fa69526b0cdfc5a27b28619d$"
+	"smartupdate": "$TexturePacker:SmartUpdate:8e315d351bd891694539d3c75fac17b1:1a191b88b96f0c941c5bf000242b8006:0b493ebb21a2f089d30c9be1399b2817$"
 }
 }

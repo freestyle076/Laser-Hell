@@ -18,7 +18,93 @@ var Splash = function () {},
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Splash.prototype = 
-{
+{   
+    
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // ===========================================================================================================================
+    // INIT
+    // --------------------------------------------------------------------------------------------------------------------------
+    // Initialize splash screen
+    // ===========================================================================================================================
+    init: function()
+    {
+        // Make loading bar, logo, and status text objects
+        this.loadingBar = game.make.sprite(game.world.centerX-(256/2), 400, "loading");
+        this.logo = game.make.sprite(game.world.centerX, 100, 'brand');
+        this.status = game.make.text(game.world.centerX, 380, 'Loading Assets...', {fill: "white", font:"30px Audiowide" });
+        
+        // Center these objects (loading bar doesn't need it or it will load from center)
+        gameUtils.centerGameObjects([this.logo, this.status]);
+    },
+
+    // ===========================================================================================================================
+    // PRELOAD
+    // --------------------------------------------------------------------------------------------------------------------------
+    // Pre-loads all of the game's assets
+    // ===========================================================================================================================
+    preload: function() 
+    {
+        // Add pre-load sprites
+        game.add.existing(this.logo);
+        game.add.existing(this.loadingBar);
+        game.add.existing(this.status);
+        
+        // Set loading bar to be the preload sprite
+        this.load.setPreloadSprite(this.loadingBar);
+
+        // Load everything
+        this.status.setText('Loading Scripts...'); this.loadScripts();
+        this.status.setText('Loading Images...'); this.loadImages();
+        this.status.setText('Decoding Sounds...'); this.loadSounds();
+        this.status.setText('Decoding Fonts...'); this.loadFonts();
+    },
+    
+    // ===========================================================================================================================
+    // CREATE
+    // --------------------------------------------------------------------------------------------------------------------------
+    // Called after everything is ready. Changes label, adds other states, and starts music.
+    // ===========================================================================================================================
+    create: function() 
+    {
+        // Load nine patches (have to make sure that the atlas is loaded before doing this)
+        this.status.setText('Loading NinePatches...'); this.loadNinePatches();
+        
+        // Change loading to decoding
+        this.status.setText('Decoding Music...');
+        
+        // Add game states
+        this.addGameStates();
+        
+        // Start music
+        this.addGameMusic();
+    },
+   
+    // ===========================================================================================================================
+    // UPDATE
+    // --------------------------------------------------------------------------------------------------------------------------
+    // Method that's called over and over again that will make the game stay on this screen until the music is decoded.
+    // ===========================================================================================================================
+    update: function()
+    {
+        // Only move to the next state when the music is decoded
+        if(this.cache.isSoundDecoded('menu-music'))
+        {
+            // Set status to ready
+            this.status.setText('Ready!');
+            
+            // Set a small timeout so you see the label being changed
+            setTimeout(function() 
+            {
+                game.state.start("GameMenu");
+            }, 500);
+        }
+    },
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // PRELOAD HELPERS
+    
     // ===========================================================================================================================
     // LOAD SCRIPTS
     // --------------------------------------------------------------------------------------------------------------------------
@@ -29,9 +115,9 @@ Splash.prototype =
         // Vendor libraries
         
         // Game States
-        game.load.script('gamemenu','src/states/gamemenu.js');
+        game.load.script('gamemenu', 'src/states/gamemenu.js');
         game.load.script('game', 'src/states/game.js');
-        game.load.script('gameover','src/states/gameover.js');
+        game.load.script('gameover', 'src/states/gameover.js');
         game.load.script('options', 'src/states/options.js');
         
         // Objects
@@ -83,7 +169,7 @@ Splash.prototype =
         // Ships
         game.load.atlasJSONHash('ships-atlas', 'assets/images/game/ships.png', 'assets/images/game/ships.json');
     },
-
+    
     // ===========================================================================================================================
     // LOAD FONTS
     // --------------------------------------------------------------------------------------------------------------------------
@@ -100,80 +186,20 @@ Splash.prototype =
         });
     },
     
-    // ===========================================================================================================================
-    // INIT
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Initialize splash screen
-    // ===========================================================================================================================
-    init: function()
-    {
-        // Make loading bar, logo, and status text objects
-        this.loadingBar = game.make.sprite(game.world.centerX-(256/2), 400, "loading");
-        this.logo = game.make.sprite(game.world.centerX, 100, 'brand');
-        this.status = game.make.text(game.world.centerX, 380, 'Loading Assets...', {fill: "white", font:"30px Audiowide" });
-        
-        // Center these objects (loading bar doesn't need it or it will load from center)
-        gameUtils.centerGameObjects([this.logo, this.status]);
-    },
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // ===========================================================================================================================
-    // PRELOAD
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Pre-loads all of the game's assets
-    // ===========================================================================================================================
-    preload: function() 
-    {
-        // Add pre-load sprites
-        game.add.existing(this.logo);
-        game.add.existing(this.loadingBar);
-        game.add.existing(this.status);
-        
-        // Set loading bar to be the preload sprite
-        this.load.setPreloadSprite(this.loadingBar);
-
-        // Load everything
-        this.status.setText('Loading Scripts...'); this.loadScripts();
-        this.status.setText('Loading Images...'); this.loadImages();
-        this.status.setText('Decoding Sounds...'); this.loadSounds();
-        this.status.setText('Decoding Fonts...'); this.loadFonts();
-    },
-    
-    // ===========================================================================================================================
-    // CREATE
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Called after everything is ready. Changes label, adds other states, and starts music.
-    // ===========================================================================================================================
-    create: function() 
-    {
-        // Change loading to decoding
-        this.status.setText('Decoding Music...');
-        
-        // Add game states
-        this.addGameStates();
-        
-        // Start music
-        this.addGameMusic();
-    },
+    // CREATE HELPERS
    
     // ===========================================================================================================================
-    // UPDATE
+    // LOAD NINE PATCHES
     // --------------------------------------------------------------------------------------------------------------------------
-    // Method that's called over and over again that will make the game stay on this screen until the music is decoded.
+    // 
     // ===========================================================================================================================
-    update: function()
+    loadNinePatches : function()
     {
-        // Only move to the next state when the music is decoded
-        if(this.cache.isSoundDecoded('menu-music'))
-        {
-            // Set status to ready
-            this.status.setText('Ready!');
-            
-            // Set a small timeout so you see the label being changed
-            setTimeout(function() 
-            {
-                game.state.start("GameMenu");
-            }, 500);
-        }
+        // left, right, top, bottom
+        game.cache.addNinePatch('metalPanel_purpleCorner', 'ui-atlas', 'metalPanel_purpleCorner', 60, 30, 40, 40);
+        
     },
     
     // ===========================================================================================================================

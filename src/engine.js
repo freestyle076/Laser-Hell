@@ -32,6 +32,7 @@ Engine.prototype =
         game.load.script('webFont', 'vendor/webfontloader.min.js');
         game.load.script('splash', 'src/states/splash.js');
         game.load.script('gameUtils', 'src/utility/game.utils.js');
+        //game.load.script('ninepatch', 'vendor/ninepatch.min.js');
     },
 
     // ===========================================================================================================================

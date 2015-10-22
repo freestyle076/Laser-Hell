@@ -14,7 +14,53 @@ var GameMenu = function () {};
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 GameMenu.prototype = 
-{
+{   
+    // ===========================================================================================================================
+    // INIT
+    // --------------------------------------------------------------------------------------------------------------------------
+    // Initialize game menu
+    // ===========================================================================================================================
+    init: function()
+    {   
+        // Create title text
+        this.titleText = game.make.text(game.world.centerX, 100, "Xeinax: \nSpace Warrior", 
+        { 
+            font: "55px Tron", 
+            fill: '#B17BE3', 
+            align: 'left'
+        });
+        this.titleText.setShadow(3, 3, 'rgba(0,0,0,0.5)', 5);
+        this.titleText.anchor.set(0.5);
+        
+        this.optionCount = 1;
+    },
+
+    // ===========================================================================================================================
+    // CREATE
+    // --------------------------------------------------------------------------------------------------------------------------
+    // Called after everything is ready.
+    // ===========================================================================================================================
+    create: function() 
+    {
+        // Add background image
+        game.add.sprite(0, 0, 'game-menu');
+        
+        // Add title 
+        game.add.existing(this.titleText);
+        
+        // Create launch menu option
+        this.addMenuOption("Launch", function (target) 
+        {
+            console.log('You clicked Launch!!');
+        });
+        
+        // Create options menu option
+        this.addMenuOption("Options", this.optionsCallback);
+        
+        // Disallow game to pause
+        game.stage.disableVisibilityChange = true;
+    },
+    
     // ===========================================================================================================================
     // ADD MENU OPTION
     // --------------------------------------------------------------------------------------------------------------------------
@@ -58,64 +104,19 @@ GameMenu.prototype =
         // Increment the number of menu options
         this.optionCount++;
     },
-    
+ 
     // ===========================================================================================================================
-    // INIT
+    // OPTIONS CALL BACK
     // --------------------------------------------------------------------------------------------------------------------------
-    // Initialize game menu
+    // What is called after options is clicked
     // ===========================================================================================================================
-    init: function()
-    {   
-        // Create title text
-        this.titleText = game.make.text(game.world.centerX, 100, "Xeinax: \nSpace Warrior", 
-        { 
-            font: "55px Tron", 
-            fill: '#B17BE3', 
-            align: 'left'
-        });
-        this.titleText.setShadow(3, 3, 'rgba(0,0,0,0.5)', 5);
-        this.titleText.anchor.set(0.5);
-        
-        this.optionCount = 1;
-    },
-    
-    // ===========================================================================================================================
-    // PRELOAD
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Pre-loads the game menu's assets.
-    // ===========================================================================================================================
-    preload: function() 
+    optionsCallback: function()
     {
-  
-    },
-
-    // ===========================================================================================================================
-    // CREATE
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Called after everything is ready.
-    // ===========================================================================================================================
-    create: function() 
-    {
-        // Add background image
-        game.add.sprite(0, 0, 'game-menu');
+        // Take a screenshot of the screen to "fake" a pop-up and pass this to the options state
+        game.state.states['Options'].canvasImage = gameUtils.getCanvasScreenshot();
         
-        // Add title 
-        game.add.existing(this.titleText);
-        
-        // Create launch menu option
-        this.addMenuOption("Launch", function (target) 
-        {
-            console.log('You clicked Launch!!');
-        });
-        
-        // Create options menu option
-        this.addMenuOption("Options and Controls", function (target) 
-        {
-            console.log('You clicked Options!');
-        });
-        
-        // Disallow game to pause
-        game.stage.disableVisibilityChange = true;
+        // Go to the options state
+        game.state.start("Options");
     }
 };
 

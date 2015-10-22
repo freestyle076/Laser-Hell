@@ -25,6 +25,22 @@ var gameUtils =
         {
            object.anchor.setTo(0.5);
         });
+    },
+    
+    // ===========================================================================================================================
+    // GET CANVAS SCREENSHOT
+    // --------------------------------------------------------------------------------------------------------------------------
+    // Creates Image object with a photo of the canvas added to it.
+    // 
+    // @return {Image} 
+    //  Image object containing a picture of the canvas
+    // ===========================================================================================================================
+    getCanvasScreenshot : function()
+    {
+        var canvasImage = new Image();
+        canvasImage.src = game.canvas.toDataURL("image/png");
+        
+        return canvasImage;
     }
 };
 

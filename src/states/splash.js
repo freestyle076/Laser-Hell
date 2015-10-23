@@ -199,7 +199,7 @@ Splash.prototype =
     {
         // left, right, top, bottom
         game.cache.addNinePatch('metalPanel_purpleCorner', 'ui-atlas', 'metalPanel_purpleCorner', 60, 30, 40, 40);
-        
+        game.cache.addNinePatch('glassPanel', 'ui-atlas', 'glassPanel', 5, 5, 40, 40);
     },
     
     // ===========================================================================================================================

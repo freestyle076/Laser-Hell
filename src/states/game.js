@@ -44,6 +44,17 @@ Game.prototype =
     {
         this.addBackground();
         this.addHUD();
+        this.setKeyBindings();
+    },
+    
+    // ===========================================================================================================================
+    // SET KEY BINDINGS
+    // --------------------------------------------------------------------------------------------------------------------------
+    // Sets the key bindings for the game
+    // ===========================================================================================================================
+    setKeyBindings: function(){
+        var escKey = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
+        escKey.onDown.add(this.optionsMenuCallback,this);
     },
     
     // ===========================================================================================================================
@@ -71,14 +82,38 @@ Game.prototype =
         this.hud = game.add.group();
         
         // Add hud sprites
-        game.add.sprite(game.width - 80, game.height - 175, 'ui-atlas', 'primary-icon', this.hud).scale.setTo(0.75, 0.75);
-        game.add.sprite(game.width - 80, game.height - 85, 'ui-atlas','secondary-icon', this.hud).scale.setTo(0.75, 0.75);
+        
+        // primary icon and backing glasspanel
+        var primaryGlassPanel = game.add.sprite(game.width - 85, game.height - 180, 'ui-atlas', 'glassPanel', this.hud);
+        primaryGlassPanel.scale.setTo(0.81,0.81);
+        game.add.sprite(primaryGlassPanel.x + 3, primaryGlassPanel.y + 3, 'ui-atlas', 'primary-icon', this.hud).scale.setTo(0.75, 0.75);
+        
+        // secondary icon and backing glasspanel
+        var secondaryGlassPanel = game.add.sprite(game.width - 85, game.height - 90, 'ui-atlas','glassPanel', this.hud);
+        secondaryGlassPanel.scale.setTo(0.81, 0.81);
+        game.add.sprite(secondaryGlassPanel.x + 3, secondaryGlassPanel.y + 3, 'ui-atlas','secondary-icon', this.hud).scale.setTo(0.75, 0.75);
         
         // Add special sprite, options, and add events when clicked and hovered on
         this.addOptionsSprite();
+        
+        // add status panel and contained status bar sprites
+        this.addStatusPanel();
     },
     
+    // ===========================================================================================================================
+    //  CALLBACK FUNCTION TO LAUNCH OPTION MENU
+    // --------------------------------------------------------------------------------------------------------------------------
+    // Takes screenshot of game and transitions to options state
+    // ===========================================================================================================================
+    optionsMenuCallback: function()
+    {
+        // Take a screenshot of the screen to "fake" a pop-up and pass this to the options state
+        game.state.states['Options'].canvasImage = gameUtils.getCanvasScreenshot();
 
+        // Go to the options state
+        game.state.start("Options");
+    },
+        
     // ===========================================================================================================================
     // ADD OPTIONS SPRITE
     // --------------------------------------------------------------------------------------------------------------------------
@@ -89,33 +124,36 @@ Game.prototype =
         var optionsSprite = game.add.sprite(game.width - 80, 10, 'ui-atlas', 'options-icon', this.hud);
         optionsSprite.scale.setTo(0.75, 0.75);
         
-        // Add callback function to go to another screen when clicked
-        var callback = function()
-        {
-            // Take a screenshot of the screen to "fake" a pop-up and pass this to the options state
-            game.state.states['Options'].canvasImage = gameUtils.getCanvasScreenshot();
-
-            // Go to the options state
-            game.state.start("Options");
-        };
-        
-        // Add onInputOver function to change menu text
+        // Add onInputOver function to change option sprite
         var onOver = function(target) 
         {
-            // Change to another sprite here to appear "hovered over"
+            target.alpha = 0.5;
         };
         
-        // Add onInputOutfunction to change menu text
+        // Add onInputOut function to change option sprite
         var onOut = function(target) 
         {
-            // Change back
+            target.alpha = 1;
         };
         
-        // Add these functions to the menu text
+        // Add these functions to the option sprite
         optionsSprite.inputEnabled = true;
-        optionsSprite.events.onInputUp.add(callback);
+        optionsSprite.events.onInputUp.add(this.optionsMenuCallback);
         optionsSprite.events.onInputOver.add(onOver);
         optionsSprite.events.onInputOut.add(onOut);
+    },
+    
+    // ===========================================================================================================================
+    // ADD STATUS PANEL
+    // --------------------------------------------------------------------------------------------------------------------------
+    // Creates and adds the status panel sprites: panel, health bar (init 100%), weapon heat bar (init 0%)
+    // ===========================================================================================================================
+    addStatusPanel: function(){
+        
+        // status panel sprite
+        //var statusPanel = game.add.sprite(10,game.height - 90, 'ui-atlas','metalPanel',this.hud); // metal option
+        var statusPanel = game.add.sprite(10,game.height - 90, 'ui-atlas','glassPanel_projection',this.hud); // glass option
+        statusPanel.scale.setTo(1.8,.8);
     }
 };
 

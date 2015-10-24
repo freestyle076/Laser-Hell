@@ -11,14 +11,13 @@
 
 var gameUtils = 
 {
-    // ===========================================================================================================================
-    // CENTER GAME OBJECTS
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Centers passed in game objects by setting anchor accordingly
-    // 
-    // @param {array} objects
-    //  Array of phaser game objects
-    // ===========================================================================================================================
+    /**==========================================================================================================================
+    * @name CENTER GAME OBJECTS
+    * 
+    * @description Centers passed in game objects by setting anchor accordingly
+    * 
+    * @param {array} objects - Array of phaser game objects
+    *///=========================================================================================================================
     centerGameObjects : function(objects)
     {
         objects.forEach(function (object) 
@@ -27,14 +26,13 @@ var gameUtils =
         });
     },
     
-    // ===========================================================================================================================
-    // GET CANVAS SCREENSHOT
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Creates Image object with a photo of the canvas added to it.
-    // 
-    // @return {Image} 
-    //  Image object containing a picture of the canvas
-    // ===========================================================================================================================
+    /**==========================================================================================================================
+    * @name GET CANVAS SCREENSHOT
+    * 
+    * @description Creates Image object with a photo of the canvas added to it.
+    * 
+    * @return {Image} - Image object containing a picture of the canvas
+    *///=========================================================================================================================
     getCanvasScreenshot : function()
     {
         var canvasImage = new Image();
@@ -43,35 +41,21 @@ var gameUtils =
         return canvasImage;
     },
     
-    // ===========================================================================================================================
-    // MAKE GLASS PANEL
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Creates Image object with a photo of the canvas added to it.
-    // 
-    // @param {string} ninePatchKey
-    //  The key specified for the cached NinePatch object 
-    // 
-    // @param {float} x
-    //  x position of panel
-    //  
-    // @param {float} y
-    //  y position of panel
-    //   
-    // @param {float} width
-    //  Width of panel
-    //  
-    // @param {float} height
-    //  Height of panel
-    // 
-    // @param {float} anchorX
-    //  x anchor 
-    // 
-    // @param {float} anchorY
-    //  y anchor
-    // 
-    // @return {Phaser.NinePatchImage} 
-    //  A Phaser Nine Patch Image Sprite
-    // ===========================================================================================================================
+    /**==========================================================================================================================
+    * @name MAKE NINE PATCH PANEL
+    * 
+    * @description Creates a Nine Patch image with the given information.
+    * 
+    * @param {string} ninePatchKey - The key specified for the cached NinePatch object 
+    * @param {float} x - x position of panel
+    * @param {float} y - y position of panel
+    * @param {float} width - Width of panel
+    * @param {float} height - Height of panel
+    * @param {float} anchorX -  x anchor 
+    * @param {float} anchorY - y anchor
+    * 
+    * @return {Phaser.NinePatchImage} - A Phaser Nine Patch Image Sprite
+    *///=========================================================================================================================
     makeNinePatchPanel : function(ninePatchKey, x, y, width, height, anchorX, anchorY)
     {
         // Nine patch panel sprite

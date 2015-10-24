@@ -41,6 +41,51 @@ var gameUtils =
         canvasImage.src = game.canvas.toDataURL("image/png");
         
         return canvasImage;
+    },
+    
+    // ===========================================================================================================================
+    // MAKE GLASS PANEL
+    // --------------------------------------------------------------------------------------------------------------------------
+    // Creates Image object with a photo of the canvas added to it.
+    // 
+    // @param {string} ninePatchKey
+    //  The key specified for the cached NinePatch object 
+    // 
+    // @param {float} x
+    //  x position of panel
+    //  
+    // @param {float} y
+    //  y position of panel
+    //   
+    // @param {float} width
+    //  Width of panel
+    //  
+    // @param {float} height
+    //  Height of panel
+    // 
+    // @param {float} anchorX
+    //  x anchor 
+    // 
+    // @param {float} anchorY
+    //  y anchor
+    // 
+    // @return {Phaser.NinePatchImage} 
+    //  A Phaser Nine Patch Image Sprite
+    // ===========================================================================================================================
+    makeNinePatchPanel : function(ninePatchKey, x, y, width, height, anchorX, anchorY)
+    {
+        // Nine patch panel sprite
+        var ninePatchPanel = new Phaser.NinePatchImage(game, x, y, ninePatchKey);
+        
+        // Set the measures for image - [AUTOMATICALLY UPDATED]
+        ninePatchPanel.targetWidth  = width;
+        ninePatchPanel.targetHeight = height;
+        
+        // Set anchor for image - [NEEDS MANUAL UPDATE] 
+        ninePatchPanel.anchor.setTo(anchorX, anchorY);
+        ninePatchPanel.UpdateImageSizes();
+        
+        return ninePatchPanel;
     }
 };
 

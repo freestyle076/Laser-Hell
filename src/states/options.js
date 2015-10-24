@@ -26,8 +26,6 @@ Options.prototype =
     {
         // Load canvas image
         game.load.image('canvas-image', this.canvasImage.src, this.canvasImage);
-        
-        
     },
     
     // ===========================================================================================================================
@@ -41,15 +39,8 @@ Options.prototype =
         game.add.sprite(0, 0, 'canvas-image');
         
         // Add options panel
-       var image = new Phaser.NinePatchImage(game, game.width/2, game.height/2, 'metalPanel_purpleCorner');
-        
-        /** Set the measures for image - [AUTOMATICALLY UPDATED] */
-                image.alpha = 0.85;
-                image.targetWidth  = 500;
-                image.targetHeight = 500;
-        /** Set anchor for image - [NEEDS MANUAL UPDATE] */
-                image.anchor.setTo(0.5, 0.5);
-                image.UpdateImageSizes();
+       var optionsPanel = gameUtils.makeNinePatchPanel('metalPanel_purpleCorner', game.width/2, game.height/2, 500, 500, 0.5, 0.5);
+       optionsPanel.alpha = 0.80;
     }
 };
 

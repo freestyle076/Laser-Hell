@@ -36,7 +36,7 @@ Options.prototype =
     /**==========================================================================================================================
     * @name CREATE
     * 
-    * @description 
+    * @description Creates the options menu
     *///=========================================================================================================================
     create: function() 
     {
@@ -51,6 +51,7 @@ Options.prototype =
        // Add game controls
        this.addControlKeys(optionsPanelCenter);
        
+       // Add menu items for music, sound, and going back
        this.addMenuItems(optionsPanelCenter);
     },
     
@@ -63,6 +64,8 @@ Options.prototype =
     * @name ADD CONTROL KEYS
     * 
     * @description Adds control key sprites that change to what key they correspond to when hovered over
+    * 
+    * @param {Object} optionsPanelCenter - "x" and "y" center of the panel 
     *///=========================================================================================================================
     addControlKeys : function(optionsPanelCenter)
     {
@@ -115,6 +118,8 @@ Options.prototype =
     * @name ADD MENU ITEMS
     * 
     * @description Creates a "Play Sound" and "Play Music" menu items on this menu screen.
+    * 
+    * @param {Object} optionsPanelCenter - "x" and "y" center of the panel 
     *///=========================================================================================================================
     addMenuItems: function(optionsPanelCenter) 
     {
@@ -144,13 +149,6 @@ Options.prototype =
             target.stroke = "rgba(255,255,255,1)";
         };
         
-        // Retrieve game options for on click event funciton
-        var playSound = gameOptions.playSound;
-        var playMusic = gameOptions.playMusic;
-        
-        // Retrieve back state for on click event function
-        var myBackState = this.backState;
-        
         // Create sound menu item
         gameUtils.addMenuItem(playSound ? 'Mute Sound' : 'Play Sound', textX, textY, itemStyle, onOver, onOut, this.soundCallback);
         
@@ -164,6 +162,7 @@ Options.prototype =
         textY += 80;
 
         // Create back menu item
+        var myBackState = this.backState;
         gameUtils.addMenuItem('<- Back', textX, textY, itemStyle, onOver, onOut, function(target) { game.state.start(myBackState); });
        
     },

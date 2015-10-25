@@ -223,7 +223,7 @@ Splash.prototype =
     /**==========================================================================================================================
     * @name ADD MENU MUSIC
     * 
-    * @description Add the loaded game audio and play the menu music
+    * @description Sets up the music player, adds the loaded game audio, and plays the menu music
     *///=========================================================================================================================
     addMenuMusic: function() 
     {

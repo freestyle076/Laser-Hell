@@ -4,8 +4,7 @@
 // @author Angela Gross and Kyle Handy
 // Xeinax: Space Warrior
 // -------------------------------------------------------------------------------------------------------------------------------
-// Class that implements methods for the splash screen, or the screen that loads all of the game's necessary assets and uses a 
-// loading bar to notify the user of its progress.
+// Screen that loads all of the game's necessary assets and uses a loading bar to notify the user of its progress.
 // ================================================================================================================================
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -204,6 +203,7 @@ Splash.prototype =
     {
         // Note: The last four arguments are left, right, top and bottom points in the nine patch image
         game.cache.addNinePatch('metalPanel_purpleCorner', 'ui-atlas', 'metalPanel_purpleCorner', 60, 30, 40, 40);
+        game.cache.addNinePatch('metalPanel_redCorner', 'ui-atlas', 'metalPanel_redCorner', 60, 30, 40, 40);
         game.cache.addNinePatch('glassPanel', 'ui-atlas', 'glassPanel', 10, 10, 10, 20);
     },
     

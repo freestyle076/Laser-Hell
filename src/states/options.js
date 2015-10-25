@@ -4,7 +4,7 @@
 // @author Angela Gross and Kyle Handy
 // Xeinax: Space Warrior
 // -------------------------------------------------------------------------------------------------------------------------------
-// 
+// Screen that emulates a pop-up window and allows the player to see the game's controls and mute the sound/music.
 // ================================================================================================================================
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -150,13 +150,13 @@ Options.prototype =
         };
         
         // Create sound menu item
-        gameUtils.addMenuItem(playSound ? 'Mute Sound' : 'Play Sound', textX, textY, itemStyle, onOver, onOut, this.soundCallback);
+        gameUtils.addMenuItem(gameOptions.playSound ? 'Mute Sound' : 'Play Sound', textX, textY, itemStyle, onOver, onOut, this.soundCallback);
         
         // Move down for next item
         textY += 80;
         
         // Create music menu item
-        gameUtils.addMenuItem(playMusic ? 'Mute Music' : 'Play Music', textX, textY, itemStyle, onOver, onOut, this.musicCallback);
+        gameUtils.addMenuItem(gameOptions.playMusic ? 'Mute Music' : 'Play Music', textX, textY, itemStyle, onOver, onOut, this.musicCallback);
        
         // Move down for next item
         textY += 80;

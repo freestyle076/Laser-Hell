@@ -171,6 +171,9 @@ Game.prototype =
     {
         // Take a screenshot of the screen to "fake" a pop-up and pass this to the options state
         game.state.states['Options'].canvasImage = gameUtils.getCanvasScreenshot();
+        
+        // Add state that it will go back to
+        game.state.states['Options'].backState = 'Game';
 
         // Go to the options state
         game.state.start("Options");

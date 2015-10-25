@@ -10,10 +10,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var Splash = function () {},
-    playSound = true,
-    playMusic = true,
-    music;
+var Splash = function () {};
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -230,9 +227,9 @@ Splash.prototype =
     *///=========================================================================================================================
     addMenuMusic: function() 
     {
-        music = game.add.audio('menu-music');
-        music.loop = true;
-        music.play();
+        musicPlayer = game.add.audio('menu-music');
+        musicPlayer.loop = true;
+        musicPlayer.play();
     }
 };
 

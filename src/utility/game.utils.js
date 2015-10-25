@@ -27,6 +27,20 @@ var gameUtils =
     },
     
     /**==========================================================================================================================
+    * @name GET OBJECT CENTER
+    * 
+    * @description Returns the center of the object
+    * 
+    * @param {Object} object - Phaser game object we we want the center of
+    * 
+    * @return {Object} - "x" and "y" center of the sprite 
+    *///=========================================================================================================================
+    getObjectCenter : function(object)
+    {
+        return { "x" : Math.floor(object.x + object.width / 2), "y" : Math.floor(object.y + object.height / 2) };
+    },
+    
+    /**==========================================================================================================================
     * @name GET CANVAS SCREENSHOT
     * 
     * @description Creates Image object with a photo of the canvas added to it.
@@ -70,6 +84,31 @@ var gameUtils =
         ninePatchPanel.UpdateImageSizes();
         
         return ninePatchPanel;
+    },
+    
+    /**==========================================================================================================================
+    * @name ADD MENU ITEM
+    * 
+    * @description Menu item factory
+    * 
+    * @param {string} text - Text to be displayed 
+    * @param {int} x - x coordinate of the text
+    * @param {int} y - y coordinate of the text
+    * @param {Object} optionStyle - Style of the text
+    * @param {function} onOver - Function called when text is hovered over
+    * @param {function} onOut - Function called after text is hovered over
+    * @param {function} callback - Callback function to be called when the menu option is clicked
+    *///=========================================================================================================================
+    addMenuItem: function(text, x, y, optionStyle, onOver, onOut, callback) 
+    {
+        // Add menu text to game
+        var menuText = game.add.text(x, y, text, optionStyle);
+
+        // Add these functions to the menu text
+        menuText.inputEnabled = true;
+        menuText.events.onInputUp.add(callback);
+        menuText.events.onInputOver.add(onOver);
+        menuText.events.onInputOut.add(onOut);
     }
 };
 

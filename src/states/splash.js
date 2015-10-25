@@ -227,9 +227,8 @@ Splash.prototype =
     *///=========================================================================================================================
     addMenuMusic: function() 
     {
-        musicPlayer = game.add.audio('menu-music');
-        musicPlayer.loop = true;
-        musicPlayer.play();
+        musicPlayer = game.sound;
+        musicPlayer.play('menu-music', 1, true);
     }
 };
 

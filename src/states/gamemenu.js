@@ -99,7 +99,15 @@ GameMenu.prototype =
         };
         
         // Create launch menu item
-        gameUtils.addMenuItem("Launch", textX, textY, itemStyle, onOver, onOut, function (target) { game.state.start("Game"); });
+        gameUtils.addMenuItem("Launch", textX, textY, itemStyle, onOver, onOut, function (target) 
+        {
+            // Remove menu music and play game music
+            musicPlayer.removeByKey('menu-music');
+            musicPlayer.play('game-music', 1, true);
+            
+            // Go to the next state
+            game.state.start("Game"); 
+        });
         
         // Move down for next item
         textY += 80;

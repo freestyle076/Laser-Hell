@@ -154,10 +154,13 @@ Game.prototype =
     // ===========================================================================================================================
     addLevelDisplay: function()
     {
+        
+        var levelPanel = game.add.sprite(10,10,'ui-atlas','metalPanel_purpleCorner',this.hud);
+        levelPanel.scale.setTo(.7,.7);
+        
+        // TODO: would love a new font here
         var level = 1;
-        var levelPanel = game.add.sprite(10,10,'ui-atlas','glassPanel',this.hud);
-        levelPanel.scale.setTo(1.25,.3);
-        var level = game.add.text(18,7,'Level ' + level,{ fontSize: '32px', fill: '#000' },this.hud);
+        var level = game.add.text(35,35,level.toString(),{ fontSize: '32px', fill: '#000' },this.hud);
     },
     
     // ===========================================================================================================================
@@ -187,7 +190,7 @@ Game.prototype =
         // add health and heat bars
         this.graphics = game.add.graphics(0,0,this.hud);
         this.drawHealthBar(100,100);
-        this.drawHeatBar(0,100);
+        this.drawHeatBar(50,100);
     },
     
     // ===========================================================================================================================
@@ -198,8 +201,8 @@ Game.prototype =
     drawHealthBar: function(current,total)
     {
         // health bar colors
-        var borderColor = 0x00AA00;
-        var fillColor = 0x00FF00;
+        var borderColor = 0x00CC22;
+        var fillColor = 0xFF0000;
         
         // draw function
         this.drawStatusBar(current,total,borderColor,fillColor);
@@ -213,8 +216,9 @@ Game.prototype =
     drawHeatBar: function(current,total)
     {
         // health bar colors
-        var borderColor = 0xAA0000;
-        var fillColor = 0xFF0000;
+        
+        var borderColor = 0xFFFF00;
+        var fillColor = 0xFF00FF;
         
         // draw function
         this.drawStatusBar(current,total,borderColor,fillColor);
@@ -233,7 +237,7 @@ Game.prototype =
         var width = 143;
         var fillWidth = width * (current/total);
         var height = 18;
-        var cornerRadius = 5;
+        var borderThickness = 3;
         
         // fill bar
         this.graphics.beginFill(fillColor);
@@ -243,29 +247,70 @@ Game.prototype =
         this.graphics.beginFill(borderColor);
         
         // left vertical bar
-        this.graphics.drawRect(ulx-cornerRadius,uly,cornerRadius,height);
+        this.graphics.drawRect(ulx-borderThickness,uly,borderThickness,height);
         // right vertical bar
-        this.graphics.drawRect(ulx+width,uly,cornerRadius,height);
+        this.graphics.drawRect(ulx+width,uly,borderThickness,height);
         // top horizontal bar
-        this.graphics.drawRect(ulx,uly-cornerRadius,width,cornerRadius);
+        this.graphics.drawRect(ulx,uly-borderThickness,width,borderThickness);
         // bottom horizontal bar
-        this.graphics.drawRect(ulx,uly+height,width,cornerRadius);
+        this.graphics.drawRect(ulx,uly+height,width,borderThickness);
         
         // upper left corner
-        this.graphics.arc(ulx,uly,cornerRadius,game.math.degToRad(180),game.math.degToRad(270),false);
-        this.graphics.drawPolygon( new Phaser.Polygon([ulx,uly, ulx,uly-cornerRadius, ulx-cornerRadius,uly]) );
+        this.graphics.arc(ulx,uly,borderThickness,game.math.degToRad(180),game.math.degToRad(270),false);
+        this.graphics.drawPolygon( new Phaser.Polygon([ulx,uly, ulx,uly-borderThickness, ulx-borderThickness,uly]) );
         // lower left corner
-        this.graphics.arc(ulx,uly+height,cornerRadius,game.math.degToRad(90),game.math.degToRad(180),false);
-        this.graphics.drawPolygon( new Phaser.Polygon([ulx,uly+height, ulx,uly+height+cornerRadius, ulx-cornerRadius,uly+height]) );
+        this.graphics.arc(ulx,uly+height,borderThickness,game.math.degToRad(90),game.math.degToRad(180),false);
+        this.graphics.drawPolygon( new Phaser.Polygon([ulx,uly+height, ulx,uly+height+borderThickness, ulx-borderThickness,uly+height]) );
         // upper right corner
-        this.graphics.arc(ulx+width,uly,cornerRadius,game.math.degToRad(270),game.math.degToRad(0),false);
-        this.graphics.drawPolygon( new Phaser.Polygon([ulx+width,uly, ulx+width+cornerRadius,uly, ulx+width,uly-cornerRadius]) );
+        this.graphics.arc(ulx+width,uly,borderThickness,game.math.degToRad(270),game.math.degToRad(0),false);
+        this.graphics.drawPolygon( new Phaser.Polygon([ulx+width,uly, ulx+width+borderThickness,uly, ulx+width,uly-borderThickness]) );
         // lower right corner
-        this.graphics.arc(ulx+width,uly+height,cornerRadius,game.math.degToRad(0),game.math.degToRad(90),false);
-        this.graphics.drawPolygon( new Phaser.Polygon([ulx+width,uly+height, ulx+width+cornerRadius,uly+height, ulx+width,uly+height+cornerRadius]) );
+        this.graphics.arc(ulx+width,uly+height,borderThickness,game.math.degToRad(0),game.math.degToRad(90),false);
+        this.graphics.drawPolygon( new Phaser.Polygon([ulx+width,uly+height, ulx+width+borderThickness,uly+height, ulx+width,uly+height+borderThickness]) );
         
+        /*
+        // set static animation
+        // TODO: This should happen during the update function
+        var lighterColor = gameUtils.lightenDarkenColor(fillColor,40);
+        var g = this.graphics;
+        var animationFunction = this.staticAnimation;
+        setInterval(function(){
+            animationFunction(ulx,uly,width,height,lighterColor,g);
+        },1000);
+        */
         this.numStatusBars++;
+    },
+    
+    // ===========================================================================================================================
+    // STATIC ANIMATION
+    // --------------------------------------------------------------------------------------------------------------------------
+    // Draws one frame of the staticy status bar animation
+    // ===========================================================================================================================
+    staticAnimation: function(ulx, uly, width, height, flashColor, graphics){
+        var flashes = [];
+        for (var i = 0; i < (width/10); i++) {
+            // get random flash position
+            var randX = (Math.random() * width) + ulx;
+            
+            // get varied color, varied lighter
+            var colorVar = Math.random() * 20;
+            var variedColor = gameUtils.lightenDarkenColor(flashColor,colorVar);
+            
+            // push flash object
+            flashes.push({
+                x: randX,
+                color: variedColor
+            });
+        }
+        
+        // draw all generated flashes
+        for (flash in flashes){
+            console.log("flash!");
+            graphics.beginFill(flash.color);
+            graphics.drawRect(flash.x,uly,3,height);
+        }
     }
+    
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

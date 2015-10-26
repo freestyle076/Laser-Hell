@@ -41,7 +41,30 @@ var gameUtils =
         canvasImage.src = game.canvas.toDataURL("image/png");
         
         return canvasImage;
+    },
+    
+    // ===========================================================================================================================
+    // lIGHTEN DARKEN COLOR
+    // --------------------------------------------------------------------------------------------------------------------------
+    // Lightens or darkens a hexadecimal color (0xABCDEF). Positive lightens, negative darkens.
+    // @param col
+    //  RGB hex color code 0xABCDEF
+    // @param amt
+    //  positive lightens, negative darkens
+    // Accreditation: Pimp Trizkit
+    // http://stackoverflow.com/questions/5560248/programmatically-lighten-or-darken-a-hex-color-or-rgb-and-blend-colors
+    // ===========================================================================================================================
+    lightenDarkenColor: function(col,amt) {
+        var num = parseInt(col,16);
+        var r = (num >> 16) + amt;
+        var b = ((num >> 8) & 0x00FF) + amt;
+        var g = (num & 0x0000FF) + amt;
+        var newColor = g | (b << 8) | (r << 16);
+        return newColor.toString(16);
     }
+    
+    
+    
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

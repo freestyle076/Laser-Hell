@@ -73,13 +73,13 @@ Options.prototype =
        var wasdKeys = game.add.sprite(0, 0, 'ui-atlas', 'wasd-keys', this.hud);
        wasdKeys.anchor.setTo(0.5);
        wasdKeys.x = optionsPanelCenter.x;
-       wasdKeys.y = optionsPanelCenter.y - 200;
+       wasdKeys.y = optionsPanelCenter.y - 180;
        
        // ALT and Space Key Sprite
        var altSpaceKeys = game.add.sprite(0, 0, 'ui-atlas', 'alt-space-keys', this.hud);
        altSpaceKeys.anchor.setTo(0.5);
        altSpaceKeys.x = optionsPanelCenter.x;
-       altSpaceKeys.y = optionsPanelCenter.y - 200 + wasdKeys.height;
+       altSpaceKeys.y = optionsPanelCenter.y - 180 + wasdKeys.height;
        
        // Key hover animations
        this.addControlKeyBehavior(wasdKeys, ['wasd-keys', 'wasd-keys_hover']);

@@ -4,42 +4,50 @@
 // @author Angela Gross and Kyle Handy
 // Xeinax: Space Warrior
 // -------------------------------------------------------------------------------------------------------------------------------
-// 
-// ================================================================================================================================
+// Screen that allows the player to play the game.
+// ===============================================================================================================================
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var Game = function () {};
+var Game = function () {},
+        levelNumber = 1,
+        statusBars = { "health" : null, "weaponHeat" : null };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Game.prototype = 
 {
-    // ===========================================================================================================================
-    // INIT
+    
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    // MAIN PHASER FUNCTIONS
     // --------------------------------------------------------------------------------------------------------------------------
-    // Initialize game
-    // ===========================================================================================================================
+
+    /**==========================================================================================================================
+    * @name INIT
+    * 
+    * @description Initialize game
+    *///=========================================================================================================================
     init: function()
     {
         
     },
     
-    // ===========================================================================================================================
-    // PRELOAD
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Pre-loads the game's assets.
-    // ===========================================================================================================================
+    /**==========================================================================================================================
+    * @name PRELOAD
+    * 
+    * @description Preloads game state's assets
+    *///=========================================================================================================================
     preload: function() 
     {
-  
+        
     },
 
-    // ===========================================================================================================================
-    // CREATE
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Called after everything is ready. Creates HUD and tiled background.
-    // ===========================================================================================================================
+    /**==========================================================================================================================
+    * @name CREATE
+    * 
+    * @description Adds tile background, HUD, and sets key bindings.
+    *///=========================================================================================================================
     create: function() 
     {
         this.addBackground();
@@ -47,22 +55,27 @@ Game.prototype =
         this.setKeyBindings();
     },
     
-    // ===========================================================================================================================
-    // SET KEY BINDINGS
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // CREATE HELPERS
     // --------------------------------------------------------------------------------------------------------------------------
-    // Sets the key bindings for the game
-    // ===========================================================================================================================
+    
+    /**==========================================================================================================================
+    * @name SET KEY BINDINGS
+    * 
+    * @description Sets the key bindings for the game
+    *///=========================================================================================================================
     setKeyBindings: function()
     {
         var escKey = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
         escKey.onDown.add(this.optionsMenuCallback,this);
     },
     
-    // ===========================================================================================================================
-    // ADD BACKGROUND
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Adds the game background and scrolls it down.
-    // ===========================================================================================================================
+    /**==========================================================================================================================
+    * @name ADD BACKGROUND
+    * 
+    * @description Adds the game background and scrolls it down.
+    *///=========================================================================================================================
     addBackground: function()
     {
         // Set background sprite
@@ -72,61 +85,62 @@ Game.prototype =
         game.background.autoScroll(0, 50);
     },
     
-    // ===========================================================================================================================
-    // ADD HUD
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Creates HUD group and adds each part of the HUD to that group.
-    // ===========================================================================================================================
+    /**==========================================================================================================================
+    * @name ADD HUD
+    * 
+    * @description Creates HUD group and adds each part of the HUD to that group.
+    *///=========================================================================================================================
     addHUD: function()
     {
         // Create hud group
         this.hud = game.add.group();
         
-        // Add hud sprites
-        
-        // primary icon and backing glasspanel
-        var primaryGlassPanel = game.add.sprite(game.width - 85, game.height - 180, 'ui-atlas', 'glassPanel', this.hud);
-        primaryGlassPanel.scale.setTo(0.81,0.81);
-        game.add.sprite(primaryGlassPanel.x + 3, primaryGlassPanel.y + 3, 'ui-atlas', 'primary-icon', this.hud).scale.setTo(0.75, 0.75);
-        
-        // secondary icon and backing glasspanel
-        var secondaryGlassPanel = game.add.sprite(game.width - 85, game.height - 90, 'ui-atlas','glassPanel', this.hud);
-        secondaryGlassPanel.scale.setTo(0.81, 0.81);
-        game.add.sprite(secondaryGlassPanel.x + 3, secondaryGlassPanel.y + 3, 'ui-atlas','secondary-icon', this.hud).scale.setTo(0.75, 0.75);
+        // Add primary and secondary skills
+        this.addSkills();
         
         // Add special sprite, options, and add events when clicked and hovered on
-        this.addOptionsSprite();
+        this.addOptions();
         
-        // add status panel and contained status bar sprites
+        // Add status panel and contained status bar sprites
         this.addStatusPanel();
         
-        // add level display
+        // Add level display
         this.addLevelDisplay();
+        
     },
     
-    // ===========================================================================================================================
-    //  CALLBACK FUNCTION TO LAUNCH OPTION MENU
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Takes screenshot of game and transitions to options state
-    // ===========================================================================================================================
-    optionsMenuCallback: function()
-    {
-        // Take a screenshot of the screen to "fake" a pop-up and pass this to the options state
-        game.state.states['Options'].canvasImage = gameUtils.getCanvasScreenshot();
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        // Go to the options state
-        game.state.start("Options");
+    // ADD HUD HELPERS
+    // --------------------------------------------------------------------------------------------------------------------------
+    
+    /**==========================================================================================================================
+    * @name ADD SKILLS
+    * 
+    * @description Add primary and secondary skill icons and adds a backing glass panel behind each one
+    *///=========================================================================================================================
+    addSkills : function()
+    {
+        // Primary icon and backing glasspanel
+        var primaryGlassPanel = gameUtils.makeNinePatchPanel('glassPanel', game.width - 85, game.height - 180, 80, 80, 0, 0);
+        primaryGlassPanel.alpha = 0.5;
+        game.add.sprite(primaryGlassPanel.x + 3, primaryGlassPanel.y + 3, 'ui-atlas', 'primary-icon', this.hud).scale.setTo(0.75, 0.75);
+        
+        // Secondary icon and backing glasspanel
+        var secondaryGlassPanel = gameUtils.makeNinePatchPanel('glassPanel', game.width - 85, game.height - 90, 80, 80, 0, 0);
+        secondaryGlassPanel.alpha = 0.5;
+        game.add.sprite(secondaryGlassPanel.x + 3, secondaryGlassPanel.y + 3, 'ui-atlas','secondary-icon', this.hud).scale.setTo(0.75, 0.75);
     },
         
-    // ===========================================================================================================================
-    // ADD OPTIONS SPRITE
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Creates and adds a sprite that will move to the options state.
-    // ===========================================================================================================================
-    addOptionsSprite: function()
+    /**==========================================================================================================================
+    * @name ADD OPTIONS
+    * 
+    * @description Creates and adds a sprite that will move to the options state.
+    *///=========================================================================================================================
+    addOptions: function()
     {
-        var optionsSprite = game.add.sprite(game.width - 80, 10, 'ui-atlas', 'options-icon', this.hud);
-        optionsSprite.scale.setTo(0.75, 0.75);
+        var options = game.add.sprite(game.width - 80, 10, 'ui-atlas', 'options-icon', this.hud);
+        options.scale.setTo(0.75, 0.75);
         
         // Add onInputOver function to change option sprite
         var onOver = function(target) 
@@ -140,110 +154,101 @@ Game.prototype =
             target.alpha = 1;
         };
         
-        // Add these functions to the option sprite
-        optionsSprite.inputEnabled = true;
-        optionsSprite.events.onInputUp.add(this.optionsMenuCallback);
-        optionsSprite.events.onInputOver.add(onOver);
-        optionsSprite.events.onInputOut.add(onOut);
+        // Add click, onOver, and onOut functions to the option sprite
+        options.inputEnabled = true;
+        options.events.onInputUp.add(this.optionsMenuCallback);
+        options.events.onInputOver.add(onOver);
+        options.events.onInputOut.add(onOut);
     },
     
-    // ===========================================================================================================================
-    // ADD LEVEL DISPLAY
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Creates and adds the level display panel with current level
-    // ===========================================================================================================================
+    /**==========================================================================================================================
+    * @name OPTIONS MENU CALLBACK
+    * 
+    * @description Takes screenshot of game and transitions to options state
+    *///=========================================================================================================================
+    optionsMenuCallback: function()
+    {
+        // Take a screenshot of the screen to "fake" a pop-up and pass this to the options state
+        game.state.states['Options'].canvasImage = gameUtils.getCanvasScreenshot();
+        
+        // Add state that it will go back to
+        game.state.states['Options'].backState = 'Game';
+
+        // Go to the options state
+        game.state.start("Options");
+        
+    },
+    
+    /**==========================================================================================================================
+    * @name ADD LEVEL DISPLAY
+    * 
+    * @description Creates and adds the level display panel with current level
+    *///=========================================================================================================================
     addLevelDisplay: function()
     {
-        
         var levelPanel = game.add.sprite(10,10,'ui-atlas','metalPanel_purpleCorner',this.hud);
         levelPanel.scale.setTo(.7,.7);
         
         // TODO: would love a new font here
         var level = 1;
-        var level = game.add.text(35,35,level.toString(),{ fontSize: '32px', fill: '#000' },this.hud);
+        var level = game.add.text(35,35,level.toString(),{fill: "black", font:"30px Tron" },this.hud);
     },
     
-    // ===========================================================================================================================
-    // ADD STATUS PANEL
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Creates and adds the status panel sprites: panel, health bar (init 100%), weapon heat bar (init 0%)
-    // ===========================================================================================================================
-    addStatusPanel: function(){
+    /**==========================================================================================================================
+    * @name ADD STATUS PANEL
+    * 
+    * @description Creates and adds the status panel sprites: panel, health bar, and weapon heat bar 
+    *///=========================================================================================================================
+    addStatusPanel: function()
+    {
+
+        // Glass status panel
+        var statusPanel = gameUtils.makeNinePatchPanel('glassPanel', 5, game.height - 90, 215, 85, 0, 0);
+        statusPanel.alpha = 0.5;
         
-        // status panel sprite
-        
-        /*
-        var statusPanel = new Phaser.NinePatchImage(game, 10, game.height - 90, game.height/2, 'glassPanel');
-        // Set the measures for image - [AUTOMATICALLY UPDATED]
-        statusPanel.targetWidth  = 500;
-        statusPanel.targetHeight = 500;
-        // Set anchor for image - [NEEDS MANUAL UPDATE] 
-        statusPanel.anchor.setTo(0, 0);
-        statusPanel.UpdateImageSizes();
-        */
-        var statusPanel = game.add.sprite(10,game.height - 90, 'ui-atlas','glassPanel',this.hud); // glass option
-        statusPanel.scale.setTo(1.8,.8);
-        
-        // track number of status bars
+        // Status bar helpers
+        this.graphics = game.add.graphics(0, 0, this.hud);
         this.numStatusBars = 0;
+        var upperLeftX = statusPanel.x + 10;
+        var upperLeftY = statusPanel.y + 11;
         
-        // add health and heat bars
-        this.graphics = game.add.graphics(0,0,this.hud);
-        this.drawHealthBar(100,100);
-        this.drawHeatBar(50,100);
+        // Health bar and shadow
+        this.drawStatusBar("health", "health_statusBar", upperLeftX, upperLeftY, 0x005522, 0x005522);
+        // Weapon heat bar and shadow
+        this.drawStatusBar("weaponHeat", "weaponHeat_statusBar", upperLeftX, upperLeftY, 0x440055, 0x440055);
+        this.updateStatusBar("weaponHeat", 0, 100)
     },
     
-    // ===========================================================================================================================
-    // DRAW HEALTH BAR
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Uses graphics to draw health bar with fill percentage current/total
-    // ===========================================================================================================================
-    drawHealthBar: function(current,total)
+    /**==========================================================================================================================
+    * @name DRAW STATUS BAR
+    * 
+    * @param {string} statusBarKey - The key specified for the status bar sprite (see class variables above)
+    * @param {string} statusBarSpriteName - Name of the sprite from the ui-atlas for the status bar
+    * @param {float} upperLeftX - Upperleft x position of the status bar
+    * @param {float} upperLeftY - Upperleft y position of the status bar
+    * @param {hexidecimal} borderColor - Color of the status bar shadow's border
+    * @param {hexidecimal} fillColor - Color of the status bar shadow's fill
+    * 
+    * @description Generic function to draw a status bar and its shadow in the status panel
+    *///=========================================================================================================================
+    drawStatusBar: function(statusBarKey, statusBarSpriteName, upperLeftX, upperLeftY, borderColor, fillColor)
     {
-        // health bar colors
-        var borderColor = 0x00CC22;
-        var fillColor = 0xFF0000;
         
-        // draw function
-        this.drawStatusBar(current,total,borderColor,fillColor);
-    },
-    
-    // ===========================================================================================================================
-    // DRAW HEAT BAR
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Uses graphics to draw heat bar with fill percentage current/total
-    // ===========================================================================================================================
-    drawHeatBar: function(current,total)
-    {
-        // health bar colors
-        
-        var borderColor = 0xFFFF00;
-        var fillColor = 0xFF00FF;
-        
-        // draw function
-        this.drawStatusBar(current,total,borderColor,fillColor);
-    },
-    
-    // ===========================================================================================================================
-    // DRAW STATUS BAR
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Generic function to draw a status bar in the status panel
-    // ===========================================================================================================================
-    drawStatusBar: function(current,total,borderColor,fillColor)
-    {
-        // status bar constants
-        var ulx = 30;
-        var uly = game.height - 78 + (this.numStatusBars * 38);
-        var width = 143;
-        var fillWidth = width * (current/total);
-        var height = 18;
+        // Status bar constants
+        var ulx = upperLeftX;
+        var uly = upperLeftY + (this.numStatusBars * 38);
+        var width = 195;
+        var height = 25.95;
         var borderThickness = 3;
         
-        // fill bar
-        this.graphics.beginFill(fillColor);
-        this.graphics.drawRect(ulx,uly,fillWidth,height);
+        // SHADOW
+        // ------------------------------------------------------------------------------------
         
-        // border
+        // Fill bar
+        this.graphics.beginFill(fillColor);
+        this.graphics.drawRect(ulx, uly, width, height);
+        
+        // Border
         this.graphics.beginFill(borderColor);
         
         // left vertical bar
@@ -267,6 +272,19 @@ Game.prototype =
         // lower right corner
         this.graphics.arc(ulx+width,uly+height,borderThickness,game.math.degToRad(0),game.math.degToRad(90),false);
         this.graphics.drawPolygon( new Phaser.Polygon([ulx+width,uly+height, ulx+width+borderThickness,uly+height, ulx+width,uly+height+borderThickness]) );
+
+        // STATUS BAR
+        // ------------------------------------------------------------------------------------
+
+        // Add status bar sprite
+        var statusBar = game.add.sprite(ulx, uly, 'ui-atlas', statusBarSpriteName, this.hud);
+        
+        // Enable cropping on the status bar and add cropping rectangle
+        statusBar.cropEnabled = true;
+        statusBar.cropRect = new Phaser.Rectangle(0, 0, statusBar.width, statusBar.height);
+        
+        // Add status bar to object
+        statusBars[statusBarKey] = statusBar;
         
         /*
         // set static animation
@@ -281,36 +299,31 @@ Game.prototype =
         this.numStatusBars++;
     },
     
-    // ===========================================================================================================================
-    // STATIC ANIMATION
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Draws one frame of the staticy status bar animation
-    // ===========================================================================================================================
-    staticAnimation: function(ulx, uly, width, height, flashColor, graphics){
-        var flashes = [];
-        for (var i = 0; i < (width/10); i++) {
-            // get random flash position
-            var randX = (Math.random() * width) + ulx;
-            
-            // get varied color, varied lighter
-            var colorVar = Math.random() * 20;
-            var variedColor = gameUtils.lightenDarkenColor(flashColor,colorVar);
-            
-            // push flash object
-            flashes.push({
-                x: randX,
-                color: variedColor
-            });
-        }
+    /**==========================================================================================================================
+    * @name UPDATE STATUS BAR
+    * 
+    * @description Crops the status bar according to its current and max values
+    * 
+    * @param {string} statusBarKey - The key specified for the status bar sprite (see class variables above)
+    * @param {float} current - Current value to use as a percentage of the crop
+    * @param {float} max - Max value to use as a percentage of the crop
+    * 
+    * @return {Phaser.NinePatchImage} - A Phaser Nine Patch Image Sprite
+    *///=========================================================================================================================
+    updateStatusBar : function(statusBarKey, current, max)
+    {
+        // Get status bar
+        var statusBar = statusBars[statusBarKey];
         
-        // draw all generated flashes
-        for (flash in flashes){
-            console.log("flash!");
-            graphics.beginFill(flash.color);
-            graphics.drawRect(flash.x,uly,3,height);
-        }
+        // Update crop width based on current and max
+        statusBar.cropRect.width = (current / max) * statusBar.width;
+        
+        // Update crop to change status bar
+        statusBar.updateCrop();
     }
     
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

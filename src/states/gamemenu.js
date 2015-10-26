@@ -4,7 +4,7 @@
 // @author Angela Gross and Kyle Handy
 // Xeinax: Space Warrior
 // -------------------------------------------------------------------------------------------------------------------------------
-// 
+// Screen that allows the player to see options or launch the game.
 // ================================================================================================================================
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -15,11 +15,16 @@ var GameMenu = function () {};
 
 GameMenu.prototype = 
 {   
-    // ===========================================================================================================================
-    // INIT
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    // MAIN PHASER FUNCTIONS
     // --------------------------------------------------------------------------------------------------------------------------
-    // Initialize game menu
-    // ===========================================================================================================================
+    
+    /**==========================================================================================================================
+    * @name INIT
+    * 
+    * @description Initialize game menu
+    *///=========================================================================================================================
     init: function()
     {   
         // Create title text
@@ -35,11 +40,11 @@ GameMenu.prototype =
         this.optionCount = 1;
     },
 
-    // ===========================================================================================================================
-    // CREATE
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Called after everything is ready.
-    // ===========================================================================================================================
+    /**==========================================================================================================================
+    * @name CREATE
+    * 
+    * @description Called after everything is ready. Adds background, title, and menu options.
+    *///=========================================================================================================================
     create: function() 
     {
         // Add background image
@@ -48,76 +53,88 @@ GameMenu.prototype =
         // Add title 
         game.add.existing(this.titleText);
         
-        // Create launch menu option
-        this.addMenuOption("Launch", function (target) 
-        {
-            game.state.start("Game");
-        });
-        
-        // Create options menu option
-        this.addMenuOption("Options", this.optionsCallback);
-        
+        // Add menu items
+        this.addMenuItems();
+
         // Disallow game to pause
         game.stage.disableVisibilityChange = true;
     },
     
-    // ===========================================================================================================================
-    // ADD MENU OPTION
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // CREATE HELPERS
     // --------------------------------------------------------------------------------------------------------------------------
-    // Menu option factory
-    // ===========================================================================================================================
-    addMenuOption: function(text, callback) 
+    
+    /**==========================================================================================================================
+    * @name ADD MENU ITEMS
+    * 
+    * @description Creates a "launch" and "options" menu items on this menu screen.
+    *///=========================================================================================================================
+    addMenuItems: function() 
     {
-        // Menu style
-        var menuStyle =
-        {
-            font: "35px Tron", 
-            fill: '#ffffff', 
-            align: 'left', 
-            stroke: 'rgba(0,0,0,0)', 
-            strokeThickness: 4
-        };
+        var textX = game.world.centerX;
+        var textY = 280;
         
-        // Add menu text to game
-        var menuText = game.add.text(game.world.centerX, (this.optionCount * 80) + 200, text, menuStyle);
+        var itemStyle =
+        {
+            font: '35px Tron', 
+            fill: '#ffffff',
+            align: 'left', 
+            stroke: 'rgba(0,0,0,0.5)', 
+            strokeThickness: 2
+        };
         
         // Add onInputOver function to change menu text
         var onOver = function(target) 
         {
             target.fill = "#D6BBF0";
-            target.stroke = "rgba(200,200,200,0.5)";
+            target.stroke = "rgba(255,255,255,1)";
         };
         
         // Add onInputOutfunction to change menu text
         var onOut = function(target) 
         {
             target.fill = "#FFFFFF";
-            target.stroke = "rgba(0,0,0,0)";
+            target.stroke = "rgba(0,0,0,0.5)";
         };
         
-        // Add these functions to the menu text
-        menuText.inputEnabled = true;
-        menuText.events.onInputUp.add(callback);
-        menuText.events.onInputOver.add(onOver);
-        menuText.events.onInputOut.add(onOut);
+        // Create launch menu item
+        gameUtils.addMenuItem("Launch", textX, textY, itemStyle, onOver, onOut, function (target) 
+        {
+            // Remove menu music and play game music
+            musicPlayer.removeByKey('menu-music');
+            musicPlayer.play('game-music', 1, true);
+            
+            // Go to the next state
+            game.state.start("Game"); 
+        });
         
-        // Increment the number of menu options
-        this.optionCount++;
+        // Move down for next item
+        textY += 80;
+        
+        // Create options menu item
+        gameUtils.addMenuItem("Options", textX, textY, itemStyle, onOver, onOut, this.optionsCallback);
     },
- 
-    // ===========================================================================================================================
-    // OPTIONS CALL BACK
-    // --------------------------------------------------------------------------------------------------------------------------
-    // What is called after options is clicked
-    // ===========================================================================================================================
+
+    /**==========================================================================================================================
+    * @name OPTIONS CALL BACK
+    * 
+    * @description What is called after the options sprite is clicked
+    *///=========================================================================================================================
     optionsCallback: function()
     {
         // Take a screenshot of the screen to "fake" a pop-up and pass this to the options state
         game.state.states['Options'].canvasImage = gameUtils.getCanvasScreenshot();
         
+        // Add state that it will go back to
+        game.state.states['Options'].backState = 'GameMenu';
+        
         // Go to the options state
         game.state.start("Options");
     }
+    
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

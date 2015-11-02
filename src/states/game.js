@@ -30,7 +30,8 @@ Game.prototype =
     *///=========================================================================================================================
     init: function()
     {
-        
+        // game score
+        this.gameScore = 0;
     },
     
     /**==========================================================================================================================
@@ -40,7 +41,6 @@ Game.prototype =
     *///=========================================================================================================================
     preload: function() 
     {
-        
     },
 
     /**==========================================================================================================================
@@ -53,13 +53,34 @@ Game.prototype =
         this.addBackground();
         this.addHUD();
         this.setKeyBindings();
+
+        var g = this;
+        setTimeout(function () {
+            console.log("bombs away");
+            g.updateStatusBar('health', 20, 100);
+            setTimeout(function () {
+                console.log("bombs away");
+                g.updateStatusBar('weaponHeat', 80, 100);
+            }, 2000);
+        }, 2000);
+    },
+
+    /**==========================================================================================================================
+    * @name UPDATE
+    * 
+    * @description Performs frame updates to game elements before render
+    *///=========================================================================================================================
+    update: function()
+    {
+        statusBars['health'].updateCrop();
+        statusBars['weaponHeat'].updateCrop();
     },
     
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // CREATE HELPERS
     // --------------------------------------------------------------------------------------------------------------------------
-    
+
     /**==========================================================================================================================
     * @name SET KEY BINDINGS
     * 
@@ -67,8 +88,9 @@ Game.prototype =
     *///=========================================================================================================================
     setKeyBindings: function()
     {
+        // ESC -> Pause Menu
         var escKey = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
-        escKey.onDown.add(this.optionsMenuCallback,this);
+        escKey.onDown.add(this.optionsMenuCallback, this);
     },
     
     /**==========================================================================================================================
@@ -104,8 +126,8 @@ Game.prototype =
         // Add status panel and contained status bar sprites
         this.addStatusPanel();
         
-        // Add level display
-        this.addLevelDisplay();
+        // Add score display
+        this.addScoreDisplay();
         
     },
     
@@ -180,18 +202,16 @@ Game.prototype =
     },
     
     /**==========================================================================================================================
-    * @name ADD LEVEL DISPLAY
+    * @name ADD SCORE DISPLAY
     * 
-    * @description Creates and adds the level display panel with current level
+    * @description Creates and adds the score display panel with current gamescore
     *///=========================================================================================================================
-    addLevelDisplay: function()
+    addScoreDisplay: function()
     {
-        var levelPanel = game.add.sprite(10,10,'ui-atlas','metalPanel_purpleCorner',this.hud);
-        levelPanel.scale.setTo(.7,.7);
+        var scorePanel = game.add.sprite(10,10,'ui-atlas','metalPanel_purpleCorner',this.hud);
+        scorePanel.scale.setTo(.7,.7);
         
-        // TODO: would love a new font here
-        var level = 1;
-        var level = game.add.text(35,35,level.toString(),{fill: "black", font:"30px Tron" },this.hud);
+        this.scoreDisplay = game.add.text(35, 35, this.gameScore.toString(), { fill: "#AA00D4", font: "30px Tron" }, this.hud);
     },
     
     /**==========================================================================================================================
@@ -237,7 +257,7 @@ Game.prototype =
         // Status bar constants
         var ulx = upperLeftX;
         var uly = upperLeftY + (this.numStatusBars * 38);
-        var width = 195;
+        statusBarWidth = 195;
         var height = 25.95;
         var borderThickness = 3;
         
@@ -246,7 +266,7 @@ Game.prototype =
         
         // Fill bar
         this.graphics.beginFill(fillColor);
-        this.graphics.drawRect(ulx, uly, width, height);
+        this.graphics.drawRect(ulx, uly, statusBarWidth, height);
         
         // Border
         this.graphics.beginFill(borderColor);
@@ -254,11 +274,11 @@ Game.prototype =
         // left vertical bar
         this.graphics.drawRect(ulx-borderThickness,uly,borderThickness,height);
         // right vertical bar
-        this.graphics.drawRect(ulx+width,uly,borderThickness,height);
+        this.graphics.drawRect(ulx + statusBarWidth, uly, borderThickness, height);
         // top horizontal bar
-        this.graphics.drawRect(ulx,uly-borderThickness,width,borderThickness);
+        this.graphics.drawRect(ulx, uly - borderThickness, statusBarWidth, borderThickness);
         // bottom horizontal bar
-        this.graphics.drawRect(ulx,uly+height,width,borderThickness);
+        this.graphics.drawRect(ulx, uly + height, statusBarWidth, borderThickness);
         
         // upper left corner
         this.graphics.arc(ulx,uly,borderThickness,game.math.degToRad(180),game.math.degToRad(270),false);
@@ -267,11 +287,11 @@ Game.prototype =
         this.graphics.arc(ulx,uly+height,borderThickness,game.math.degToRad(90),game.math.degToRad(180),false);
         this.graphics.drawPolygon( new Phaser.Polygon([ulx,uly+height, ulx,uly+height+borderThickness, ulx-borderThickness,uly+height]) );
         // upper right corner
-        this.graphics.arc(ulx+width,uly,borderThickness,game.math.degToRad(270),game.math.degToRad(0),false);
-        this.graphics.drawPolygon( new Phaser.Polygon([ulx+width,uly, ulx+width+borderThickness,uly, ulx+width,uly-borderThickness]) );
+        this.graphics.arc(ulx + statusBarWidth, uly, borderThickness, game.math.degToRad(270), game.math.degToRad(0), false);
+        this.graphics.drawPolygon(new Phaser.Polygon([ulx + statusBarWidth, uly, ulx + statusBarWidth + borderThickness, uly, ulx + statusBarWidth, uly - borderThickness]));
         // lower right corner
-        this.graphics.arc(ulx+width,uly+height,borderThickness,game.math.degToRad(0),game.math.degToRad(90),false);
-        this.graphics.drawPolygon( new Phaser.Polygon([ulx+width,uly+height, ulx+width+borderThickness,uly+height, ulx+width,uly+height+borderThickness]) );
+        this.graphics.arc(ulx + statusBarWidth, uly + height, borderThickness, game.math.degToRad(0), game.math.degToRad(90), false);
+        this.graphics.drawPolygon(new Phaser.Polygon([ulx + statusBarWidth, uly + height, ulx + statusBarWidth + borderThickness, uly + height, ulx + statusBarWidth, uly + height + borderThickness]));
 
         // STATUS BAR
         // ------------------------------------------------------------------------------------
@@ -286,16 +306,6 @@ Game.prototype =
         // Add status bar to object
         statusBars[statusBarKey] = statusBar;
         
-        /*
-        // set static animation
-        // TODO: This should happen during the update function
-        var lighterColor = gameUtils.lightenDarkenColor(fillColor,40);
-        var g = this.graphics;
-        var animationFunction = this.staticAnimation;
-        setInterval(function(){
-            animationFunction(ulx,uly,width,height,lighterColor,g);
-        },1000);
-        */
         this.numStatusBars++;
     },
     
@@ -316,11 +326,32 @@ Game.prototype =
         var statusBar = statusBars[statusBarKey];
         
         // Update crop width based on current and max
-        statusBar.cropRect.width = (current / max) * statusBar.width;
+        //statusBar.cropRect.width = (current / max) * statusBar.width;
+        // create status bar slide animation
+
+        var animation = game.add.tween(statusBar.cropRect).to({ 'width': (current / max) * statusBarWidth }, 200);
+
+        animation.start();
         
-        // Update crop to change status bar
-        statusBar.updateCrop();
-    }
+    },
+
+    /**==========================================================================================================================
+    * @name UPDATE SCORE
+    * 
+    * @description Sets the gameScore value and updates the score display
+    * 
+    * @param {int} newScore - The new score value
+    * @param {bool} isReset - If true gameScore is newScore, else gameScore is gameScore + newScore
+    *///=========================================================================================================================
+    updateScore: function (newScore, isReset) {
+        if (isReset) {
+            this.gameScore = newScore;
+        }
+        else {
+            this.gameScore += newScore;
+        }
+        this.scoreDisplay.setText(this.gameScore.toString());
+    },
     
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -131,7 +131,24 @@ var gameUtils =
         menuText.events.onInputUp.add(callback);
         menuText.events.onInputOver.add(onOver);
         menuText.events.onInputOut.add(onOut);
+    },
+
+    /**==========================================================================================================================
+    * @name PYTHAG THEOREM
+    * 
+    * @description Classic pythagorean theorem
+    * 
+    * @param {float} a - side a length
+    * @param {float} b - side b length
+    * 
+    * @return I'll let your middle school math do the rest
+    *///=========================================================================================================================
+    pythagTheorem: function (a, b)
+    {
+        return Math.sqrt(a * a + b * b);
     }
+
+
     
 };
 

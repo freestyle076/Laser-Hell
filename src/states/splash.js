@@ -124,6 +124,7 @@ Splash.prototype =
         // Objects
         
         // Ships
+        game.load.script('ship', 'src/characters/ship.js');
         
     },
 

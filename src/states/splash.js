@@ -125,7 +125,11 @@ Splash.prototype =
         
         // Ships
         game.load.script('ship', 'src/characters/ship.js');
-        
+        game.load.script('playerShip', 'src/characters/playerShip.js');
+        game.load.script('enemyShip', 'src/characters/enemyShip.js');
+        game.load.script('tanker', 'src/characters/tanker.js');
+        game.load.script('destroyer', 'src/characters/destroyer.js');
+        game.load.script('slasher', 'src/characters/slasher.js');
     },
 
     /**==========================================================================================================================

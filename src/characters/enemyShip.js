@@ -19,12 +19,15 @@
 * @param {string} mainSprite - key for ship sprite image
 * @param {string} explosionSprite - key for explosion sprite image
 * @param {float} maxHealth - maximum and starting health for ship
+* @param {float} speed - movement speed
 * @param {Skill[]} skills - list of skill objects for ship
 * @param {Phaser.Group} group - physics group to add ship to
 *
 * @description EnemyShip constructor does not need to be overriden
 *///=========================================================================================================================
-EnemyShip = Ship.prototype.call;
+EnemyShip = function(game, x, y, mainSprite, explosionSprite, maxHealth, skills, group) {
+    Ship.call(this, game, x, y, mainSprite, explosionSprite, maxHealth, skills, group);
+}
 
 EnemyShip.prototype = Object.create(Ship.prototype);
 EnemyShip.prototype.constructor = EnemyShip;

@@ -25,12 +25,11 @@
 *
 * @description Ship constructor
 *///=========================================================================================================================
-Ship = function (game, x, y, mainSprite, explosionSprite, maxHealth, speed, skills, group)
-{
+Ship = function (game, x, y, mainSprite, explosionSprite, maxHealth, speed, skills, group) {
 
     // Calls Phaser.Sprite constructor
     // Requires existing loaded image with key: spriteKey
-    Phaser.Sprite.call(this, game, x, y, mainSprite, 'ships-atlas');
+    Phaser.Sprite.call(this, game, x, y, 'ships-atlas', mainSprite);
     // Health values
     this.health = this.maxHealth = maxHealth;
 
@@ -46,7 +45,7 @@ Ship = function (game, x, y, mainSprite, explosionSprite, maxHealth, speed, skil
     // List of projectiles
     this.projectiles = [];
 
-}
+};
 Ship.prototype = Object.create(Phaser.Sprite.prototype);
 Ship.prototype.constructor = Ship;
 
@@ -56,31 +55,20 @@ Ship.prototype.constructor = Ship;
     // --------------------------------------------------------------------------------------------------------------------------
 
     /**==========================================================================================================================
-    * @name UPDATE
-    *  
-    * @description OVERRIDE called automatically by World.update
-    *///=========================================================================================================================
-    Ship.prototype.update = function ()
-    {
-        // this functions is called automatically on the game's update function
-    },
-
-    /**==========================================================================================================================
     * @name IS DEAD
     *
     * @description Checks if the ship is dead
     *
     * @return {bool} - true if health is above 0, false otherwise
     *///=========================================================================================================================
-    Ship.prototype.isDead = function ()
-    {
+    Ship.prototype.isDead = function () {
         if (health <= 0.0) {
             return true;
         }
         else {
             return false;
         }
-    },
+    };
 
     /**==========================================================================================================================
     * @name MOVE
@@ -89,44 +77,41 @@ Ship.prototype.constructor = Ship;
     *
     * @return {bool} - true if health is above 0, false otherwise
     *///=========================================================================================================================
-    Ship.prototype.move = function (isUp, isRight, isDown, isLeft)
-    {
+    Ship.prototype.move = function (isUp, isRight, isDown, isLeft) {
 
         // fun tidbet, to achieve proportionate (same radius) horizontal movement
         // change x and y by speed/2
 
-        //Ship needs a speed constructor parameter!!!!!!!!!!!!!
-
         // check all 8 directions, most complex (hard to satisfy) first
-        if (isUp && isRight){
-            this.x -= this.speed/2;
-            this.y += this.speed2;
+        if (isUp && isRight) {
+            this.x -= this.speed / 2;
+            this.y += this.speed / 2;
         }
-        else if (isUp && isLeft){
-            this.x -= this.speed/2;
-            this.y -= this.speed/2;
+        else if (isUp && isLeft) {
+            this.x -= this.speed / 2;
+            this.y -= this.speed / 2;
         }
-        else if (isDown && isLeft){
-            this.x -= this.speed/2;
-            this.y += this.pseed/2;
+        else if (isDown && isLeft) {
+            this.x -= this.speed / 2;
+            this.y += this.pseed / 2;
         }
-        else if (isDown && isRight){
-            this.x += this.speed/2;
-            this.y += this.speed/2;
+        else if (isDown && isRight) {
+            this.x += this.speed / 2;
+            this.y += this.speed / 2;
         }
-        else if (isRight){
+        else if (isRight) {
             this.x += this.speed;
         }
-        else if (isUp){
+        else if (isUp) {
             this.y -= this.speed;
         }
-        else if (isLeft){
+        else if (isLeft) {
             this.x -= this.speed;
         }
-        else if (isDown){
+        else if (isDown) {
             this.y += this.speed;
         }
-    },
+    };
 
 
     /**==========================================================================================================================
@@ -136,10 +121,9 @@ Ship.prototype.constructor = Ship;
     *
     * @param {float} damage - amount by which to lower ship's health
     *///=========================================================================================================================
-    Ship.prototype.takeDamage = function (damage)
-    {
+    Ship.prototype.takeDamage = function (damage) {
         this.health -= damage;
-    },
+    };
 
 
     /**==========================================================================================================================
@@ -147,21 +131,22 @@ Ship.prototype.constructor = Ship;
     *
     * @description Displays ship's explosion sprite, frees resources
     *///=========================================================================================================================
-    Ship.prototype.die = function ()
-    {
+    Ship.prototype.die = function () {
 
         // spawn explosionSprite by switching textures
-        game.add.loadTexture(this.explosionSprite, 'projectiles-atlas');
+        //this.loadTexture('projectiles-atlas',this.explosionSprite); //doesn't replce
 
         //TODO: Could add some motion/scaling to explosion
-
+        this.kill();
+        /*
         // dissapear timeout for explosion
-        var ship = this; //resolve reference
+        var animation = game.add.tween(this).to({ 'alpha': 0 }, 1000);
+        animation.onComplete.add(this.kill);
+
         setTimeout(function () {
-            ship.tween({ alpha: 0 }, 1000); //does this run synchronously? it must
-            ship.kill();
-        }, 200);
-    },
+            animation.start();
+        }, 200);*/
+    };
 
     /**==========================================================================================================================
     * @name FIRE
@@ -170,14 +155,13 @@ Ship.prototype.constructor = Ship;
     *
     * @param {Skill} skill - skill to fire
     *///=========================================================================================================================
-    Ship.prototype.fire = function (skill)
-    {
+    Ship.prototype.fire = function (skill) {
         // fire skill
         var projectile = skill.fire();
 
         // collect projectile sprite
         this.projectiles.push(projectile);
-    }
+    };
 
 
     

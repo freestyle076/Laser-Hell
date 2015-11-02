@@ -16,17 +16,19 @@
 * @param {Phaser.Game} game - game that sprite will be added to
 * @param {float} x - horizontal (x) location of sprite
 * @param {float} y - vertifcal (y) location of sprite
-* @param {string} mainSprite - key for ship sprite image
-* @param {string} explosionSprite - key for explosion sprite image
-* @param {float} maxHealth - maximum and starting health for ship
 * @param {Skill[]} skills - list of skill objects for ship
 * @param {Phaser.Group} group - physics group to add ship to
-* @param {float} speed - ship's movement speed
 *
-* @description Destroyer constructor
+* @description Tanker constructor
 *///=========================================================================================================================
-Tanker = function (game, x, y, mainSprite, explosionSprite, maxHealth, speed, skills, group) {
-    EnemyShip.prototype.call(game, x, y, mainSprite, explosionSprite, EnemyShip.tankerHealth, skills, group);
+Tanker = function (game, x, y,skills, group) {
+
+    var mainSprite = 'red_ship_01';
+    var explosionSprite = 'expl_01_0021';
+    var maxHealth = 100;
+    var speed = 5;
+
+    EnemyShip.call(this, game, x, y, mainSprite, explosionSprite, EnemyShip.tankerHealth, speed, skills, group);
 }
 Tanker.prototype = Object.create(EnemyShip.prototype);
 Tanker.prototype.constructor = Tanker;

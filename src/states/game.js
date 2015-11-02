@@ -30,7 +30,6 @@ Game.prototype =
     *///=========================================================================================================================
     init: function()
     {
-        // game score
         this.gameScore = 0;
     },
     
@@ -52,8 +51,11 @@ Game.prototype =
     {
         this.addBackground();
         this.addHUD();
+        this.addPlayerShip();
         this.setKeyBindings();
+        this.addPlayerShip();
 
+        /*
         var g = this;
         setTimeout(function () {
             console.log("bombs away");
@@ -61,8 +63,18 @@ Game.prototype =
             setTimeout(function () {
                 console.log("bombs away");
                 g.updateStatusBar('weaponHeat', 80, 100);
+
+                var slash = new Slasher(g, 20, 20, null, null);
+                game.add.existing(slash);
+
+                var tank = new Tanker(g, 60, 60, null, null);
+                game.add.existing(tank);
+
+                var dest = new Destroyer(g, 80, 80, null, null);
+                game.add.existing(dest);
             }, 2000);
         }, 2000);
+        */
     },
 
     /**==========================================================================================================================
@@ -129,6 +141,25 @@ Game.prototype =
         // Add score display
         this.addScoreDisplay();
         
+    },
+    
+    /**==========================================================================================================================
+    * @name ADD PLAYER SHIP
+    * 
+    * @description Adds the player's ship to the game
+    *///=========================================================================================================================
+    addPlayerShip: function () {
+
+        // visible parameters
+        var playerMaxHealth = 100;
+        var playerSpeed = 20;
+        var skills = null;
+
+        // create ship
+        this.playerShip = new PlayerShip(game, 400, 400, 'blue_ship_01', 'expl_02_0021', playerMaxHealth, playerSpeed, skills, this.hud);
+
+        // add to game
+        game.add.existing(this.playerShip);
     },
     
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -324,10 +355,6 @@ Game.prototype =
     {
         // Get status bar
         var statusBar = statusBars[statusBarKey];
-        
-        // Update crop width based on current and max
-        //statusBar.cropRect.width = (current / max) * statusBar.width;
-        // create status bar slide animation
 
         var animation = game.add.tween(statusBar.cropRect).to({ 'width': (current / max) * statusBarWidth }, 200);
 

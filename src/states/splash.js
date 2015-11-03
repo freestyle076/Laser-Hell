@@ -172,8 +172,8 @@ Splash.prototype =
         // Pickups
         game.load.atlasJSONHash('pickups-atlas', 'assets/images/game/pickups.png', 'assets/images/game/pickups.json');
         
-        // Ships
-        game.load.atlasJSONHash('ships-atlas', 'assets/images/game/ships.png', 'assets/images/game/ships.json');
+        // Ships and Projectiles
+        game.load.atlasJSONHash('ships-atlas', 'assets/images/game/ships-and-projectiles.png', 'assets/images/game/ships-and-projectiles.json');
     },
     
     /**==========================================================================================================================

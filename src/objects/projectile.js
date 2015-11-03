@@ -4,7 +4,8 @@
 // @author Angela Gross and Kyle Handy
 // Xeinax: Space Warrior
 // -------------------------------------------------------------------------------------------------------------------------------
-// Base class for projectiles, extends Phaser.Sprite
+// Base class for projectiles, extends Phaser.Sprite.
+// This may include bullets, lasers, and rockets.
 // ===============================================================================================================================
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -17,20 +18,19 @@
 * 
 * @description Projectile constructor
 * 
-* @param {string} textureKey - The texture atlas key for the projectile
+* @param {string} textureKey - The texture atlas key for the projectile.
 * @param {float} x - x position of the projectile to spawn
 * @param {float} y - y position of the projectile to spawn
 * @param {float} damage - Damage that the projectile does
-* @param {bool} isObstacle - Whether or not the projectile is an obstacle
 * @param {FramesInfo} explosionFramesInfo - Frame information for the explosion object
+* @param {FramesInfo} obstacleFramesInfo - [optional] Frame information for the obstacle object
 *///=========================================================================================================================
-Projectile = function(textureKey, x, y, damage, isObstacle, explosionFramesInfo) 
+Projectile = function(textureKey, x, y, damage, explosionFramesInfo, obstacleFramesInfo) 
 {
     // Set up attributes
     this.textureKey = textureKey;
     this.damage = damage;
-    this.isObstacle = isObstacle;
-    this.explosionFramesInfo = explosionFramesInfo;
+    this.isObstacle = obstacleFramesInfo ? true : false;
     
     // Create projectile sprite
     Phaser.Sprite.call(this, game, x, y, 'ships-atlas', textureKey);
@@ -39,15 +39,75 @@ Projectile = function(textureKey, x, y, damage, isObstacle, explosionFramesInfo)
     var deathAnim = this.animations.add
     (
         'dying', 
-        Phaser.animation.generateFrameNames(this.explosionFramesInfo.prefix, this.explosionFramesInfo.start, this.explosionFramesInfo.stop, this.explosionFramesInfo.suffix, this.explosionFramesInfo.zeroPad),
-        30,
+        Phaser.animation.generateFrameNames(explosionFramesInfo.prefix, explosionFramesInfo.start, explosionFramesInfo.stop, explosionFramesInfo.suffix, explosionFramesInfo.zeroPad),
+        60,
         false
     );
     
     // If this animation will dispatch the onUpdate events upon changing frame.
     deathAnim.enableUpdate = true;
-    // Should the parent of this Animation be killed when the animation completes?
-    deathAnim.killOnComplete  = true;
+    
+    // When the projectile is scaled from its default size it won't be automatically 'smoothed' as will retain its pixel crispness
+    this.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
+    
+    // Anchor in the middle
+    this.anchor.set(0.5);
+    
+    // They will check if the projectile is within the world bounds and if not kill it, freeing it up for use in the projectile pool again.
+    this.checkWorldBounds = true;
+    this.outOfBoundsKill = true;
+    this.exists = false;
+    
+    // Tells the projectile to rotate to face the direction it is moving in, as it moves.
+    this.tracking = false;
+    
+    // How fast the projectile should grow in size as it travels
+    this.scaleSpeed = 0;
+    
+    // Initialize based on type
+    if(this.isObstacle)
+    {
+       this.obstacleInit(obstacleFramesInfo); 
+    }
+    else
+    {
+        this.bulletInit();
+    }
+};
+
+/**==========================================================================================================================
+* @name BULLET INIT
+* 
+* @description Bullet constructor
+*///=========================================================================================================================
+Projectile.prototype.bulletInit = function()
+{
+    // Nothing here for now
+};
+
+/**==========================================================================================================================
+* @name OBSTACLE INIT
+* 
+* @description Obstacle constructor
+* 
+* @param {FramesInfo} obstacleFramesInfo - Frame information for the obstacle object
+*///=========================================================================================================================
+Projectile.prototype.obstacleInit = function(obstacleFramesInfo)
+{
+    // Create floating animation
+    var floatingAnim = this.animations.add
+    (
+        'floating', 
+        Phaser.animation.generateFrameNames(obstacleFramesInfo.prefix, obstacleFramesInfo.start, obstacleFramesInfo.stop, obstacleFramesInfo.suffix, obstacleFramesInfo.zeroPad),
+        60,
+        true
+    );
+    
+    // If this animation will dispatch the onUpdate events upon changing frame.
+    floatingAnim.enableUpdate = true;
+    
+    // Play animation immediately
+    this.animations.play('floating');
 };
 
 // Inherits from sprite

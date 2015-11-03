@@ -1,3 +1,5 @@
 /nbproject/private/
 *.sln
 Web.config
+*.suo
+applicationhost.config

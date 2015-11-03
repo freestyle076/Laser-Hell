@@ -33,7 +33,7 @@ Projectile = function(textureKey, x, y, damage, isObstacle, explosionFramesInfo)
     this.explosionFramesInfo = explosionFramesInfo;
     
     // Create projectile sprite
-    Phaser.Sprite.call(this, game, x, y, 'ships-and-projectiles-atlas', textureKey);
+    Phaser.Sprite.call(this, game, x, y, 'ships-atlas', textureKey);
     
     // Create death animation
     var deathAnim = this.animations.add

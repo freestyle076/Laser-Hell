@@ -53,28 +53,6 @@ Game.prototype =
         this.addHUD();
         this.addPlayerShip();
         this.setKeyBindings();
-        this.addPlayerShip();
-
-        /*
-        var g = this;
-        setTimeout(function () {
-            console.log("bombs away");
-            g.updateStatusBar('health', 20, 100);
-            setTimeout(function () {
-                console.log("bombs away");
-                g.updateStatusBar('weaponHeat', 80, 100);
-
-                var slash = new Slasher(g, 20, 20, null, null);
-                game.add.existing(slash);
-
-                var tank = new Tanker(g, 60, 60, null, null);
-                game.add.existing(tank);
-
-                var dest = new Destroyer(g, 80, 80, null, null);
-                game.add.existing(dest);
-            }, 2000);
-        }, 2000);
-        */
     },
 
     /**==========================================================================================================================
@@ -84,8 +62,12 @@ Game.prototype =
     *///=========================================================================================================================
     update: function()
     {
+        // update status bars
         statusBars['health'].updateCrop();
         statusBars['weaponHeat'].updateCrop();
+
+        // move player ship
+        this.playerShip.move(this.wKey.isDown, this.dKey.isDown, this.sKey.isDown, this.aKey.isDown);
     },
     
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,6 +85,87 @@ Game.prototype =
         // ESC -> Pause Menu
         var escKey = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
         escKey.onDown.add(this.optionsMenuCallback, this);
+
+        // W -> Up
+        this.wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
+        
+        // A -> Left
+        this.aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
+
+        // S -> Down 
+        this.sKey = game.input.keyboard.addKey(Phaser.Keyboard.S);
+
+        // D -> Right
+        this.dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
+
+        // graphics module for skill icons
+        this.skillGraphics = game.add.graphics(0, 0);
+
+        // SPACE -> Primary Fire
+        var spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        spaceKey.onDown.add(this.primaryFireKeyOnDown, this);
+        spaceKey.onUp.add(this.primaryFireKeyOnUp, this);
+
+        // ALT -> Secondary Fire
+        var altKey = game.input.keyboard.addKey(Phaser.Keyboard.ALT);
+        altKey.onDown.add(this.secondaryFireKeyOnDown, this);
+        altKey.onUp.add(this.secondaryFireKeyOnUp, this);
+    },
+
+    /**==========================================================================================================================
+    * @name OPTIONS MENU CALLBACK
+    * 
+    * @description Takes screenshot of game and transitions to options state
+    *///=========================================================================================================================
+    optionsMenuCallback: function () {
+        // Take a screenshot of the screen to "fake" a pop-up and pass this to the options state
+        game.state.states['Options'].canvasImage = gameUtils.getCanvasScreenshot();
+
+        // Add state that it will go back to
+        game.state.states['Options'].backState = 'Game';
+
+        // Go to the options state
+        game.state.start("Options");
+    },
+
+    /**==========================================================================================================================
+    * @name PRIMARY FIRE KEY ON DOWN
+    * 
+    * @description Primary fire key on down callback
+    *///=========================================================================================================================
+    primaryFireKeyOnDown: function () {
+        this.skillGraphics.alpha = 0.5;
+        this.skillGraphics.beginFill(0x00FFFF);
+        this.skillGraphics.drawRoundedRect(this.primaryGlassPanel.x, this.primaryGlassPanel.y, this.primaryGlassPanel.targetWidth, this.primaryGlassPanel.targetHeight, 4);
+    },
+
+    /**==========================================================================================================================
+    * @name PRIMARY FIRE KEY ON UP
+    * 
+    * @description Primary fire key on up callback
+    *///=========================================================================================================================
+    primaryFireKeyOnUp: function () {
+        this.skillGraphics.clear();
+    },
+
+    /**==========================================================================================================================
+    * @name SECONDARY FIRE KEY ON DOWN
+    * 
+    * @description Secondary fire key on down callback
+    *///=========================================================================================================================
+    secondaryFireKeyOnDown: function () {
+        this.skillGraphics.alpha = 0.5;
+        this.skillGraphics.beginFill(0x00FFFF);
+        this.skillGraphics.drawRoundedRect(this.secondaryGlassPanel.x, this.secondaryGlassPanel.y, this.secondaryGlassPanel.targetWidth, this.secondaryGlassPanel.targetHeight, 4);
+    },
+
+    /**==========================================================================================================================
+    * @name SECONDARY FIRE KEY ON UP
+    * 
+    * @description Secondary fire key on up callback
+    *///=========================================================================================================================
+    secondaryFireKeyOnUp: function () {
+        this.skillGraphics.clear();
     },
     
     /**==========================================================================================================================
@@ -152,7 +215,7 @@ Game.prototype =
 
         // visible parameters
         var playerMaxHealth = 100;
-        var playerSpeed = 20;
+        var playerSpeed = 7;
         var skills = null;
 
         // create ship
@@ -175,14 +238,14 @@ Game.prototype =
     addSkills : function()
     {
         // Primary icon and backing glasspanel
-        var primaryGlassPanel = gameUtils.makeNinePatchPanel('glassPanel', game.width - 85, game.height - 180, 80, 80, 0, 0);
-        primaryGlassPanel.alpha = 0.5;
-        game.add.sprite(primaryGlassPanel.x + 3, primaryGlassPanel.y + 3, 'ui-atlas', 'primary-icon', this.hud).scale.setTo(0.75, 0.75);
+        this.primaryGlassPanel = gameUtils.makeNinePatchPanel('glassPanel', game.width - 85, game.height - 180, 80, 80, 0, 0);
+        this.primaryGlassPanel.alpha = 0.5;
+        game.add.sprite(this.primaryGlassPanel.x + 3, this.primaryGlassPanel.y + 3, 'ui-atlas', 'primary-icon', this.hud).scale.setTo(0.75, 0.75);
         
         // Secondary icon and backing glasspanel
-        var secondaryGlassPanel = gameUtils.makeNinePatchPanel('glassPanel', game.width - 85, game.height - 90, 80, 80, 0, 0);
-        secondaryGlassPanel.alpha = 0.5;
-        game.add.sprite(secondaryGlassPanel.x + 3, secondaryGlassPanel.y + 3, 'ui-atlas','secondary-icon', this.hud).scale.setTo(0.75, 0.75);
+        this.secondaryGlassPanel = gameUtils.makeNinePatchPanel('glassPanel', game.width - 85, game.height - 90, 80, 80, 0, 0);
+        this.secondaryGlassPanel.alpha = 0.5;
+        game.add.sprite(this.secondaryGlassPanel.x + 3, this.secondaryGlassPanel.y + 3, 'ui-atlas', 'secondary-icon', this.hud).scale.setTo(0.75, 0.75);
     },
         
     /**==========================================================================================================================
@@ -215,24 +278,6 @@ Game.prototype =
     },
     
     /**==========================================================================================================================
-    * @name OPTIONS MENU CALLBACK
-    * 
-    * @description Takes screenshot of game and transitions to options state
-    *///=========================================================================================================================
-    optionsMenuCallback: function()
-    {
-        // Take a screenshot of the screen to "fake" a pop-up and pass this to the options state
-        game.state.states['Options'].canvasImage = gameUtils.getCanvasScreenshot();
-        
-        // Add state that it will go back to
-        game.state.states['Options'].backState = 'Game';
-
-        // Go to the options state
-        game.state.start("Options");
-        
-    },
-    
-    /**==========================================================================================================================
     * @name ADD SCORE DISPLAY
     * 
     * @description Creates and adds the score display panel with current gamescore
@@ -258,7 +303,7 @@ Game.prototype =
         statusPanel.alpha = 0.5;
         
         // Status bar helpers
-        this.graphics = game.add.graphics(0, 0, this.hud);
+        this.statusBarGraphics = game.add.graphics(0, 0, this.hud);
         this.numStatusBars = 0;
         var upperLeftX = statusPanel.x + 10;
         var upperLeftY = statusPanel.y + 11;
@@ -296,33 +341,33 @@ Game.prototype =
         // ------------------------------------------------------------------------------------
         
         // Fill bar
-        this.graphics.beginFill(fillColor);
-        this.graphics.drawRect(ulx, uly, statusBarWidth, height);
+        this.statusBarGraphics.beginFill(fillColor);
+        this.statusBarGraphics.drawRect(ulx, uly, statusBarWidth, height);
         
         // Border
-        this.graphics.beginFill(borderColor);
+        this.statusBarGraphics.beginFill(borderColor);
         
         // left vertical bar
-        this.graphics.drawRect(ulx-borderThickness,uly,borderThickness,height);
+        this.statusBarGraphics.drawRect(ulx - borderThickness, uly, borderThickness, height);
         // right vertical bar
-        this.graphics.drawRect(ulx + statusBarWidth, uly, borderThickness, height);
+        this.statusBarGraphics.drawRect(ulx + statusBarWidth, uly, borderThickness, height);
         // top horizontal bar
-        this.graphics.drawRect(ulx, uly - borderThickness, statusBarWidth, borderThickness);
+        this.statusBarGraphics.drawRect(ulx, uly - borderThickness, statusBarWidth, borderThickness);
         // bottom horizontal bar
-        this.graphics.drawRect(ulx, uly + height, statusBarWidth, borderThickness);
+        this.statusBarGraphics.drawRect(ulx, uly + height, statusBarWidth, borderThickness);
         
         // upper left corner
-        this.graphics.arc(ulx,uly,borderThickness,game.math.degToRad(180),game.math.degToRad(270),false);
-        this.graphics.drawPolygon( new Phaser.Polygon([ulx,uly, ulx,uly-borderThickness, ulx-borderThickness,uly]) );
+        this.statusBarGraphics.arc(ulx, uly, borderThickness, game.math.degToRad(180), game.math.degToRad(270), false);
+        this.statusBarGraphics.drawPolygon(new Phaser.Polygon([ulx, uly, ulx, uly - borderThickness, ulx - borderThickness, uly]));
         // lower left corner
-        this.graphics.arc(ulx,uly+height,borderThickness,game.math.degToRad(90),game.math.degToRad(180),false);
-        this.graphics.drawPolygon( new Phaser.Polygon([ulx,uly+height, ulx,uly+height+borderThickness, ulx-borderThickness,uly+height]) );
+        this.statusBarGraphics.arc(ulx, uly + height, borderThickness, game.math.degToRad(90), game.math.degToRad(180), false);
+        this.statusBarGraphics.drawPolygon(new Phaser.Polygon([ulx, uly + height, ulx, uly + height + borderThickness, ulx - borderThickness, uly + height]));
         // upper right corner
-        this.graphics.arc(ulx + statusBarWidth, uly, borderThickness, game.math.degToRad(270), game.math.degToRad(0), false);
-        this.graphics.drawPolygon(new Phaser.Polygon([ulx + statusBarWidth, uly, ulx + statusBarWidth + borderThickness, uly, ulx + statusBarWidth, uly - borderThickness]));
+        this.statusBarGraphics.arc(ulx + statusBarWidth, uly, borderThickness, game.math.degToRad(270), game.math.degToRad(0), false);
+        this.statusBarGraphics.drawPolygon(new Phaser.Polygon([ulx + statusBarWidth, uly, ulx + statusBarWidth + borderThickness, uly, ulx + statusBarWidth, uly - borderThickness]));
         // lower right corner
-        this.graphics.arc(ulx + statusBarWidth, uly + height, borderThickness, game.math.degToRad(0), game.math.degToRad(90), false);
-        this.graphics.drawPolygon(new Phaser.Polygon([ulx + statusBarWidth, uly + height, ulx + statusBarWidth + borderThickness, uly + height, ulx + statusBarWidth, uly + height + borderThickness]));
+        this.statusBarGraphics.arc(ulx + statusBarWidth, uly + height, borderThickness, game.math.degToRad(0), game.math.degToRad(90), false);
+        this.statusBarGraphics.drawPolygon(new Phaser.Polygon([ulx + statusBarWidth, uly + height, ulx + statusBarWidth + borderThickness, uly + height, ulx + statusBarWidth, uly + height + borderThickness]));
 
         // STATUS BAR
         // ------------------------------------------------------------------------------------
@@ -340,6 +385,11 @@ Game.prototype =
         this.numStatusBars++;
     },
     
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // UPDATE HELPERS
+    // --------------------------------------------------------------------------------------------------------------------------
+
     /**==========================================================================================================================
     * @name UPDATE STATUS BAR
     * 
@@ -351,15 +401,14 @@ Game.prototype =
     * 
     * @return {Phaser.NinePatchImage} - A Phaser Nine Patch Image Sprite
     *///=========================================================================================================================
-    updateStatusBar : function(statusBarKey, current, max)
-    {
+    updateStatusBar: function (statusBarKey, current, max) {
         // Get status bar
         var statusBar = statusBars[statusBarKey];
 
         var animation = game.add.tween(statusBar.cropRect).to({ 'width': (current / max) * statusBarWidth }, 200);
 
         animation.start();
-        
+
     },
 
     /**==========================================================================================================================
@@ -379,8 +428,7 @@ Game.prototype =
         }
         this.scoreDisplay.setText(this.gameScore.toString());
     },
-    
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 };
 

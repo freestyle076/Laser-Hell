@@ -17,7 +17,7 @@
 * @param {float} x - horizontal (x) location of sprite
 * @param {float} y - vertifcal (y) location of sprite
 * @param {string} mainSprite - key for ship sprite image
-* @param {string} explosionSprite - key for explosion sprite image
+* @param {[string]} explosionFrames - frames for explosion animation
 * @param {float} maxHealth - maximum and starting health for ship
 * @param {Skill[]} skills - list of skill objects for ship
 * @param {Phaser.Group} group - physics group to add ship to
@@ -25,16 +25,20 @@
 *
 * @description Ship constructor
 *///=========================================================================================================================
-Ship = function (game, x, y, mainSprite, explosionSprite, maxHealth, speed, skills, group) {
+Ship = function (game, x, y, mainSprite, explosionFrames, maxHealth, speed, skills, group) {
 
     // Calls Phaser.Sprite constructor
     // Requires existing loaded image with key: spriteKey
     Phaser.Sprite.call(this, game, x, y, 'ships-atlas', mainSprite);
+
     // Health values
     this.health = this.maxHealth = maxHealth;
 
-    // Explosion sprite key
-    this.explosionSprite = explosionSprite;
+    // add explosion animation created from frames
+    this.animations.add('explosion', explosionFrames);
+
+    // kill ship on explosion animation completion
+    this.animations.getAnimation('explosion').killOnComplete = true;
 
     // ship's speed
     this.speed = speed;
@@ -79,25 +83,22 @@ Ship.prototype.constructor = Ship;
     *///=========================================================================================================================
     Ship.prototype.move = function (isUp, isRight, isDown, isLeft) {
 
-        // fun tidbet, to achieve proportionate (same radius) horizontal movement
-        // change x and y by speed/2
-
         // check all 8 directions, most complex (hard to satisfy) first
         if (isUp && isRight) {
-            this.x -= this.speed / 2;
-            this.y += this.speed / 2;
+            this.x += this.speed / 1.5;
+            this.y -= this.speed / 1.5;
         }
         else if (isUp && isLeft) {
-            this.x -= this.speed / 2;
-            this.y -= this.speed / 2;
+            this.x -= this.speed / 1.5;
+            this.y -= this.speed / 1.5;
         }
         else if (isDown && isLeft) {
-            this.x -= this.speed / 2;
-            this.y += this.pseed / 2;
+            this.x -= this.speed / 1.5;
+            this.y += this.speed / 1.5;
         }
         else if (isDown && isRight) {
-            this.x += this.speed / 2;
-            this.y += this.speed / 2;
+            this.x += this.speed / 1.5;
+            this.y += this.speed / 1.5;
         }
         else if (isRight) {
             this.x += this.speed;
@@ -132,20 +133,7 @@ Ship.prototype.constructor = Ship;
     * @description Displays ship's explosion sprite, frees resources
     *///=========================================================================================================================
     Ship.prototype.die = function () {
-
-        // spawn explosionSprite by switching textures
-        //this.loadTexture('projectiles-atlas',this.explosionSprite); //doesn't replce
-
-        //TODO: Could add some motion/scaling to explosion
-        this.kill();
-        /*
-        // dissapear timeout for explosion
-        var animation = game.add.tween(this).to({ 'alpha': 0 }, 1000);
-        animation.onComplete.add(this.kill);
-
-        setTimeout(function () {
-            animation.start();
-        }, 200);*/
+        this.animations.play('explosion');
     };
 
     /**==========================================================================================================================

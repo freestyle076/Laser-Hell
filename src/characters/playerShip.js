@@ -15,9 +15,8 @@
 /**=========================================================================================================================
 * @param {Phaser.Game} game - game that sprite will be added to
 * @param {float} x - horizontal (x) location of sprite
-* @param {float} y - vertifcal (y) location of sprite
+* @param {float} y - vertical (y) location of sprite
 * @param {string} mainSprite - key for ship sprite image
-* @param {string} explosionSprite - key for explosion sprite image
 * @param {float} maxHealth - maximum and starting health for ship
 * @param {float} maxWeaponHeat - maximum weaponheat for player ship (heat inits to 0)
 * @param {float} speed - movement speed of ship
@@ -26,10 +25,16 @@
 *
 * @description PlayerShip constructor
 *///=========================================================================================================================
-PlayerShip = function (game, x, y, mainSprite, explosionSprite, maxHealth, maxWeaponHeat, speed, skills, group) {
+PlayerShip = function (game, x, y, mainSprite, maxHealth, maxWeaponHeat, speed, skills, group) {
+
+    // player ship explosion animation
+    var explosionFramePrefix = 'expl_02_';    
+    var explosionFrames = Phaser.Animation.generateFrameNames(explosionFramePrefix, 0, 23, "", 4);
+
     // base class constructor
-    Ship.call(this, game, x, y, mainSprite, explosionSprite, maxHealth, speed, skills, group);
+    Ship.call(this, game, x, y, mainSprite, explosionFrames, maxHealth, speed, skills, group);
     this.scale.setTo(0.8, 0.8);
+
     // weaponheat members
     this.weaponHeat = 0;
     this.maxWeaponHeat = maxWeaponHeat;

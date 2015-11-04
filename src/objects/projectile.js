@@ -119,13 +119,50 @@ Projectile.prototype.constructor = Projectile;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**==========================================================================================================================
-* @name EXPLODE
+* @name FIRE
 * 
-* @description Explodes or "kills" the projectile by playing the death animation
+* @description Applies damage to the specified ship by using its takeDamage() function.
+* 
+* @param {float} x - x position of the projectile
+* @param {float} y - y position of the projectile
+* @param {float} angle - Angle of the projectile
+* @param {float} speed - Speed of the projectile
+* @param {float} gx - Gravity of the projectile in the x direction
+* @param {float} gy - Gravity of the projectile in the y direction
 *///=========================================================================================================================
-Projectile.prototype.explode = function()
+Projectile.prototype.fire = function(x, y, angle, speed, gx, gy)
 {
-    this.animations.play('dying');
+    gx = gx || 0;
+    gy = gy || 0;
+
+    this.reset(x, y);
+    this.scale.set(1);
+
+    this.game.physics.arcade.velocityFromAngle(angle, speed, this.body.velocity);
+
+    this.angle = angle;
+
+    this.body.gravity.set(gx, gy);
+};
+
+/**==========================================================================================================================
+* @name UPDATE
+* 
+* @description Update the x and y position of the projectile
+*///=========================================================================================================================
+Projectile.prototype.update = function () 
+{
+    if (this.tracking)
+    {
+        this.rotation = Math.atan2(this.body.velocity.y, this.body.velocity.x);
+    }
+
+    if (this.scaleSpeed > 0)
+    {
+        this.scale.x += this.scaleSpeed;
+        this.scale.y += this.scaleSpeed;
+    }
+
 };
 
 /**==========================================================================================================================
@@ -138,6 +175,16 @@ Projectile.prototype.explode = function()
 Projectile.prototype.applyDamage = function(damagedShip)
 {
     damagedShip.takeDamage(this.damage);
+};
+
+/**==========================================================================================================================
+* @name EXPLODE
+* 
+* @description Explodes or "kills" the projectile by playing the death animation
+*///=========================================================================================================================
+Projectile.prototype.explode = function()
+{
+    this.animations.play('dying');
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

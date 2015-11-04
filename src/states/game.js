@@ -53,6 +53,17 @@ Game.prototype =
         this.addHUD();
         this.addPlayerShip();
         this.setKeyBindings();
+
+        var s = new Slasher(game, 100, 100, null, null);
+        game.add.existing(s);
+
+        var t = new Tanker(game, 200, 100, null, null);
+        game.add.existing(t);
+
+        var d = new Destroyer(game, 300, 100, null, null);
+        game.add.existing(d);
+
+        
     },
 
     /**==========================================================================================================================
@@ -67,7 +78,11 @@ Game.prototype =
         statusBars['weaponHeat'].updateCrop();
 
         // move player ship
-        this.playerShip.move(this.wKey.isDown, this.dKey.isDown, this.sKey.isDown, this.aKey.isDown);
+        if (!this.playerShip.isDead())
+        {
+            this.playerShip.move(this.wKey.isDown, this.dKey.isDown, this.sKey.isDown, this.aKey.isDown);
+        }
+        
     },
     
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -218,7 +233,6 @@ Game.prototype =
         var playerMaxWeaponHeat = 100;
         var playerSpeed = 7;
         var skills = null;
-
 
         // create ship
         this.playerShip = new PlayerShip(game, 400, 400, 'blue_ship_01', playerMaxHealth, playerMaxWeaponHeat, playerSpeed, skills, this.hud);

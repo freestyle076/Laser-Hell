@@ -215,11 +215,13 @@ Game.prototype =
 
         // visible parameters
         var playerMaxHealth = 100;
+        var playerMaxWeaponHeat = 100;
         var playerSpeed = 7;
         var skills = null;
 
+
         // create ship
-        this.playerShip = new PlayerShip(game, 400, 400, 'blue_ship_01', 'expl_02_0021', playerMaxHealth, playerSpeed, skills, this.hud);
+        this.playerShip = new PlayerShip(game, 400, 400, 'blue_ship_01', playerMaxHealth, playerMaxWeaponHeat, playerSpeed, skills, this.hud);
 
         // add to game
         game.add.existing(this.playerShip);
@@ -284,10 +286,15 @@ Game.prototype =
     *///=========================================================================================================================
     addScoreDisplay: function()
     {
-        var scorePanel = game.add.sprite(10,10,'ui-atlas','metalPanel_purpleCorner',this.hud);
-        scorePanel.scale.setTo(.7,.7);
+        // create scorePanel nine patch
+        this.scorePanel = gameUtils.makeNinePatchPanel('metalPanel_purpleCorner', 5, 5, 130, 80, 0, 0);
+
+        // text component to display game score, empty string init
+        this.scoreDisplay = game.add.text(this.scorePanel.targetWidth - 5, 35, "", { fill: "#AA00D4", font: "30px Audiowide" });
+
+        // allow update function to set game score to 0
+        this.updateScore(0, true);
         
-        this.scoreDisplay = game.add.text(35, 35, this.gameScore.toString(), { fill: "#AA00D4", font: "30px Tron" }, this.hud);
     },
     
     /**==========================================================================================================================
@@ -404,10 +411,11 @@ Game.prototype =
     updateStatusBar: function (statusBarKey, current, max) {
         // Get status bar
         var statusBar = statusBars[statusBarKey];
-
+        
+        
         var animation = game.add.tween(statusBar.cropRect).to({ 'width': (current / max) * statusBarWidth }, 200);
-
         animation.start();
+        
 
     },
 
@@ -420,13 +428,22 @@ Game.prototype =
     * @param {bool} isReset - If true gameScore is newScore, else gameScore is gameScore + newScore
     *///=========================================================================================================================
     updateScore: function (newScore, isReset) {
+
+        // sets game score
         if (isReset) {
             this.gameScore = newScore;
         }
+        // adds to game score
         else {
             this.gameScore += newScore;
         }
+
+        
+        // update text
         this.scoreDisplay.setText(this.gameScore.toString());
+        
+        // update x position of text
+        this.scoreDisplay.x = (this.scorePanel.targetWidth - 10) - this.scoreDisplay.width;
     },
 
 

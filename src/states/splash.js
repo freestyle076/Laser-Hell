@@ -122,6 +122,9 @@ Splash.prototype =
         game.load.script('options', 'src/states/options.js');
         
         // Objects
+        game.load.script('projectile', 'src/objects/projectile.js');
+        game.load.script('powerups', 'src/objects/powerup.js');
+        game.load.script('skills', 'src/objects/skill.js');
         
         // Ships
         game.load.script('ship', 'src/characters/ship.js');

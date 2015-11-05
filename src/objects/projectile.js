@@ -19,13 +19,14 @@
 * @description Projectile constructor
 * 
 * @param {string} textureKey - The texture atlas key for the projectile.
+* @param {string} atlasKey - The atlas key for the texture atlas key
 * @param {float} x - x position of the projectile to spawn
 * @param {float} y - y position of the projectile to spawn
 * @param {float} damage - Damage that the projectile does
 * @param {FramesInfo} explosionFramesInfo - Frame information for the explosion object
 * @param {FramesInfo} obstacleFramesInfo - [optional] Frame information for the obstacle object
 *///=========================================================================================================================
-Projectile = function(textureKey, x, y, damage, explosionFramesInfo, obstacleFramesInfo) 
+Projectile = function(textureKey, atlasKey, x, y, damage, explosionFramesInfo, obstacleFramesInfo) 
 {
     // Set up attributes
     this.textureKey = textureKey;
@@ -33,7 +34,7 @@ Projectile = function(textureKey, x, y, damage, explosionFramesInfo, obstacleFra
     this.isObstacle = obstacleFramesInfo ? true : false;
     
     // Create projectile sprite
-    Phaser.Sprite.call(this, game, x, y, 'ships-atlas', textureKey);
+    Phaser.Sprite.call(this, game, x, y, atlasKey, textureKey);
     
     // Create death animation
     var deathAnim = this.animations.add

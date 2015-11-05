@@ -4,9 +4,10 @@
 // @author Angela Gross and Kyle Handy
 // Xeinax: Space Warrior
 // -------------------------------------------------------------------------------------------------------------------------------
-// Base class for game ships, extends Phaser.Sprite
+// Base class for game ships and player ship class
 // ===============================================================================================================================
 
+// SHIP
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // CONSTRUCTOR
@@ -17,7 +18,6 @@
 * @param {float} x - horizontal (x) location of sprite
 * @param {float} y - vertifcal (y) location of sprite
 * @param {string} mainSprite - key for ship sprite image
-* @param {[string]} explosionFrames - frames for explosion animation
 * @param {float} maxHealth - maximum and starting health for ship
 * @param {Skill[]} skills - list of skill objects for ship
 * @param {Phaser.Group} group - physics group to add ship to
@@ -25,29 +25,32 @@
 *
 * @description Ship constructor
 *///=========================================================================================================================
-Ship = function (game, x, y, mainSprite, explosionFrames, maxHealth, speed, skills, group) {
+Ship = function (game, x, y, mainSprite, maxHealth, speed, skills, group) {
 
     // Calls Phaser.Sprite constructor
     // Requires existing loaded image with key: spriteKey
     Phaser.Sprite.call(this, game, x, y, 'ships-atlas', mainSprite);
 
+    this.anchor.setTo(0.5, 0.5);
+
     // Health values
     this.health = this.maxHealth = maxHealth;
 
+    // player ship explosion animation
+    var explosionFramePrefix = 'expl_11_';    
+    var explosionFrames = Phaser.Animation.generateFrameNames(explosionFramePrefix, 0, 23, "", 4);
+
     // add explosion animation created from frames
-    this.animations.add('explosion', explosionFrames);
+    var explosionAnim = this.animations.add('explosion', explosionFrames);
 
     // kill ship on explosion animation completion
-    this.animations.getAnimation('explosion').killOnComplete = true;
+    explosionAnim.killOnComplete = true;
 
     // ship's speed
     this.speed = speed;
 
     // Ship's skill
     this.skills = skills;
-
-    // List of projectiles
-    this.projectiles = [];
 
 };
 Ship.prototype = Object.create(Phaser.Sprite.prototype);
@@ -65,8 +68,9 @@ Ship.prototype.constructor = Ship;
     *
     * @return {bool} - true if health is above 0, false otherwise
     *///=========================================================================================================================
-    Ship.prototype.isDead = function () {
-        if (health <= 0.0) {
+    Ship.prototype.isDead = function ()
+    {
+        if (this.health <= 0.0) {
             return true;
         }
         else {
@@ -81,8 +85,8 @@ Ship.prototype.constructor = Ship;
     *
     * @return {bool} - true if health is above 0, false otherwise
     *///=========================================================================================================================
-    Ship.prototype.move = function (isUp, isRight, isDown, isLeft) {
-
+    Ship.prototype.move = function (isUp, isRight, isDown, isLeft)
+    {
         // check all 8 directions, most complex (hard to satisfy) first
         if (isUp && isRight) {
             this.x += this.speed / 1.5;
@@ -122,7 +126,8 @@ Ship.prototype.constructor = Ship;
     *
     * @param {float} damage - amount by which to lower ship's health
     *///=========================================================================================================================
-    Ship.prototype.takeDamage = function (damage) {
+    Ship.prototype.takeDamage = function (damage)
+    {
         this.health -= damage;
     };
 
@@ -132,24 +137,78 @@ Ship.prototype.constructor = Ship;
     *
     * @description Displays ship's explosion sprite, frees resources
     *///=========================================================================================================================
-    Ship.prototype.die = function () {
+    Ship.prototype.die = function ()
+    {
         this.animations.play('explosion');
     };
 
-    /**==========================================================================================================================
-    * @name FIRE
-    *
-    * @description Triggers the skill's fire method, collects projectile
-    *
-    * @param {Skill} skill - skill to fire
-    *///=========================================================================================================================
-    Ship.prototype.fire = function (skill) {
-        // fire skill
-        var projectile = skill.fire();
+// PLAYER SHIP
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        // collect projectile sprite
-        this.projectiles.push(projectile);
+    // CONSTRUCTOR
+    // --------------------------------------------------------------------------------------------------------------------------
+
+    /**=========================================================================================================================
+    * @param {Phaser.Game} game - game that sprite will be added to
+    * @param {float} x - horizontal (x) location of sprite
+    * @param {float} y - vertical (y) location of sprite
+    * @param {string} mainSprite - key for ship sprite image
+    * @param {float} maxHealth - maximum and starting health for ship
+    * @param {float} maxWeaponHeat - maximum weaponheat for player ship (heat inits to 0)
+    * @param {float} speed - movement speed of ship
+    * @param {Skill[]} skills - list of skill objects for ship
+    * @param {Phaser.Group} group - physics group to add ship to
+    *
+    * @description PlayerShip constructor
+    *///=========================================================================================================================
+    PlayerShip = function (game, x, y, mainSprite, maxHealth, maxWeaponHeat, speed, skills, group)
+    {
+
+        // base class constructor
+        Ship.call(this, game, x, y, mainSprite, maxHealth, speed, skills, group);
+        this.scale.setTo(0.6, 0.6);
+
+        // weaponheat members
+        this.weaponHeat = 0;
+        this.maxWeaponHeat = maxWeaponHeat;
+    };
+    PlayerShip.prototype = Object.create(Ship.prototype);
+    PlayerShip.prototype.constructor = PlayerShip;
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // SHIP FUNCTIONS
+    // --------------------------------------------------------------------------------------------------------------------------
+
+    /**==========================================================================================================================
+    * @name UPDATE
+    *  
+    * @description OVERRIDE called automatically by World.update
+    *///=========================================================================================================================
+    /*    PlayerShip.prototype.update = function () {
+            // this functions is called automatically on the game's update function
+        };
+        */
+    /**==========================================================================================================================
+    * @name HEAL
+    *  
+    * @param {float} howMuch - amount to modify ships health by
+    *
+    * @description adds howMuch to the ship's health member
+    *///=========================================================================================================================
+    PlayerShip.prototype.heal = function (howMuch)
+    {
+        this.health += howMuch;
     };
 
-
-    
+    /**==========================================================================================================================
+    * @name COOL WEAPON
+    *  
+    * @param {float} howMuch - amount to modify ships health by
+    *
+    * @description adds howMuch param to the ship's weaponheat member
+    *///=========================================================================================================================
+    PlayerShip.prototype.heat = function (howMuch)
+    {
+        this.weaponHeat += howMuch;
+    };

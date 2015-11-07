@@ -199,6 +199,18 @@ Ship.prototype.constructor = Ship;
     PlayerShip.prototype.heal = function (howMuch)
     {
         this.health += howMuch;
+
+        if (this.health < 0)
+        {
+            this.health = 0;
+        }
+
+        if (this.health > this.maxHealth)
+        {
+            this.health = this.maxHealth;
+        }
+
+        //this.game.updateStatusBar('health', this.health, this.maxHealth);
     };
 
     /**==========================================================================================================================
@@ -211,4 +223,16 @@ Ship.prototype.constructor = Ship;
     PlayerShip.prototype.heat = function (howMuch)
     {
         this.weaponHeat += howMuch;
+        
+        if(this.weaponHeat < 0)
+        {
+            this.weaponHeat = 0;
+        }
+
+        if (this.weaponHeat > this.maxWeaponHeat)
+        {
+            this.weaponHeat = this.maxWeaponHeat;
+        }
+
+        //this.game.updateStatusBar('weaponHeat', this.weaponHeat, this.maxWeaponHeat);
     };

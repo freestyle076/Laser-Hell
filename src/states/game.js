@@ -73,15 +73,21 @@ Game.prototype =
     *///=========================================================================================================================
     update: function()
     {
-        // update status bars
-        statusBars['health'].updateCrop();
-        statusBars['weaponHeat'].updateCrop();
-
-        // move player ship
+        
+        // perform player ship updates if still alive
         if (!this.playerShip.isDead())
         {
+            // move ship
             this.playerShip.move(this.wKey.isDown, this.dKey.isDown, this.sKey.isDown, this.aKey.isDown);
+
+            // cool weapon
+            this.playerShip.heat(-0.5);
+
         }
+
+        // update the status bar crop rectangles
+        statusBars['health'].updateCrop();
+        statusBars['weaponHeat'].updateCrop();
         
     },
     
@@ -148,10 +154,19 @@ Game.prototype =
     * 
     * @description Primary fire key on down callback
     *///=========================================================================================================================
-    primaryFireKeyOnDown: function () {
+    primaryFireKeyOnDown: function ()
+    {
+        // light up primary weapon panel
         this.skillGraphics.alpha = 0.5;
         this.skillGraphics.beginFill(0x00FFFF);
         this.skillGraphics.drawRoundedRect(this.primaryGlassPanel.x, this.primaryGlassPanel.y, this.primaryGlassPanel.targetWidth, this.primaryGlassPanel.targetHeight, 4);
+
+        // fire skill
+        //this.playerShip.skills[0].fire();
+
+        // increase weapon heat
+        this.playerShip.heat(10); // TODO better way to set this heat value? In skill?
+
     },
 
     /**==========================================================================================================================
@@ -168,10 +183,15 @@ Game.prototype =
     * 
     * @description Secondary fire key on down callback
     *///=========================================================================================================================
-    secondaryFireKeyOnDown: function () {
+    secondaryFireKeyOnDown: function ()
+    {
+        // light up secondary skill panel
         this.skillGraphics.alpha = 0.5;
         this.skillGraphics.beginFill(0x00FFFF);
         this.skillGraphics.drawRoundedRect(this.secondaryGlassPanel.x, this.secondaryGlassPanel.y, this.secondaryGlassPanel.targetWidth, this.secondaryGlassPanel.targetHeight, 4);
+
+        // fire skill
+        //this.playerShip.skills[1].fire();
     },
 
     /**==========================================================================================================================
@@ -333,7 +353,7 @@ Game.prototype =
         this.drawStatusBar("health", "health_statusBar", upperLeftX, upperLeftY, 0x005522, 0x005522);
         // Weapon heat bar and shadow
         this.drawStatusBar("weaponHeat", "weaponHeat_statusBar", upperLeftX, upperLeftY, 0x440055, 0x440055);
-        this.updateStatusBar("weaponHeat", 0, 100)
+        
     },
     
     /**==========================================================================================================================
@@ -422,15 +442,14 @@ Game.prototype =
     * 
     * @return {Phaser.NinePatchImage} - A Phaser Nine Patch Image Sprite
     *///=========================================================================================================================
-    updateStatusBar: function (statusBarKey, current, max) {
+    updateStatusBar: function (statusBarKey, current, max)
+    {
         // Get status bar
         var statusBar = statusBars[statusBarKey];
-        
-        
-        var animation = game.add.tween(statusBar.cropRect).to({ 'width': (current / max) * statusBarWidth }, 200);
-        animation.start();
-        
 
+        // create and start animation
+        game.add.tween(statusBar.cropRect).to({ 'width': (current / max) * statusBarWidth }, 100).start();
+        
     },
 
     /**==========================================================================================================================
@@ -441,7 +460,8 @@ Game.prototype =
     * @param {int} newScore - The new score value
     * @param {bool} isReset - If true gameScore is newScore, else gameScore is gameScore + newScore
     *///=========================================================================================================================
-    updateScore: function (newScore, isReset) {
+    updateScore: function (newScore, isReset)
+    {
 
         // sets game score
         if (isReset) {

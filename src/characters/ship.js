@@ -33,6 +33,12 @@ Ship = function (game, x, y, mainSprite, maxHealth, speed, skills, group) {
 
     this.anchor.setTo(0.5, 0.5);
 
+    // add to group if one given
+    if (group)
+    {
+        group.add(this);
+    }
+
     // Health values
     this.health = this.maxHealth = maxHealth;
 
@@ -167,7 +173,7 @@ Ship.prototype.constructor = Ship;
         // primary player ship skill
         var primaryDamage = 20;
         var primaryMaxProjectiles = 50;
-        var primaryBulletSpeed = 10;
+        var primaryBulletSpeed = 200;
         var primaryFireRate = 10;
         var explosionFrames = new gameUtils.FramesInfo("expl_02_", 0, 23, "", 4);
         var playerPrimarySkill = new PlayerPrimarySkill(
@@ -183,7 +189,7 @@ Ship.prototype.constructor = Ship;
         // secondary player ship skill
         var secondaryDamage = 60;
         var secondaryMaxProjectiles = 10;
-        var secondaryBulletSpeed = 5;
+        var secondaryBulletSpeed = 150;
         var secondaryFireRate = 20;
         var playerSecondarySkill = new PlayerSecondarySkill(
             "large_ball_yellow_laser",

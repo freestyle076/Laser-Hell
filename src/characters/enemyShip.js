@@ -63,21 +63,36 @@ EnemyShip.prototype.constructor = EnemyShip;
     * @param {Phaser.Game} game - game that sprite will be added to
     * @param {float} x - horizontal (x) location of sprite
     * @param {float} y - vertifcal (y) location of sprite
-    * @param {Skill[]} skills - list of skill objects for ship
     * @param {Phaser.Group} group - physics group to add ship to
     *
     * @description Destroyer constructor
     *///=========================================================================================================================
 
-    Destroyer = function (game, x, y, skills, group)
+    Destroyer = function (game, x, y, group)
     {
         // visible parameters
         var mainSprite = 'red_ship_03';
         var maxHealth = 50;
         var speed = 2;
 
+        // destroyer ship skill
+        var damage = 40;
+        var maxProjectiles = 50;
+        var bulletSpeed = 4;
+        var fireRate = 10;
+        var explosionFrames = new gameUtils.FramesInfo("expl_02_", 0, 23, "", 4);
+        var destroyerSkill = new DestroyerSkill(
+            "large_red_laser",
+            "destroyerProjectiles",
+            damage,
+            maxProjectiles,
+            bulletSpeed,
+            fireRate,
+            explosionFrames
+        );
+
         // call super class constructor
-        EnemyShip.call(this, game, x, y, mainSprite, maxHealth, speed, skills, group);
+        EnemyShip.call(this, game, x, y, mainSprite, maxHealth, speed, [destroyerSkill], group);
 
         // scale destroyer sprite
         this.scale.setTo(0.4, 0.4);
@@ -108,8 +123,24 @@ EnemyShip.prototype.constructor = EnemyShip;
         var maxHealth = 20;
         var speed = 10;
 
+        // slasher ship skill
+        var damage = 40;
+        var maxProjectiles = 50;
+        var bulletSpeed = 4;
+        var fireRate = 10;
+        var explosionFrames = new gameUtils.FramesInfo("expl_02_", 0, 23, "", 4);
+        var slasherSkill = new SlasherSkill(
+            "green_laser_01",
+            "slasherProjectiles",
+            damage,
+            maxProjectiles,
+            bulletSpeed,
+            fireRate,
+            explosionFrames
+        );
+
         // call superclass constructor
-        EnemyShip.call(this, game, x, y, mainSprite, maxHealth, speed, skills, group);
+        EnemyShip.call(this, game, x, y, mainSprite, maxHealth, speed, [slasherSkill], group);
 
         // scale slasher sprite
         this.scale.setTo(0.4, 0.4);
@@ -139,8 +170,24 @@ EnemyShip.prototype.constructor = EnemyShip;
         var maxHealth = 100;
         var speed = 5;
 
+        // tanker ship skill
+        var damage = 40;
+        var maxProjectiles = 50;
+        var bulletSpeed = 4;
+        var fireRate = 10;
+        var explosionFrames = new gameUtils.FramesInfo("expl_02_", 0, 23, "", 4);
+        var tankerSkill = new TankerSkill(
+            "pink_laser_03",
+            "tankerProjectiles",
+            damage,
+            maxProjectiles,
+            bulletSpeed,
+            fireRate,
+            explosionFrames
+        );
+
         // call super constructor
-        EnemyShip.call(this, game, x, y, mainSprite, maxHealth, speed, skills, group);
+        EnemyShip.call(this, game, x, y, mainSprite, maxHealth, speed, [tankerSkill], group);
         this.scale.setTo(0.4, 0.4);
     }
     Tanker.prototype = Object.create(EnemyShip.prototype);

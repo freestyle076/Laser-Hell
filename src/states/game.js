@@ -62,7 +62,6 @@ Game.prototype =
 
         var d = new Destroyer(game, 300, 100, null, null);
         game.add.existing(d);
-
         
     },
 
@@ -73,21 +72,6 @@ Game.prototype =
     *///=========================================================================================================================
     update: function()
     {
-        
-        // perform player ship updates if still alive
-        if (!this.playerShip.isDead())
-        {
-            // move ship
-            this.playerShip.move(this.wKey.isDown, this.dKey.isDown, this.sKey.isDown, this.aKey.isDown);
-
-            // cool weapon
-            this.playerShip.heat(-0.5);
-
-        }
-
-        // update the status bar crop rectangles
-        statusBars['health'].updateCrop();
-        statusBars['weaponHeat'].updateCrop();
         
     },
     
@@ -123,14 +107,14 @@ Game.prototype =
         this.skillGraphics = game.add.graphics(0, 0);
 
         // SPACE -> Primary Fire
-        var spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-        spaceKey.onDown.add(this.primaryFireKeyOnDown, this);
-        spaceKey.onUp.add(this.primaryFireKeyOnUp, this);
+        var primaryKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        primaryKey.onDown.add(this.primaryFireKeyOnDown, this);
+        primaryKey.onUp.add(this.primaryFireKeyOnUp, this);
 
         // ALT -> Secondary Fire
-        var altKey = game.input.keyboard.addKey(Phaser.Keyboard.ALT);
-        altKey.onDown.add(this.secondaryFireKeyOnDown, this);
-        altKey.onUp.add(this.secondaryFireKeyOnUp, this);
+        var secondaryKey = game.input.keyboard.addKey(Phaser.Keyboard.ALT);
+        secondaryKey.onDown.add(this.secondaryFireKeyOnDown, this);
+        secondaryKey.onUp.add(this.secondaryFireKeyOnUp, this);
     },
 
     /**==========================================================================================================================
@@ -162,10 +146,10 @@ Game.prototype =
         this.skillGraphics.drawRoundedRect(this.primaryGlassPanel.x, this.primaryGlassPanel.y, this.primaryGlassPanel.targetWidth, this.primaryGlassPanel.targetHeight, 4);
 
         // fire skill
-        //this.playerShip.skills[0].fire();
+        this.playerShip.skills[0].fire(this.playerShip);
 
         // increase weapon heat
-        this.playerShip.heat(10); // TODO better way to set this heat value? In skill?
+        this.playerShip.heat(10);
 
     },
 
@@ -191,7 +175,8 @@ Game.prototype =
         this.skillGraphics.drawRoundedRect(this.secondaryGlassPanel.x, this.secondaryGlassPanel.y, this.secondaryGlassPanel.targetWidth, this.secondaryGlassPanel.targetHeight, 4);
 
         // fire skill
-        //this.playerShip.skills[1].fire();
+        this.playerShip.skills[1].fire(this.playerShip);
+        // TODO what about secondary weapon timer?
     },
 
     /**==========================================================================================================================
@@ -253,9 +238,11 @@ Game.prototype =
         var playerMaxWeaponHeat = 100;
         var playerSpeed = 7;
         var skills = null;
+        var startX = 400;
+        var startY = 400;
 
         // create ship
-        this.playerShip = new PlayerShip(game, 400, 400, 'blue_ship_01', playerMaxHealth, playerMaxWeaponHeat, playerSpeed, skills, this.hud);
+        this.playerShip = new PlayerShip(game, this, startX, startY, 'blue_ship_01', playerMaxHealth, playerMaxWeaponHeat, playerSpeed);
 
         // add to game
         game.add.existing(this.playerShip);
@@ -447,8 +434,11 @@ Game.prototype =
         // Get status bar
         var statusBar = statusBars[statusBarKey];
 
-        // create and start animation
-        game.add.tween(statusBar.cropRect).to({ 'width': (current / max) * statusBarWidth }, 100).start();
+        // static cropping
+        statusBar.cropRect.width = (current / max) * statusBarWidth;
+
+        // update the crop
+        statusBar.updateCrop();
         
     },
 
@@ -472,7 +462,6 @@ Game.prototype =
             this.gameScore += newScore;
         }
 
-        
         // update text
         this.scoreDisplay.setText(this.gameScore.toString());
         

@@ -150,27 +150,68 @@ Ship.prototype.constructor = Ship;
 
     /**=========================================================================================================================
     * @param {Phaser.Game} game - game that sprite will be added to
+    * @param {Game} gameState - the Game state tracking keys/HUD
     * @param {float} x - horizontal (x) location of sprite
     * @param {float} y - vertical (y) location of sprite
     * @param {string} mainSprite - key for ship sprite image
     * @param {float} maxHealth - maximum and starting health for ship
     * @param {float} maxWeaponHeat - maximum weaponheat for player ship (heat inits to 0)
     * @param {float} speed - movement speed of ship
-    * @param {Skill[]} skills - list of skill objects for ship
     * @param {Phaser.Group} group - physics group to add ship to
     *
     * @description PlayerShip constructor
     *///=========================================================================================================================
-    PlayerShip = function (game, x, y, mainSprite, maxHealth, maxWeaponHeat, speed, skills, group)
+    PlayerShip = function (game, gameState, x, y, mainSprite, maxHealth, maxWeaponHeat, speed, group)
     {
+        
+        // primary player ship skill
+        var primaryDamage = 20;
+        var primaryMaxProjectiles = 50;
+        var primaryBulletSpeed = 10;
+        var primaryFireRate = 10;
+        var explosionFrames = new gameUtils.FramesInfo("expl_02_", 0, 23, "", 4);
+        var playerPrimarySkill = new PlayerPrimarySkill(
+            "blue_laser_01",
+            "playerPrimaryProjectiles",
+            primaryDamage,
+            primaryMaxProjectiles,
+            primaryBulletSpeed,
+            primaryFireRate,
+            explosionFrames
+        );
+        
+        // secondary player ship skill
+        var secondaryDamage = 60;
+        var secondaryMaxProjectiles = 10;
+        var secondaryBulletSpeed = 5;
+        var secondaryFireRate = 20;
+        var playerSecondarySkill = new PlayerSecondarySkill(
+            "large_ball_yellow_laser",
+            "playerSecondaryProjectiles",
+            secondaryDamage,
+            secondaryMaxProjectiles,
+            secondaryBulletSpeed,
+            secondaryFireRate,
+            explosionFrames
+        );
 
         // base class constructor
-        Ship.call(this, game, x, y, mainSprite, maxHealth, speed, skills, group);
+        Ship.call(this, game, x, y, mainSprite, maxHealth, speed, [playerPrimarySkill, playerSecondarySkill], group);
         this.scale.setTo(0.6, 0.6);
+
+        // player ship's reference to game state
+        this.gameState = gameState;
 
         // weaponheat members
         this.weaponHeat = 0;
         this.maxWeaponHeat = maxWeaponHeat;
+
+        // set physics type, construct physics body
+        game.physics.enable(this, Phaser.Physics.ARCADE);
+
+        // player ship can't leave screen
+        this.body.collideWorldBounds = true;
+        
     };
     PlayerShip.prototype = Object.create(Ship.prototype);
     PlayerShip.prototype.constructor = PlayerShip;
@@ -185,10 +226,18 @@ Ship.prototype.constructor = Ship;
     *  
     * @description OVERRIDE called automatically by World.update
     *///=========================================================================================================================
-    /*    PlayerShip.prototype.update = function () {
-            // this functions is called automatically on the game's update function
-        };
-        */
+    PlayerShip.prototype.update = function ()
+    {
+        
+        // move ship
+        this.move(this.gameState.wKey.isDown, this.gameState.dKey.isDown, this.gameState.sKey.isDown, this.gameState.aKey.isDown);
+
+        // cool weapon
+        this.heat(-0.5);
+
+
+    };
+        
     /**==========================================================================================================================
     * @name HEAL
     *  
@@ -210,7 +259,7 @@ Ship.prototype.constructor = Ship;
             this.health = this.maxHealth;
         }
 
-        //this.game.updateStatusBar('health', this.health, this.maxHealth);
+        this.gameState.updateStatusBar('health', this.health, this.maxHealth);
     };
 
     /**==========================================================================================================================
@@ -234,5 +283,5 @@ Ship.prototype.constructor = Ship;
             this.weaponHeat = this.maxWeaponHeat;
         }
 
-        //this.game.updateStatusBar('weaponHeat', this.weaponHeat, this.maxWeaponHeat);
+        this.gameState.updateStatusBar('weaponHeat', this.weaponHeat, this.maxWeaponHeat);
     };

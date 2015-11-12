@@ -206,9 +206,9 @@ Splash.prototype =
     loadNinePatches : function()
     {
         // Note: The last four arguments are left, right, top and bottom points in the nine patch image
-        game.cache.addNinePatch('metalPanel_purpleCorner', 'ui-atlas', 'metalPanel_purpleCorner', 60, 30, 40, 40);
-        game.cache.addNinePatch('metalPanel_redCorner', 'ui-atlas', 'metalPanel_redCorner', 60, 30, 40, 40);
-        game.cache.addNinePatch('glassPanel', 'ui-atlas', 'glassPanel', 10, 10, 10, 20);
+        game.cache.addNinePatch('metalPanel_purpleCorner', 'ui-atlas', 'metalPanel_purpleCorner', 36, 18, 24, 24);
+        game.cache.addNinePatch('metalPanel_redCorner', 'ui-atlas', 'metalPanel_redCorner', 36, 18, 24, 24);
+        game.cache.addNinePatch('glassPanel', 'ui-atlas', 'glassPanel', 6, 6, 6, 12);
     },
     
     /**==========================================================================================================================

@@ -122,7 +122,8 @@ Game.prototype =
     * 
     * @description Takes screenshot of game and transitions to options state
     *///=========================================================================================================================
-    optionsMenuCallback: function () {
+    optionsMenuCallback: function () 
+    {
         // Take a screenshot of the screen to "fake" a pop-up and pass this to the options state
         game.state.states['Options'].canvasImage = gameUtils.getCanvasScreenshot();
 
@@ -158,7 +159,8 @@ Game.prototype =
     * 
     * @description Primary fire key on up callback
     *///=========================================================================================================================
-    primaryFireKeyOnUp: function () {
+    primaryFireKeyOnUp: function () 
+    {
         this.skillGraphics.clear();
     },
 
@@ -184,7 +186,8 @@ Game.prototype =
     * 
     * @description Secondary fire key on up callback
     *///=========================================================================================================================
-    secondaryFireKeyOnUp: function () {
+    secondaryFireKeyOnUp: function () 
+    {
         this.skillGraphics.clear();
     },
     
@@ -231,7 +234,8 @@ Game.prototype =
     * 
     * @description Adds the player's ship to the game
     *///=========================================================================================================================
-    addPlayerShip: function () {
+    addPlayerShip: function () 
+    {
 
         // visible parameters
         var playerMaxHealth = 100;
@@ -261,12 +265,12 @@ Game.prototype =
     addSkills : function()
     {
         // Primary icon and backing glasspanel
-        this.primaryGlassPanel = gameUtils.makeNinePatchPanel('glassPanel', game.width - 85, game.height - 180, 80, 80, 0, 0);
+        this.primaryGlassPanel = gameUtils.makeNinePatchPanel('glassPanel', game.width - 55, game.height - 106, 50, 50, 0, 0);
         this.primaryGlassPanel.alpha = 0.5;
         game.add.sprite(this.primaryGlassPanel.x + 3, this.primaryGlassPanel.y + 3, 'ui-atlas', 'primary-icon', this.hud).scale.setTo(0.75, 0.75);
         
         // Secondary icon and backing glasspanel
-        this.secondaryGlassPanel = gameUtils.makeNinePatchPanel('glassPanel', game.width - 85, game.height - 90, 80, 80, 0, 0);
+        this.secondaryGlassPanel = gameUtils.makeNinePatchPanel('glassPanel', game.width - 55, game.height - 54, 50, 50, 0, 0);
         this.secondaryGlassPanel.alpha = 0.5;
         game.add.sprite(this.secondaryGlassPanel.x + 3, this.secondaryGlassPanel.y + 3, 'ui-atlas', 'secondary-icon', this.hud).scale.setTo(0.75, 0.75);
     },
@@ -278,7 +282,7 @@ Game.prototype =
     *///=========================================================================================================================
     addOptions: function()
     {
-        var options = game.add.sprite(game.width - 80, 10, 'ui-atlas', 'options-icon', this.hud);
+        var options = game.add.sprite(game.width - 52, 5, 'ui-atlas', 'options-icon', this.hud);
         options.scale.setTo(0.75, 0.75);
         
         // Add onInputOver function to change option sprite
@@ -308,10 +312,11 @@ Game.prototype =
     addScoreDisplay: function()
     {
         // create scorePanel nine patch
-        this.scorePanel = gameUtils.makeNinePatchPanel('metalPanel_purpleCorner', 5, 5, 130, 80, 0, 0);
+        this.scorePanel = gameUtils.makeNinePatchPanel('metalPanel_purpleCorner', 5, 5, 78, 48, 0, 0);
+        this.scorePanel.alpha = 0.5;
 
         // text component to display game score, empty string init
-        this.scoreDisplay = game.add.text(this.scorePanel.targetWidth - 5, 35, "", { fill: "#AA00D4", font: "30px Audiowide" });
+        this.scoreDisplay = game.add.text(0, 25, "", { fill: "#AA00D4", font: "14px Audiowide" });
 
         // allow update function to set game score to 0
         this.updateScore(0, true);
@@ -325,16 +330,15 @@ Game.prototype =
     *///=========================================================================================================================
     addStatusPanel: function()
     {
-
         // Glass status panel
-        var statusPanel = gameUtils.makeNinePatchPanel('glassPanel', 5, game.height - 90, 215, 85, 0, 0);
+        var statusPanel = gameUtils.makeNinePatchPanel('glassPanel', 5, game.height - 56, 129, 51, 0, 0);
         statusPanel.alpha = 0.5;
         
         // Status bar helpers
         this.statusBarGraphics = game.add.graphics(0, 0, this.hud);
         this.numStatusBars = 0;
-        var upperLeftX = statusPanel.x + 10;
-        var upperLeftY = statusPanel.y + 11;
+        var upperLeftX = statusPanel.x + 6;
+        var upperLeftY = statusPanel.y + 7;
         
         // Health bar and shadow
         this.drawStatusBar("health", "health_statusBar", upperLeftX, upperLeftY, 0x005522, 0x005522);
@@ -360,10 +364,10 @@ Game.prototype =
         
         // Status bar constants
         var ulx = upperLeftX;
-        var uly = upperLeftY + (this.numStatusBars * 38);
-        statusBarWidth = 195;
-        var height = 25.95;
-        var borderThickness = 3;
+        var uly = upperLeftY + (this.numStatusBars * 22.8);
+        statusBarWidth = 117;
+        var height = 16;
+        var borderThickness = 2;
         
         // SHADOW
         // ------------------------------------------------------------------------------------
@@ -454,11 +458,13 @@ Game.prototype =
     {
 
         // sets game score
-        if (isReset) {
+        if (isReset) 
+        {
             this.gameScore = newScore;
         }
         // adds to game score
-        else {
+        else 
+        {
             this.gameScore += newScore;
         }
 
@@ -466,8 +472,8 @@ Game.prototype =
         this.scoreDisplay.setText(this.gameScore.toString());
         
         // update x position of text
-        this.scoreDisplay.x = (this.scorePanel.targetWidth - 10) - this.scoreDisplay.width;
-    },
+        this.scoreDisplay.x = (this.scorePanel.targetWidth - 5) - this.scoreDisplay.width;
+    }
 
 
 };

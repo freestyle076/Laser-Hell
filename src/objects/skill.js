@@ -29,10 +29,10 @@ Skill = function(textureKey, projectileGroupName, damage, maxProjectiles, bullet
 {
     // had to remove parent to get group to construct. was game.world
     // Create a group of these projectiles with Arcade Physics enabled on it
-    Phaser.Group.call(this, game, null, projectileGroupName, false, true, Phaser.Physics.ARCADE);
+    Phaser.Group.call(this, game, game.world, projectileGroupName, false, true, Phaser.Physics.ARCADE);
 
     // The time player is allowed to shoot again
-    this.nextFire = game.time.time;
+    this.nextFire = 0;
     
     // Speed the projectile travels
     this.bulletSpeed = bulletSpeed;
@@ -193,7 +193,7 @@ PlayerSecondarySkill.prototype.fire = function(sourceShip)
 PlayerSecondarySkill.prototype.upgrade = function()
 {
     PlayerSecondarySkill.prototype.fire = function(sourceShip)
-    {
+    { 
         // Don't allow it to fire if it's before the cooldown
         if(this.game.time.time < this.nextFire) { return; }
 

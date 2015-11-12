@@ -46,7 +46,7 @@ Projectile = function(textureKey, atlasKey, x, y, damage, explosionFramesInfo, o
     );
     
     // If this animation will dispatch the onUpdate events upon changing frame.
-    deathAnim.enableUpdate = true;
+    //deathAnim.enableUpdate = true;
     
     // When the projectile is scaled from its default size it won't be automatically 'smoothed' as will retain its pixel crispness
     this.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
@@ -136,7 +136,7 @@ Projectile.prototype.fire = function(x, y, angle, speed, gx, gy)
 {
     gx = gx || 0;
     gy = gy || 0;
-
+    
     this.reset(x, y);
     this.scale.set(1);
     

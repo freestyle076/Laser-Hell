@@ -147,7 +147,7 @@ Game.prototype =
 
         // fire skill
         this.playerShip.skills[0].fire(this.playerShip);
-
+        
         // increase weapon heat
         this.playerShip.heat(10);
 

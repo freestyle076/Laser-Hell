@@ -52,6 +52,11 @@ Game.prototype =
         this.addBackground();
         this.addHUD();
         this.addPlayerShip();
+
+        // graphics modules for skill icons
+        this.primarySkillGraphics = game.add.graphics(0, 0);
+        this.secondarySkillGraphics = game.add.graphics(0, 0);
+
         this.setKeyBindings();
 
         var s = new Slasher(game, 100, 100, null, null);
@@ -103,18 +108,13 @@ Game.prototype =
         // D -> Right
         this.dKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
 
-        // graphics module for skill icons
-        this.skillGraphics = game.add.graphics(0, 0);
-
         // SPACE -> Primary Fire
         var primaryKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         primaryKey.onDown.add(this.primaryFireKeyOnDown, this);
-        primaryKey.onUp.add(this.primaryFireKeyOnUp, this);
 
         // ALT -> Secondary Fire
         var secondaryKey = game.input.keyboard.addKey(Phaser.Keyboard.ALT);
         secondaryKey.onDown.add(this.secondaryFireKeyOnDown, this);
-        secondaryKey.onUp.add(this.secondaryFireKeyOnUp, this);
     },
 
     /**==========================================================================================================================
@@ -141,27 +141,30 @@ Game.prototype =
     *///=========================================================================================================================
     primaryFireKeyOnDown: function ()
     {
-        // light up primary weapon panel
-        this.skillGraphics.alpha = 0.5;
-        this.skillGraphics.beginFill(0x00FFFF);
-        this.skillGraphics.drawRoundedRect(this.primaryGlassPanel.x, this.primaryGlassPanel.y, this.primaryGlassPanel.targetWidth, this.primaryGlassPanel.targetHeight, 4);
+        // fire skill, respond to sucess or failure
+        if (this.playerShip.fire(0))
+        {
+            // light up primary weapon panel - BLUE
+            this.primarySkillGraphics.alpha = 0.5;
+            this.primarySkillGraphics.beginFill(0x00FFFF);
+            this.primarySkillGraphics.drawRoundedRect(this.primaryGlassPanel.x, this.primaryGlassPanel.y, this.primaryGlassPanel.targetWidth, this.primaryGlassPanel.targetHeight, 4);
 
-        // fire skill
-        this.playerShip.skills[0].fire(this.playerShip);
-        
-        // increase weapon heat
-        this.playerShip.heat(10);
+            // increase weapon heat
+            this.playerShip.heat(8);
+        }
+        else
+        {
+            // light up secondary skill panel - RED
+            this.primarySkillGraphics.alpha = 0.5;
+            this.primarySkillGraphics.beginFill(0xFF0000);
+            this.primarySkillGraphics.drawRoundedRect(this.primaryGlassPanel.x, this.primaryGlassPanel.y, this.primaryGlassPanel.targetWidth, this.primaryGlassPanel.targetHeight, 4);
+        }
 
-    },
-
-    /**==========================================================================================================================
-    * @name PRIMARY FIRE KEY ON UP
-    * 
-    * @description Primary fire key on up callback
-    *///=========================================================================================================================
-    primaryFireKeyOnUp: function () 
-    {
-        this.skillGraphics.clear();
+        // clear timeout
+        var g = this.primarySkillGraphics;
+        setTimeout(function () {
+            g.clear();
+        }, 100);
     },
 
     /**==========================================================================================================================
@@ -171,24 +174,32 @@ Game.prototype =
     *///=========================================================================================================================
     secondaryFireKeyOnDown: function ()
     {
-        // light up secondary skill panel
-        this.skillGraphics.alpha = 0.5;
-        this.skillGraphics.beginFill(0x00FFFF);
-        this.skillGraphics.drawRoundedRect(this.secondaryGlassPanel.x, this.secondaryGlassPanel.y, this.secondaryGlassPanel.targetWidth, this.secondaryGlassPanel.targetHeight, 4);
+        if (this.playerShip.fire(1))
+        {
+            // light up secondary skill panel
+            this.secondarySkillGraphics.alpha = 0.5;
+            this.secondarySkillGraphics.beginFill(0x00FFFF);
+            this.secondarySkillGraphics.drawRoundedRect(this.secondaryGlassPanel.x, this.secondaryGlassPanel.y, this.secondaryGlassPanel.targetWidth, this.secondaryGlassPanel.targetHeight, 4);
+
+            // weapon timer
+            // this.playerShip.skills[1].fireRate
+            // light up secondary skill panel
+            this.secondarySkillGraphics.alpha = 0.5;
+            this.secondarySkillGraphics.beginFill(0xFFBB00);
+            this.secondarySkillGraphics.drawRoundedRect(this.secondaryGlassPanel.x, this.secondaryGlassPanel.y, this.secondaryGlassPanel.targetWidth, this.secondaryGlassPanel.targetHeight, 4);
+
+            // set timeout to clear the red after fireRate
+            var g = this.secondarySkillGraphics;
+            setTimeout(function ()
+            {
+                g.clear();
+            }, this.playerShip.skills[1].fireRate);
+
+        }
 
         // fire skill
-        this.playerShip.skills[1].fire(this.playerShip);
+        
         // TODO what about secondary weapon timer?
-    },
-
-    /**==========================================================================================================================
-    * @name SECONDARY FIRE KEY ON UP
-    * 
-    * @description Secondary fire key on up callback
-    *///=========================================================================================================================
-    secondaryFireKeyOnUp: function () 
-    {
-        this.skillGraphics.clear();
     },
     
     /**==========================================================================================================================

@@ -172,9 +172,9 @@ Ship.prototype.constructor = Ship;
         
         // primary player ship skill
         var primaryDamage = 20;
-        var primaryMaxProjectiles = 50;
-        var primaryBulletSpeed = 200;
-        var primaryFireRate = 10;
+        var primaryMaxProjectiles = 30;
+        var primaryBulletSpeed = 400;
+        var primaryFireRate = 1;
         var explosionFrames = new gameUtils.FramesInfo("expl_02_", 0, 23, "", 4);
         var playerPrimarySkill = new PlayerPrimarySkill(
             "blue_laser_01",
@@ -188,9 +188,9 @@ Ship.prototype.constructor = Ship;
         
         // secondary player ship skill
         var secondaryDamage = 60;
-        var secondaryMaxProjectiles = 10;
-        var secondaryBulletSpeed = 150;
-        var secondaryFireRate = 20;
+        var secondaryMaxProjectiles = 4;
+        var secondaryBulletSpeed = 200;
+        var secondaryFireRate = 2000;
         var playerSecondarySkill = new PlayerSecondarySkill(
             "large_ball_yellow_laser",
             "playerSecondaryProjectiles",
@@ -291,3 +291,16 @@ Ship.prototype.constructor = Ship;
 
         this.gameState.updateStatusBar('weaponHeat', this.weaponHeat, this.maxWeaponHeat);
     };
+
+    /**==========================================================================================================================
+    * @name FIRE
+    *  
+    * @param {int} skillIndex - index of the skill to fire
+    *
+    * @description fires the skill at skillIndex in skills list
+    * @return {bool} - true if skill fired, false otherwise
+    *///=========================================================================================================================
+    PlayerShip.prototype.fire = function (skillIndex)
+    {
+        return this.skills[skillIndex].fire(this);
+    }

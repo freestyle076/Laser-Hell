@@ -35,7 +35,7 @@ Projectile = function(textureKey, atlasKey, x, y, damage, explosionFramesInfo, o
     
     // Create projectile sprite
     Phaser.Sprite.call(this, game, x, y, atlasKey, textureKey);
-
+    
     // Create death animation
     var deathAnim = this.animations.add
     (
@@ -138,11 +138,12 @@ Projectile.prototype.fire = function(x, y, angle, speed, gx, gy)
     gy = gy || 0;
     
     this.reset(x, y);
+
     this.scale.set(1);
     
     this.game.physics.arcade.velocityFromAngle(angle, speed, this.body.velocity);
 
-    this.angle = angle;
+    this.angle = angle + 90;
 
     this.body.gravity.set(gx, gy);
 };
@@ -154,6 +155,7 @@ Projectile.prototype.fire = function(x, y, angle, speed, gx, gy)
 *///=========================================================================================================================
 Projectile.prototype.update = function () 
 {
+    
     if (this.tracking)
     {
         this.rotation = Math.atan2(this.body.velocity.y, this.body.velocity.x);

@@ -28,6 +28,10 @@
 *///=========================================================================================================================
 EnemyShip = function(game, x, y, mainSprite, explosionFrames, maxHealth, skills, group) {
     Ship.call(this, game, x, y, mainSprite, explosionFrames, maxHealth, skills, group);
+
+    this.checkWorldBounds = true;
+    this.outOfBoundsKill = true;
+    this.exists = false;
 }
 
 EnemyShip.prototype = Object.create(Ship.prototype);

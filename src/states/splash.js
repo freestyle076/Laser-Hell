@@ -112,14 +112,16 @@ Splash.prototype =
     * @description Loads all of the source scripts
     *///=========================================================================================================================
     loadScripts: function() 
-    {
-        // Vendor libraries
-        
+    {   
         // Game States
         game.load.script('gamemenu', 'src/states/gamemenu.js');
         game.load.script('game', 'src/states/game.js');
         game.load.script('gameover', 'src/states/gameover.js');
         game.load.script('options', 'src/states/options.js');
+        
+        // Game helpers
+        game.load.script('collision', 'src/states/src/states/game_lib/collision.js');
+        game.load.script('spawning', 'src/states/src/states/game_lib/spawning.js');
         
         // Objects
         game.load.script('projectile', 'src/objects/projectile.js');
@@ -141,9 +143,6 @@ Splash.prototype =
         // Music
         game.load.audio('game-music', 'assets/sounds/music/game-music.ogg');
         game.load.audio('menu-music', 'assets/sounds/music/menu-music.ogg');
-        
-        // UI Sounds
-        
         
         // Combat Sounds
     },

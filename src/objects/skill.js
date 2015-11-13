@@ -89,11 +89,13 @@ PlayerPrimarySkill.prototype.constructor = PlayerPrimarySkill;
 * @description Fires the projectiles from the pool of projectiles
 * 
 * @param {Ship} sourceShip - The ship that is firing
+* 
+* @returns {bool} - Whether or not the skill was fired.
 *///=========================================================================================================================
 PlayerPrimarySkill.prototype.fire = function(sourceShip)
 {
     // Don't allow it to fire if it's before the cooldown
-    if(this.game.time.time < this.nextFire) { return; }
+    if(this.game.time.time < this.nextFire) { return false; }
 
     // Originating x and y for the projectile
     var x = sourceShip.x;
@@ -104,6 +106,8 @@ PlayerPrimarySkill.prototype.fire = function(sourceShip)
 
     // Update the next time we can fire
     this.nextFire = this.game.time.time + this.fireRate;
+    
+    return true;
 };
 
 /**==========================================================================================================================
@@ -116,7 +120,7 @@ PlayerPrimarySkill.prototype.upgrade = function()
     PlayerPrimarySkill.prototype.fire = function(sourceShip)
     {
         // Don't allow it to fire if it's before the cooldown
-        if(this.game.time.time < this.nextFire) { return; }
+        if(this.game.time.time < this.nextFire) { return false; }
 
         // Originating x and y for the projectile
         var x = sourceShip.x;
@@ -129,6 +133,8 @@ PlayerPrimarySkill.prototype.upgrade = function()
 
         // Update the next time we can fire
         this.nextFire = this.game.time.time + this.fireRate;
+        
+        return true;
     };
 };
 
@@ -168,11 +174,13 @@ PlayerSecondarySkill.prototype.constructor = PlayerSecondarySkill;
 * @description Fires the projectiles from the pool of projectiles
 * 
 * @param {Ship} sourceShip - The ship that is firing
+* 
+* @returns {bool} - Whether or not the skill was fired.
 *///=========================================================================================================================
 PlayerSecondarySkill.prototype.fire = function(sourceShip)
 {
     // Don't allow it to fire if it's before the cooldown
-    if(this.game.time.time < this.nextFire) { return; }
+    if(this.game.time.time < this.nextFire) { return false; }
 
     // Originating x and y for the projectile
     var x = sourceShip.x;
@@ -183,6 +191,8 @@ PlayerSecondarySkill.prototype.fire = function(sourceShip)
 
     // Update the next time we can fire
     this.nextFire = this.game.time.time + this.fireRate;
+    
+    return true;
 };
 
 /**==========================================================================================================================
@@ -195,7 +205,7 @@ PlayerSecondarySkill.prototype.upgrade = function()
     PlayerSecondarySkill.prototype.fire = function(sourceShip)
     { 
         // Don't allow it to fire if it's before the cooldown
-        if(this.game.time.time < this.nextFire) { return; }
+        if(this.game.time.time < this.nextFire) { return false; }
 
         // Originating x and y for the projectile
         var x = sourceShip.x;
@@ -208,6 +218,8 @@ PlayerSecondarySkill.prototype.upgrade = function()
 
         // Update the next time we can fire
         this.nextFire = this.game.time.time + this.fireRate;
+        
+        return true;
     };
 };
 
@@ -250,11 +262,13 @@ DestroyerSkill.prototype.constructor = DestroyerSkill;
 * @description Fires the projectiles from the pool of projectiles
 * 
 * @param {Ship} sourceShip - The ship that is firing
+* 
+* @returns {bool} - Whether or not the skill was fired.
 *///=========================================================================================================================
 DestroyerSkill.prototype.fire = function(sourceShip)
 {
     // Don't allow it to fire if it's before the cooldown
-    if(this.game.time.time < this.nextFire) { return; }
+    if(this.game.time.time < this.nextFire) { return false; }
 
     // Originating x and y for the projectile
     var x = sourceShip.x;
@@ -265,6 +279,8 @@ DestroyerSkill.prototype.fire = function(sourceShip)
 
     // Update the next time we can fire
     this.nextFire = this.game.time.time + this.fireRate;
+    
+    return true;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -308,11 +324,13 @@ SlasherSkill.prototype.constructor = SlasherSkill;
 * @description Fires the projectiles from the pool of projectiles
 * 
 * @param {Ship} sourceShip - The ship that is firing
+* 
+* @returns {bool} - Whether or not the skill was fired.
 *///=========================================================================================================================
 SlasherSkill.prototype.fire = function(sourceShip)
 {
     // Don't allow it to fire if it's before the cooldown
-    if(this.game.time.time < this.nextFire) { return; }
+    if(this.game.time.time < this.nextFire) { return false; }
 
     // Originating x and y for the projectile
     var x = sourceShip.x;
@@ -332,6 +350,8 @@ SlasherSkill.prototype.fire = function(sourceShip)
 
     // Update the next time we can fire
     this.nextFire = this.game.time.time + this.fireRate;
+    
+    return true;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -370,11 +390,13 @@ TankerSkill.prototype.constructor = TankerSkill;
 * @description Fires the projectiles from the pool of projectiles
 * 
 * @param {Ship} sourceShip - The ship that is firing
+* 
+* @returns {bool} - Whether or not the skill was fired.
 *///=========================================================================================================================
 TankerSkill.prototype.fire = function(sourceShip)
 {
     // Don't allow it to fire if it's before the cooldown
-    if(this.game.time.time < this.nextFire) { return; }
+    if(this.game.time.time < this.nextFire) { return false; }
 
     // Originating x and y for the projectile
     var x = sourceShip.x;
@@ -385,6 +407,8 @@ TankerSkill.prototype.fire = function(sourceShip)
 
     // Update the next time we can fire
     this.nextFire = this.game.time.time + this.fireRate;
+    
+    return true;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -100,7 +100,7 @@ PlayerPrimarySkill.prototype.fire = function(sourceShip)
     var y = sourceShip.y + 20;
 
     // Get next projectile and fire it
-    this.getFirstExists(false).fire(x, y, 0, this.bulletSpeed, 0, 0);
+    this.getFirstExists(false).fire(x, y, -90, this.bulletSpeed, 0, 0);
 
     // Update the next time we can fire
     this.nextFire = this.game.time.time + this.fireRate;
@@ -179,7 +179,7 @@ PlayerSecondarySkill.prototype.fire = function(sourceShip)
     var y = sourceShip.y + 20;
 
     // Get next projectile and fire it
-    this.getFirstExists(false).fire(x, y, 0, this.bulletSpeed, 0, 0);
+    this.getFirstExists(false).fire(x, y, -90, this.bulletSpeed, 0, 0);
 
     // Update the next time we can fire
     this.nextFire = this.game.time.time + this.fireRate;

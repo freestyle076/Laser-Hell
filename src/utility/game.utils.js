@@ -74,7 +74,8 @@ var gameUtils =
      * Accreditation:
      * http://stackoverflow.com/questions/5560248/programmatically-lighten-or-darken-a-hex-color-or-rgb-and-blend-colors
      *///=========================================================================================================================    
-    lightenDarkenColor: function(col,amt) {
+    lightenDarkenColor: function(col,amt) 
+    {
         var num = parseInt(col,16);
         var r = (num >> 16) + amt;
         var b = ((num >> 8) & 0x00FF) + amt;

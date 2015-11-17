@@ -353,7 +353,7 @@ SlasherSkill.prototype.fire = function(sourceShip)
 
     // Update the next time we can fire
     this.nextFire = this.game.time.time + this.fireRate;
-    
+
     return true;
 };
 

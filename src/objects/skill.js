@@ -120,6 +120,7 @@ PlayerPrimarySkill.prototype.fire = function(sourceShip)
 *///=========================================================================================================================
 PlayerPrimarySkill.prototype.upgrade = function()
 {
+    // Update function
     PlayerPrimarySkill.prototype.fire = function(sourceShip)
     {
         // Don't allow it to fire if it's before the cooldown
@@ -139,6 +140,9 @@ PlayerPrimarySkill.prototype.upgrade = function()
 
         return true;
     };
+    
+    // Make sure upgrades don't spawn again
+    spawningVars.primaryUpgraded = true;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -205,6 +209,7 @@ PlayerSecondarySkill.prototype.fire = function(sourceShip)
 *///=========================================================================================================================
 PlayerSecondarySkill.prototype.upgrade = function()
 {
+    // Update function
     PlayerSecondarySkill.prototype.fire = function(sourceShip)
     { 
         // Don't allow it to fire if it's before the cooldown
@@ -224,6 +229,9 @@ PlayerSecondarySkill.prototype.upgrade = function()
         
         return true;
     };
+    
+    // Make sure upgrades don't spawn again
+    spawningVars.secondaryUpgraded = true;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

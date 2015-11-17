@@ -68,48 +68,16 @@ Projectile = function(textureKey, atlasKey, x, y, damage, explosionFramesInfo, o
     // Initialize based on type
     if(this.isObstacle)
     {
-       this.obstacleInit(obstacleFramesInfo); 
+        // Create floating animation
+        this.animations.add
+        (
+            'floating', 
+            Phaser.Animation.generateFrameNames(obstacleFramesInfo.prefix, obstacleFramesInfo.start, obstacleFramesInfo.stop, obstacleFramesInfo.suffix, obstacleFramesInfo.zeroPad),
+            30,
+            true
+        );
     }
-    else
-    {
-        //this.bulletInit();
-    }
-};
 
-/**==========================================================================================================================
-* @name BULLET INIT
-* 
-* @description Bullet constructor
-*///=========================================================================================================================
-Projectile.prototype.bulletInit = function()
-{
-    // Nothing here for now
-    // commented out in Projectile constructor
-};
-
-/**==========================================================================================================================
-* @name OBSTACLE INIT
-* 
-* @description Obstacle constructor
-* 
-* @param {FramesInfo} obstacleFramesInfo - Frame information for the obstacle object
-*///=========================================================================================================================
-Projectile.prototype.obstacleInit = function(obstacleFramesInfo)
-{
-    // Create floating animation
-    var floatingAnim = this.animations.add
-    (
-        'floating', 
-        Phaser.animation.generateFrameNames(obstacleFramesInfo.prefix, obstacleFramesInfo.start, obstacleFramesInfo.stop, obstacleFramesInfo.suffix, obstacleFramesInfo.zeroPad),
-        60,
-        true
-    );
-    
-    // If this animation will dispatch the onUpdate events upon changing frame.
-    floatingAnim.enableUpdate = true;
-    
-    // Play animation immediately
-    this.animations.play('floating');
 };
 
 // Inherits from sprite

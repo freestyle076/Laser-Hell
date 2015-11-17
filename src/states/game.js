@@ -49,25 +49,22 @@ Game.prototype =
     *///=========================================================================================================================
     create: function() 
     {
+        // Background and HUD
         this.addBackground();
         this.addHUD();
-        this.addPlayerShip();
 
-        // graphics modules for skill icons
+        // Graphics modules for skill icons
         this.primarySkillGraphics = game.add.graphics(0, 0);
         this.secondarySkillGraphics = game.add.graphics(0, 0);
 
+        // Key bindings
         this.setKeyBindings();
-
-        var s = new Slasher(game, 100, 100, null, null);
-        game.add.existing(s);
-
-        var t = new Tanker(game, 200, 100, null, null);
-        game.add.existing(t);
-
-        var d = new Destroyer(game, 300, 100, null, null);
-        game.add.existing(d);
         
+        // Create and add main ship
+        this.addPlayerShip();
+        
+        // Create and add enemies and objects
+        this.addEnemiesAndObjects();
     },
 
     /**==========================================================================================================================
@@ -84,6 +81,44 @@ Game.prototype =
 
     // CREATE HELPERS
     // --------------------------------------------------------------------------------------------------------------------------
+    
+    /**==========================================================================================================================
+    * @name ADD BACKGROUND
+    * 
+    * @description Adds the game background and scrolls it down.
+    *///=========================================================================================================================
+    addBackground: function()
+    {
+        // Set background sprite
+        game.background = this.add.tileSprite(0, 0, this.game.width, this.game.height, 'game');
+        
+        // Set background to scroll downwards
+        game.background.autoScroll(0, 50);
+    },
+    
+    /**==========================================================================================================================
+    * @name ADD HUD
+    * 
+    * @description Creates HUD group and adds each part of the HUD to that group.
+    *///=========================================================================================================================
+    addHUD: function()
+    {
+        // Create hud group
+        this.hud = game.add.group();
+        
+        // Add primary and secondary skills
+        this.addSkills();
+        
+        // Add special sprite, options, and add events when clicked and hovered on
+        this.addOptions();
+        
+        // Add status panel and contained status bar sprites
+        this.addStatusPanel();
+        
+        // Add score display
+        this.addScoreDisplay();
+        
+    },
 
     /**==========================================================================================================================
     * @name SET KEY BINDINGS
@@ -203,56 +238,16 @@ Game.prototype =
     },
     
     /**==========================================================================================================================
-    * @name ADD BACKGROUND
-    * 
-    * @description Adds the game background and scrolls it down.
-    *///=========================================================================================================================
-    addBackground: function()
-    {
-        // Set background sprite
-        game.background = this.add.tileSprite(0, 0, this.game.width, this.game.height, 'game');
-        
-        // Set background to scroll downwards
-        game.background.autoScroll(0, 50);
-    },
-    
-    /**==========================================================================================================================
-    * @name ADD HUD
-    * 
-    * @description Creates HUD group and adds each part of the HUD to that group.
-    *///=========================================================================================================================
-    addHUD: function()
-    {
-        // Create hud group
-        this.hud = game.add.group();
-        
-        // Add primary and secondary skills
-        this.addSkills();
-        
-        // Add special sprite, options, and add events when clicked and hovered on
-        this.addOptions();
-        
-        // Add status panel and contained status bar sprites
-        this.addStatusPanel();
-        
-        // Add score display
-        this.addScoreDisplay();
-        
-    },
-    
-    /**==========================================================================================================================
     * @name ADD PLAYER SHIP
     * 
     * @description Adds the player's ship to the game
     *///=========================================================================================================================
     addPlayerShip: function () 
     {
-
         // visible parameters
         var playerMaxHealth = 100;
         var playerMaxWeaponHeat = 100;
         var playerSpeed = 7;
-        var skills = null;
         var startX = 400;
         var startY = 400;
 
@@ -261,6 +256,29 @@ Game.prototype =
 
         // add to game
         game.add.existing(this.playerShip);
+    },
+    
+    /**==========================================================================================================================
+    * @name ADD ENEMIES AND OBJECTS
+    * 
+    * @description Adds enemy ships, asteroids, and powerups to the game along with enabling their spawn methods.
+    *///=========================================================================================================================
+    addEnemiesAndObjects: function ()
+    {
+        // Helper variables to make and spawn enemies and objects
+        var maxEnemies = 20;
+        var enemySpawnRate = 2000;
+        var maxAsteroids = 15;
+        var asteroidSpawnRate = 500;
+        var maxPowerups = 10;
+        var powerupSpawnRate = 6500;
+        var healingAmount = 100;
+        var coolingAmount = 100;
+         
+        // Create pool of these different enemies/objects and set a spawn timer and method for spawn
+        spawning.makeEnemies(maxEnemies, enemySpawnRate, this);
+        spawning.makeAsteroids(maxAsteroids, asteroidSpawnRate, this);
+        spawning.makePowerups(maxPowerups, powerupSpawnRate, this, healingAmount, coolingAmount);
     },
     
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

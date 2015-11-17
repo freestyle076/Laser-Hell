@@ -22,27 +22,40 @@
 * @description Projectile constructor
 * 
 * @param {string} textureKey - The texture atlas key for the projectile
+* @param {string} atlasKey - The atlas key for the texture atlas key
 * @param {float} x - x position of the projectile to spawn
 * @param {float} y - y position of the projectile to spawn
 *///=========================================================================================================================
-Powerup = function(textureKey, x, y) 
+Powerup = function(textureKey, atlasKey, x, y) 
 {
     // Set up attributes
     this.textureKey = textureKey;
     
-    // Create powerup sprite
-    Phaser.Sprite.call(this, game, x, y, 'pickups-atlas', textureKey);
+    // Create projectile sprite
+    Phaser.Sprite.call(this, game, x, y, atlasKey, textureKey);
     
-    // They will check if the powerup is within the world bounds and if not kill it, freeing it up for use in the powerup pool again.
+    // When the projectile is scaled from its default size it won't be automatically 'smoothed' as will retain its pixel crispness
+    this.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
+    
+    // Anchor in the middle
+    this.anchor.set(0.5);
+    
+    // They will check if the projectile is within the world bounds and if not kill it, freeing it up for use in the projectile pool again.
     this.checkWorldBounds = true;
     this.outOfBoundsKill = true;
     this.exists = false;
+    
+    // Tells the projectile to rotate to face the direction it is moving in, as it moves.
+    this.tracking = false;
+    
+    // How fast the projectile should grow in size as it travels
+    this.scaleSpeed = 0;
 };
 
 // Inherits from sprite
 Powerup.prototype = Object.create(Phaser.Sprite.prototype);
 
-// Specify constructor of powerup
+// Specify constructor of projectile
 Powerup.prototype.constructor = Powerup;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,12 +74,15 @@ Powerup.prototype.constructor = Powerup;
 * @param {float} y - y position of the projectile to spawn
 * @param {float} health - Amount to heal the ship that collects the powerup
 *///=========================================================================================================================
-HealthPowerup = function(textureKey, x, y, health)
+HealthPowerup = function(x, y, health)
 {
-    Powerup.call(this, textureKey, x, y);
+    Powerup.call(this, 'health_powerup', 'powerups-atlas', x, y);
     
     this.health = health;
 };
+
+// Inherits from powerup
+HealthPowerup.prototype = Object.create(Powerup.prototype);
 
 // Specify constructor for health powerup
 HealthPowerup.prototype.constructor = HealthPowerup;
@@ -101,12 +117,15 @@ HealthPowerup.applyPowerup = function(sourceShip)
 * @param {float} y - y position of the projectile to spawn
 * @param {float} cooldown - Amount to cooldown the weaponheat of the ship that collects the powerup
 *///=========================================================================================================================
-CooldownPowerup = function(textureKey, x, y, cooldown)
+CooldownPowerup = function(x, y, cooldown)
 {
-    Powerup.call(this, textureKey, x, y);
+    Powerup.call(this, 'coolant_powerup', 'powerups-atlas', x, y);
     
     this.cooldown = cooldown;
 };
+
+// Inherits from powerup
+CooldownPowerup.prototype = Object.create(Powerup.prototype);
 
 // Specify constructor for cooldown powerup
 CooldownPowerup.prototype.constructor = CooldownPowerup;
@@ -141,12 +160,20 @@ CooldownPowerup.applyPowerup = function(sourceShip)
 * @param {float} y - y position of the projectile to spawn
 * @param {int} skillIndex - Index of the skill to upgrade of the ship that collected the powerup
 *///=========================================================================================================================
-UpgradePowerup = function(textureKey, x, y, skillIndex)
+UpgradePowerup = function(x, y, skillIndex)
 {
-    Powerup.call(this, textureKey, x, y);
-    
+    switch(skillIndex)
+    {
+        case 0: Powerup.call(this, 'primary_upgrade_powerup', 'powerups-atlas', x, y); break;
+        case 1: Powerup.call(this, 'secondary_upgrade_powerup', 'powerups-atlas', x, y); break;
+        default: break;
+    }
+
     this.skillIndex = skillIndex;
 };
+
+// Inherits from powerup
+UpgradePowerup.prototype = Object.create(Powerup.prototype);
 
 // Specify constructor for upgrade powerup
 UpgradePowerup.prototype.constructor = UpgradePowerup;

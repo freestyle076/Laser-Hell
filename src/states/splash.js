@@ -120,8 +120,8 @@ Splash.prototype =
         game.load.script('options', 'src/states/options.js');
         
         // Game helpers
-        game.load.script('collision', 'src/states/src/states/game_lib/collision.js');
-        game.load.script('spawning', 'src/states/src/states/game_lib/spawning.js');
+        game.load.script('collision', 'src/states/game_lib/collision.js');
+        game.load.script('spawning', 'src/states/game_lib/spawning.js');
         
         // Objects
         game.load.script('projectile', 'src/objects/projectile.js');
@@ -168,7 +168,7 @@ Splash.prototype =
         game.load.atlasJSONHash('projectiles-atlas', 'assets/images/game/projectiles.png', 'assets/images/game/projectiles.json');
         
         // Pickups
-        game.load.atlasJSONHash('pickups-atlas', 'assets/images/game/pickups.png', 'assets/images/game/pickups.json');
+        game.load.atlasJSONHash('powerups-atlas', 'assets/images/game/powerups.png', 'assets/images/game/powerups.json');
         
         // Ships and Projectiles
         game.load.atlasJSONHash('ships-atlas', 'assets/images/game/ships-and-projectiles.png', 'assets/images/game/ships-and-projectiles.json');

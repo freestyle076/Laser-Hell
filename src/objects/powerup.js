@@ -32,6 +32,11 @@ Powerup = function(textureKey, x, y)
     
     // Create powerup sprite
     Phaser.Sprite.call(this, game, x, y, 'pickups-atlas', textureKey);
+    
+    // They will check if the powerup is within the world bounds and if not kill it, freeing it up for use in the powerup pool again.
+    this.checkWorldBounds = true;
+    this.outOfBoundsKill = true;
+    this.exists = false;
 };
 
 // Inherits from sprite

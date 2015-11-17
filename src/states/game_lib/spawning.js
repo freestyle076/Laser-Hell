@@ -13,12 +13,20 @@ var spawning =
 {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-    spawnY : -10,
-    minSpawnX : 5,
-    maxSpawnX : game.width - 5,
+    spawnY : -100,
+    dieY : game.width + 100,
+    minX : 5,
+    maxX : game.width - 5,
     
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
+    /**==========================================================================================================================
+    * @name APPLY POWERUP
+    * 
+    * @description Heals the ship that collected the powerup
+    * 
+    * @param {Ship} sourceShip - Ship that collected the powerup
+    *///=========================================================================================================================
     makeEnemies : function(maxEnemies, nextSpawn, gameState)
     {
         // Helper values
@@ -37,9 +45,9 @@ var spawning =
             
             switch(randEnemyType)
             {
-                case 1: this.enemies.add(new Destroyer(game, 0, 0, this.enemies)); break;
-                case 2: this.enemies.add(new Slasher(game, 0, 0, this.enemies)); break;
-                case 3: this.enemies.add(new Tanker(game, 0, 0, this.enemies)); break;
+                case 1: this.enemies.add(new Destroyer(game, 0, 0)); break;
+                case 2: this.enemies.add(new Slasher(game, 0, 0)); break;
+                case 3: this.enemies.add(new Tanker(game, 0, 0)); break;
                 default: break;
             }
         }
@@ -48,13 +56,27 @@ var spawning =
         game.time.events.loop(nextSpawn, spawnEnemies, gameState);
     },
     
+    /**==========================================================================================================================
+    * @name APPLY POWERUP
+    * 
+    * @description Heals the ship that collected the powerup
+    * 
+    * @param {Ship} sourceShip - Ship that collected the powerup
+    *///=========================================================================================================================
     spawnEnemies : function()
     {
-        
+        this.enemies.getFirstExists(false).act();
     },
     
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
+    /**==========================================================================================================================
+    * @name APPLY POWERUP
+    * 
+    * @description Heals the ship that collected the powerup
+    * 
+    * @param {Ship} sourceShip - Ship that collected the powerup
+    *///=========================================================================================================================
     makeAsteroids : function(maxAsteroids, nextSpawn, gameState)
     {
         // Helper values
@@ -133,13 +155,35 @@ var spawning =
         game.time.events.loop(nextSpawn, spawnAsteroids, gameState);
     },
     
+    /**==========================================================================================================================
+    * @name APPLY POWERUP
+    * 
+    * @description Heals the ship that collected the powerup
+    * 
+    * @param {Ship} sourceShip - Ship that collected the powerup
+    *///=========================================================================================================================
     spawnAsteroids : function()
     {
+        // Get random spawn X location
+        var randSpawnX = game.rnd.integerInRange(minX, maxX);
+        var randDieX = game.rnd.integerInRange(minX, maxX);
         
+        // Get random asteroid
+        var randAsteroid = this.asteroids.getFirstExists(false).reset(randSpawnX, spawnY);
+        
+        // Make the asteroid tween to the bottom of the screen
+        game.add.tween(randAsteroid).to({x: randDieX, y: dieY}, 2400, Phaser.Easing.Bounce.Out, true, 1000, false);
     },
     
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
+    /**==========================================================================================================================
+    * @name APPLY POWERUP
+    * 
+    * @description Heals the ship that collected the powerup
+    * 
+    * @param {Ship} sourceShip - Ship that collected the powerup
+    *///=========================================================================================================================
     makePowerups : function(maxPowerups, nextSpawn, gameState, healingAmount, coolingAmount)
     {
         // Helper values

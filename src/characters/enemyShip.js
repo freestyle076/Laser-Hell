@@ -26,8 +26,8 @@
 *
 * @description EnemyShip constructor does not need to be overriden
 *///=========================================================================================================================
-EnemyShip = function(game, x, y, mainSprite, explosionFrames, maxHealth, skills, group) {
-    Ship.call(this, game, x, y, mainSprite, explosionFrames, maxHealth, skills, group);
+EnemyShip = function(game, x, y, mainSprite, explosionFrames, maxHealth, speed, skills, group) {
+    Ship.call(this, game, x, y, mainSprite, explosionFrames, maxHealth, speed, skills, group);
 
     this.checkWorldBounds = true;
     this.outOfBoundsKill = true;
@@ -50,7 +50,9 @@ EnemyShip.prototype.constructor = EnemyShip;
     * @description ABSTRACT performs the enemies behavior
     *///=========================================================================================================================
     EnemyShip.prototype.act = function () {
-        //override
+        // set heading
+        // update x,y
+        // fire if you can!
     };
     EnemyShip.prototype.destroyerHealth = 75;
     EnemyShip.prototype.tankerHealth = 250;
@@ -71,7 +73,6 @@ EnemyShip.prototype.constructor = EnemyShip;
     *
     * @description Destroyer constructor
     *///=========================================================================================================================
-
     Destroyer = function (game, x, y, group)
     {
         // visible parameters
@@ -104,6 +105,17 @@ EnemyShip.prototype.constructor = EnemyShip;
     Destroyer.prototype = Object.create(EnemyShip.prototype);
     Destroyer.prototype.constructor = Destroyer;
 
+    /**==========================================================================================================================
+    * @name ACT
+    *  
+    * @description determines how the enemy ship should act and performs the action
+    *///=========================================================================================================================
+    //Destroyer.prototype.act = function ()
+    //{
+    //    // move
+
+    //    // if shouldfire and canFire: fire
+    //}
 
 // SLASHER
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -152,6 +164,18 @@ EnemyShip.prototype.constructor = EnemyShip;
     Slasher.prototype = Object.create(EnemyShip.prototype);
     Slasher.prototype.constructor = Slasher;
 
+    /**==========================================================================================================================
+    * @name ACT
+    *  
+    * @description determines how the enemy ship should act and performs the action
+    *///=========================================================================================================================
+    //Slasher.prototype.act = function ()
+    //{
+    //    // move
+
+    //    // if shouldfire and canFire: fire
+    //}
+
 // TANKER
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -196,3 +220,15 @@ EnemyShip.prototype.constructor = EnemyShip;
     }
     Tanker.prototype = Object.create(EnemyShip.prototype);
     Tanker.prototype.constructor = Tanker;
+
+    /**==========================================================================================================================
+    * @name ACT
+    *  
+    * @description determines how the enemy ship should act and performs the action
+    *///=========================================================================================================================
+    //Tanker.prototype.act = function ()
+    //{
+    //    // move
+
+    //    // if shouldfire and canFire: fire
+    //}

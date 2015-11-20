@@ -145,7 +145,8 @@ Ship.prototype.constructor = Ship;
     *///=========================================================================================================================
     Ship.prototype.die = function ()
     {
-        this.animations.play('explosion');
+        this.kill();
+        //this.animations.play('explosion');
     };
 
 // PLAYER SHIP
@@ -239,7 +240,7 @@ Ship.prototype.constructor = Ship;
         this.move(this.gameState.wKey.isDown, this.gameState.dKey.isDown, this.gameState.sKey.isDown, this.gameState.aKey.isDown);
 
         // cool weapon
-        this.heat(-0.5);
+        this.heat(-0.2);
 
 
     };

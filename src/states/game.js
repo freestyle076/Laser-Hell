@@ -10,8 +10,9 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var Game = function () {},
-        levelNumber = 1,
-        statusBars = { "health" : null, "weaponHeat" : null };
+        gameScore = 0,
+        statusBars = { "health" : null, "weaponHeat" : null },
+        playerShip = null;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -24,30 +25,11 @@ Game.prototype =
     // --------------------------------------------------------------------------------------------------------------------------
 
     /**==========================================================================================================================
-    * @name INIT
-    * 
-    * @description Initialize game
-    *///=========================================================================================================================
-    init: function()
-    {
-        this.gameScore = 0;
-    },
-    
-    /**==========================================================================================================================
-    * @name PRELOAD
-    * 
-    * @description Preloads game state's assets
-    *///=========================================================================================================================
-    preload: function() 
-    {
-    },
-
-    /**==========================================================================================================================
     * @name CREATE
     * 
     * @description Adds tile background, HUD, and sets key bindings.
     *///=========================================================================================================================
-    create: function() 
+    init: function() 
     {
         // Background and HUD
         this.addBackground();
@@ -74,7 +56,32 @@ Game.prototype =
     *///=========================================================================================================================
     update: function()
     {
+        // Make enemies act
+        spawningGroups.enemies.callAllExists('act', true);
         
+        var thisPlayerShip = this.playerShip;
+        
+        // Check player and asteroid projectiles against enemies
+        // Check enemy projectiles against player
+        /*spawningGroups.enemies.forEachExists(function(enemy)
+        {
+            // Player projectiles
+            game.physics.arcade.overlap(enemy, thisPlayerShip.skills[0], collision.enemyShip_projectile, null, this);
+            game.physics.arcade.overlap(enemy, thisPlayerShip.skills[1], collision.enemyShip_projectile, null, this);
+            
+            // Asteroids that exist
+            game.physics.arcade.overlap(enemy, spawningGroups.asteroids.children.filter(function(child) { return child.exists; }), collision.enemyShip_projectile, null, this);
+            
+            // Enemy projectiles
+            game.physics.arcade.overlap(thisPlayerShip, enemy.skills[0], collision.playerShip_projectile, null, this);
+        });
+        
+        // Check player and powerup collision
+        game.physics.arcade.overlap(thisPlayerShip, spawningGroups.powerups.children.filter(function(child) { return child.exists; }), collision.playerShip_powerup, null, this);
+        
+        // Check player and asteroid collision
+        game.physics.arcade.overlap(thisPlayerShip, spawningGroups.asteroids.children.filter(function(child) { return child.exists; }), collision.playerShip_projectile, null, this);
+        game.physics.arcade.overlap(thisPlayerShip, spawningGroups.asteroids.children.filter(function(child) { return child.exists; }), collision.playerShip_projectile, null, this);*/
     },
     
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -197,9 +204,7 @@ Game.prototype =
 
         // clear timeout
         var g = this.primarySkillGraphics;
-        setTimeout(function () {
-            g.clear();
-        }, 100);
+        setTimeout(function () { g.clear(); }, 100);
     },
 
     /**==========================================================================================================================
@@ -271,7 +276,7 @@ Game.prototype =
         var maxAsteroids = 15;
         var asteroidSpawnRate = 500;
         var maxPowerups = 10;
-        var powerupSpawnRate = 6500;
+        var powerupSpawnRate = 15000;
         var healingAmount = 100;
         var coolingAmount = 100;
          
@@ -349,7 +354,6 @@ Game.prototype =
 
         // allow update function to set game score to 0
         this.updateScore(0, true);
-        
     },
     
     /**==========================================================================================================================
@@ -373,7 +377,6 @@ Game.prototype =
         this.drawStatusBar("health", "health_statusBar", upperLeftX, upperLeftY, 0x005522, 0x005522);
         // Weapon heat bar and shadow
         this.drawStatusBar("weaponHeat", "weaponHeat_statusBar", upperLeftX, upperLeftY, 0x440055, 0x440055);
-        
     },
     
     /**==========================================================================================================================
@@ -390,7 +393,6 @@ Game.prototype =
     *///=========================================================================================================================
     drawStatusBar: function(statusBarKey, statusBarSpriteName, upperLeftX, upperLeftY, borderColor, fillColor)
     {
-        
         // Status bar constants
         var ulx = upperLeftX;
         var uly = upperLeftY + (this.numStatusBars * 22.8);
@@ -472,7 +474,6 @@ Game.prototype =
 
         // update the crop
         statusBar.updateCrop();
-        
     },
 
     /**==========================================================================================================================
@@ -485,7 +486,6 @@ Game.prototype =
     *///=========================================================================================================================
     updateScore: function (newScore, isReset)
     {
-
         // sets game score
         if (isReset) 
         {
@@ -503,8 +503,6 @@ Game.prototype =
         // update x position of text
         this.scoreDisplay.x = (this.scorePanel.targetWidth - 5) - this.scoreDisplay.width;
     }
-
-
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

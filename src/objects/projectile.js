@@ -48,6 +48,9 @@ Projectile = function(textureKey, atlasKey, x, y, damage, explosionFramesInfo, o
     // If this animation will dispatch the onUpdate events upon changing frame.
     deathAnim.enableUpdate = true;
     
+    // kill ship on explosion animation completion
+    deathAnim.killOnComplete = true;
+    
     // When the projectile is scaled from its default size it won't be automatically 'smoothed' as will retain its pixel crispness
     this.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
     
@@ -77,7 +80,6 @@ Projectile = function(textureKey, atlasKey, x, y, damage, explosionFramesInfo, o
             true
         );
     }
-
 };
 
 // Inherits from sprite

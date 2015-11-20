@@ -4,7 +4,7 @@
 // @author Angela Gross and Kyle Handy
 // Xeinax: Space Warrior
 // -------------------------------------------------------------------------------------------------------------------------------
-// 
+// Helps create a pool and spawn enemy ships, powerups, and asteroids
 // ================================================================================================================================
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,11 +75,9 @@ var spawning =
     },
     
     /**==========================================================================================================================
-    * @name APPLY POWERUP
+    * @name SPAWN ENEMIES
     * 
-    * @description Heals the ship that collected the powerup
-    * 
-    * @param {Ship} sourceShip - Ship that collected the powerup
+    * @description Spawns a random enemy from the enemies group into the game
     *///=========================================================================================================================
     spawnEnemies : function()
     {
@@ -87,7 +85,7 @@ var spawning =
         var randSpawnX = game.rnd.integerInRange(spawningVars.minX, spawningVars.maxX);
         
         // Reset enemy and make exist and reset it
-        var randEnemy = spawningGroups.enemies.getFirstExists(false);
+        var randEnemy = Phaser.ArrayUtils.getRandomItem(spawningGroups.enemies.children.filter(function(enemy) { return !enemy.exists; }));
         
         if(randEnemy)
         {
@@ -172,13 +170,11 @@ var spawning =
         // Setup spawn event
         game.time.events.loop(spawnRate, this.spawnAsteroids, gameState);
     },
-    
+      
     /**==========================================================================================================================
-    * @name APPLY POWERUP
+    * @name SPAWN ASTEROIDS
     * 
-    * @description Heals the ship that collected the powerup
-    * 
-    * @param {Ship} sourceShip - Ship that collected the powerup
+    * @description Spawns a random asteroid from the asteroid group into the game and tweens the powerup off the screen.
     *///=========================================================================================================================
     spawnAsteroids : function()
     {
@@ -204,7 +200,7 @@ var spawning =
             asteroidTween.onComplete.add( function() { randAsteroid.exists = false; });
             
             // Play animation
-            randAsteroid.play('floatings');
+            randAsteroid.play('floating');
         }
 
     },
@@ -254,16 +250,14 @@ var spawning =
     },
     
     /**==========================================================================================================================
-    * @name APPLY POWERUP
+    * @name SPAWN POWERUPS
     * 
-    * @description Heals the ship that collected the powerup
-    * 
-    * @param {Ship} sourceShip - Ship that collected the powerup
+    * @description Spawns a random powerup from the powerups group into the game and tweens the powerup off the screen.
     *///=========================================================================================================================
     spawnPowerups : function()
     {   
         // Get random powerup that doesn't currently exist and reset it
-        var randPowerup = spawningGroups.powerups.getFirstExists(false);
+        var randPowerup = Phaser.ArrayUtils.getRandomItem(spawningGroups.powerups.children.filter(function(powerup) { return !powerup.exists; }));
         
         // Make sure these haven't been used to upgrade
         if(randPowerup instanceof UpgradePowerup)

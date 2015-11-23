@@ -4,7 +4,7 @@
 // @author Angela Gross and Kyle Handy
 // Xeinax: Space Warrior
 // -------------------------------------------------------------------------------------------------------------------------------
-// 
+// Handles all of the collision logic for the game.
 // ================================================================================================================================
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -19,24 +19,33 @@ var collisionVars =
 
 var collision = 
 {
+    /**==========================================================================================================================
+    * @name ENEMYSHIP_PLAYERSHIP
+    * 
+    * @description Performs collision handling between an enemy ship and the player ship. It kills both the enemy and the player
+    * and displays a game over screen.
+    *///=========================================================================================================================
     enemyShip_playerShip: function(enemy, player)
     {
         // Kill enemy and player
         enemy.die();
         player.die();
         
-        // Take a screenshot of the screen to "fake" a pop-up and pass this to the options state
-        game.state.states['GameOver'].canvasImage = gameUtils.getCanvasScreenshot();
-        
-        console.log("A ship ran into another ship!!");
-        
         // Set a short timeout so you can see the explosions
         setTimeout(function() 
         {
+            // Take a screenshot of the screen to "fake" a pop-up and pass this to the options state
+            game.state.states['GameOver'].canvasImage = gameUtils.getCanvasScreenshot();
             game.state.start('GameOver');
         }, 1000);
     },
     
+    /**==========================================================================================================================
+    * @name ENEMYSHIP_PROJECTILE
+    * 
+    * @description Performs collision handling between an enemy ship and a projectile. It damages the enemy, kills the
+    * projectile, and, if the enemy is dead, kills the enemy and rewards the player with points.
+    *///=========================================================================================================================
     enemyShip_projectile: function(enemy, projectile)
     {
         // Apply damage
@@ -56,6 +65,12 @@ var collision =
         }
     },
     
+    /**==========================================================================================================================
+    * @name PLAYERSHIP_PROJECTILE
+    * 
+    * @description Performs collision handling between the player ship and a projectile. It damages the player, kills the 
+    *  projectile, lowers the player's health bar, and, if the player is dead, kills the player and starts the game over screen.
+    *///=========================================================================================================================
     playerShip_projectile: function(player, projectile)
     {
         // Apply damage
@@ -63,8 +78,6 @@ var collision =
         
         // Kill the projectile
         projectile.die();
-        
-        console.log("An player ship ran into another projectile!");
         
         // Update health bar of player
         game.state.states['Game'].updateStatusBar("health", player.health, player.maxHealth);
@@ -74,28 +87,37 @@ var collision =
             // Kill the player
             player.die();
             
-            // Take a screenshot of the screen to "fake" a pop-up and pass this to the options state
-            game.state.states['GameOver'].canvasImage = gameUtils.getCanvasScreenshot();
-            
             // Set a short timeout so you can see the explosions
             setTimeout(function() 
             {
+                // Take a screenshot of the screen to "fake" a pop-up and pass this to the options state
+                game.state.states['GameOver'].canvasImage = gameUtils.getCanvasScreenshot();
                 game.state.start('GameOver');
             }, 1000);
         }
     },
     
+    /**==========================================================================================================================
+    * @name PLAYERSHIP_POWERUP
+    * 
+    * @description Performs collision handling between the player ship and a powerup. It applies the powerup to the player and
+    * kills the powerup.
+    *///=========================================================================================================================
     playerShip_powerup: function(player, powerup)
     {
-        console.log("An player ship ran into another powerup!");
-        
         // Apply powerup
         powerup.applyPowerup(player);
         
         // Kill the powerup
-        powerup.kill();
+        powerup.die();
     },
     
+    /**==========================================================================================================================
+    * @name PROJECTILE_PROJECTILE
+    * 
+    * @description Performs collision handling between two projectiles (namely, for asteroids and bullets). Awards the player
+    * points upon the death of both projectiles.
+    *///=========================================================================================================================
     projectile_projectile: function(thisProjectile, thatProjectile)
     {
         // Kill both projectiles

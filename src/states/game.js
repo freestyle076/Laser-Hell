@@ -59,10 +59,10 @@ Game.prototype =
         // Make enemies act
         spawningGroups.enemies.callAllExists('act', true);
         
+        // Get player ship so we can still get it out of scope
         var thisPlayerShip = this.playerShip;
         
-        // Check player and asteroid projectiles against enemies
-        // Check enemy projectiles against player
+        // Enemy collision
         spawningGroups.enemies.forEachExists(function(enemy)
         {
             // Player projectiles
@@ -71,19 +71,26 @@ Game.prototype =
             
             // Enemy projectiles
             game.physics.arcade.overlap(thisPlayerShip, enemy.skills[0], collision.playerShip_projectile, null, this);
+            
+            // Player
+            game.physics.arcade.overlap(enemy, thisPlayerShip, collision.enemyShip_playerShip, null, this);
         });
         
-        // Check player and powerup collision
+        // Powerup collision
         spawningGroups.powerups.forEachExists(function(powerup)
         {
            game.physics.arcade.overlap(thisPlayerShip, powerup, collision.playerShip_powerup, null, this);
         });
 
-        // Check player projectile and asteroid collision
+        // Asteroid collision
         spawningGroups.asteroids.forEachExists(function(asteroid)
         {
+            // Player projectiles
             game.physics.arcade.overlap(thisPlayerShip.skills[0], asteroid, collision.projectile_projectile, null, this);
             game.physics.arcade.overlap(thisPlayerShip.skills[1], asteroid, collision.projectile_projectile, null, this);
+            
+            // Player
+            game.physics.arcade.overlap(thisPlayerShip, asteroid, collision.playerShip_projectile, null, this);
         });
     },
         

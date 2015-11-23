@@ -11,7 +11,8 @@
 
 var collisionVars = 
 {
-    enemyPoints: 50
+    enemyPoints: 100,
+    asteroidPoints: 25 
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +34,7 @@ var collision =
         setTimeout(function() 
         {
             game.state.start('GameOver');
-        }, 2000);
+        }, 1000);
     },
     
     enemyShip_projectile: function(enemy, projectile)
@@ -80,7 +81,7 @@ var collision =
             setTimeout(function() 
             {
                 game.state.start('GameOver');
-            }, 2000);
+            }, 1000);
         }
     },
     
@@ -100,6 +101,9 @@ var collision =
         // Kill both projectiles
         thisProjectile.die();
         thatProjectile.die();
+        
+        // Update score
+        game.state.states['Game'].updateScore(collisionVars.asteroidPoints, false);
     }
 };
 

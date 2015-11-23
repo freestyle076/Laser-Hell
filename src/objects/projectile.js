@@ -41,9 +41,9 @@ Projectile = function(textureKey, atlasKey, x, y, damage, isObstacle)
     // Anchor in the middle
     this.anchor.set(0.5);
     
-    // They will check if the projectile is within the world bounds and if not kill it, freeing it up for use in the projectile pool again.
+    // Fires on out of bounds events so we can kill it when it's out of bounds, freeing it up for use in the projectile pool again.
     this.checkWorldBounds = true;
-    this.outOfBoundsKill = true;
+    this.events.onOutOfBounds.add(Projectile.prototype.onProjectileOut, game.state.states['Game']);
     this.exists = false;
     
     // Tells the projectile to rotate to face the direction it is moving in, as it moves.
@@ -60,6 +60,20 @@ Projectile.prototype = Object.create(Phaser.Sprite.prototype);
 Projectile.prototype.constructor = Projectile;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**==========================================================================================================================
+* @name ON PROJECTILE OUT
+* 
+* @description Kills the projectile if it goes left, right, or below the game bounds
+*///=========================================================================================================================
+Projectile.prototype.onProjectileOut = function(projectile)
+{
+    // Kill if it is truly out of bounds (spawns above)
+    if(projectile.body.x + 200 > game.width || projectile.body.x < -200 || projectile.body.y > game.width + 200)
+    {
+        projectile.kill();
+    }
+};
 
 /**==========================================================================================================================
 * @name FIRE

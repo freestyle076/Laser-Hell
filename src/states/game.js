@@ -247,8 +247,6 @@ Game.prototype =
             }, this.playerShip.skills[1].fireRate);
 
         }
-
-        // fire skill
     },
     
     /**==========================================================================================================================
@@ -357,7 +355,7 @@ Game.prototype =
     {
         // create scorePanel nine patch
         this.scorePanel = gameUtils.makeNinePatchPanel('metalPanel_purpleCorner', 5, 5, 78, 48, 0, 0);
-        this.scorePanel.alpha = 0.5;
+        this.scorePanel.alpha = 0.7;
 
         // text component to display game score, empty string init
         this.scoreDisplay = game.add.text(0, 25, "", { fill: "#AA00D4", font: "14px Audiowide" });

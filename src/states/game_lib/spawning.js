@@ -15,7 +15,7 @@ var spawningGroups = { enemies: null, asteroids: null, powerups: null, explosion
 // Associated variables 
 var spawningVars = 
 {
-    spawnY : 50,
+    spawnY : -50,
     minX : 5,
     maxX : game.width - 50,
     asteroidAngleMin: 45,

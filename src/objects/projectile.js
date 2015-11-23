@@ -23,33 +23,17 @@
 * @param {float} x - x position of the projectile to spawn
 * @param {float} y - y position of the projectile to spawn
 * @param {float} damage - Damage that the projectile does
-* @param {FramesInfo} explosionFramesInfo - Frame information for the explosion object
-* @param {FramesInfo} obstacleFramesInfo - [optional] Frame information for the obstacle object
+* @param {bool} isObstacle- Whether or not it's an obstacle
 *///=========================================================================================================================
-Projectile = function(textureKey, atlasKey, x, y, damage, explosionFramesInfo, obstacleFramesInfo) 
+Projectile = function(textureKey, atlasKey, x, y, damage, isObstacle) 
 {
     // Set up attributes
     this.textureKey = textureKey;
     this.damage = damage;
-    this.isObstacle = obstacleFramesInfo ? true : false;
+    this.isObstacle = isObstacle;
     
     // Create projectile sprite
     Phaser.Sprite.call(this, game, x, y, atlasKey, textureKey);
-    
-    // Create death animation
-    var deathAnim = this.animations.add
-    (
-        'dying', 
-        Phaser.Animation.generateFrameNames(explosionFramesInfo.prefix, explosionFramesInfo.start, explosionFramesInfo.stop, explosionFramesInfo.suffix, explosionFramesInfo.zeroPad),
-        60,
-        false
-    );
-    
-    // If this animation will dispatch the onUpdate events upon changing frame.
-    deathAnim.enableUpdate = true;
-    
-    // kill ship on explosion animation completion
-    deathAnim.killOnComplete = true;
     
     // When the projectile is scaled from its default size it won't be automatically 'smoothed' as will retain its pixel crispness
     this.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
@@ -67,19 +51,6 @@ Projectile = function(textureKey, atlasKey, x, y, damage, explosionFramesInfo, o
     
     // How fast the projectile should grow in size as it travels
     this.scaleSpeed = 0;
-    
-    // Initialize based on type
-    if(this.isObstacle)
-    {
-        // Create floating animation
-        this.animations.add
-        (
-            'floating', 
-            Phaser.Animation.generateFrameNames(obstacleFramesInfo.prefix, obstacleFramesInfo.start, obstacleFramesInfo.stop, obstacleFramesInfo.suffix, obstacleFramesInfo.zeroPad),
-            30,
-            true
-        );
-    }
 };
 
 // Inherits from sprite
@@ -123,9 +94,8 @@ Projectile.prototype.fire = function(x, y, angle, speed, gx, gy)
 * 
 * @description Update the x and y position of the projectile
 *///=========================================================================================================================
-Projectile.prototype.update = function () 
+Projectile.prototype.update = function() 
 {
-    
     if (this.tracking)
     {
         this.rotation = Math.atan2(this.body.velocity.y, this.body.velocity.x);
@@ -136,7 +106,11 @@ Projectile.prototype.update = function ()
         this.scale.x += this.scaleSpeed;
         this.scale.y += this.scaleSpeed;
     }
-
+    
+    if(this.isObstacle)
+    {
+        this.angle += 1;
+    }
 };
 
 /**==========================================================================================================================
@@ -154,11 +128,20 @@ Projectile.prototype.applyDamage = function(damagedShip)
 /**==========================================================================================================================
 * @name EXPLODE
 * 
-* @description Explodes or "kills" the projectile by playing the death animation
+* @description Kills the projectile
 *///=========================================================================================================================
-Projectile.prototype.explode = function()
-{
-    this.animations.play('dying');
+Projectile.prototype.die = function()
+{    
+    // Kill projectile
+    this.kill();
+    
+    // Create an explosion if it's an obstacle
+    if(this.isObstacle)
+    {
+        var explosion = spawningGroups.explosions.getFirstExists(false);
+        explosion.reset(this.body.x, this.body.y);
+        explosion.play('kaboom', 30, false, true);
+    }
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

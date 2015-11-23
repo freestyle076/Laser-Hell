@@ -10,21 +10,22 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Sprite groups that spawn
-var spawningGroups = { enemies: null, asteroids: null, powerups: null };
+var spawningGroups = { enemies: null, asteroids: null, powerups: null, explosions: null };
 
 // Associated variables 
 var spawningVars = 
 {
     spawnY : 50,
-    dieY : game.width + 50,
     minX : 5,
     maxX : game.width - 50,
-    asteroidDurationMin: 8000,
-    asteroidDurationMax: 11000,
-    powerupDurationMin: 9000,
-    powerupDurationMax: 13000,
-    minDelay: 0,
-    maxDelay: 1000,
+    asteroidAngleMin: 45,
+    asteroidAngleMax: 135,
+    asteroidSpeedMin: 250,
+    asteroidSpeedMax: 400,
+    powerupAngleMin: 45,
+    powerupAngleMax: 135,
+    powerupSpeedMin: 50,
+    powerupSpeedMax: 100,
     primaryUpgraded: false,
     secondaryUpgraded: false
 }; 
@@ -109,13 +110,9 @@ var spawning =
         // Helper values
         var numAsteroidTypes = 3;
         var randAsteroidType = 0;
-        var createdAsteroid = null;
-        
+
         // Make asteroid group
-        spawningGroups.asteroids = game.add.group();
-        spawningGroups.asteroids.exists = false;
-        spawningGroups.asteroids.enableBody = true;
-        spawningGroups.asteroids.physicsBodyType = Phaser.Physics.ARCADE;
+        spawningGroups.asteroids = new Phaser.Group(game, game.world, "asteroids", false, true, Phaser.Physics.ARCADE);
         
         // Create random enemies and add them to the group
         for(var i = 0; i < maxAsteroids; i++)
@@ -124,45 +121,9 @@ var spawning =
             
             switch(randAsteroidType)
             {
-                case 1: 
-                    spawningGroups.asteroids.add(new Projectile
-                    (
-                        'a10001', 
-                        'asteroids-atlas', 
-                        0, 
-                        0, 
-                        9999, 
-                        new gameUtils.FramesInfo("expl_02_", 0, 23, "", 4), 
-                        new gameUtils.FramesInfo("a1", 0, 14, "", 4)
-                    )); 
-                    break;
-                    
-                case 2: 
-                    spawningGroups.asteroids.add(new Projectile
-                    (
-                        'a30001', 
-                        'asteroids-atlas', 
-                        0, 
-                        0, 
-                        9999, 
-                        new gameUtils.FramesInfo("expl_02_", 0, 23, "", 4), 
-                        new gameUtils.FramesInfo("a3", 0, 14, "", 4)
-                    )); 
-                    break;
-                
-                case 3: 
-                    spawningGroups.asteroids.add(new Projectile
-                    (
-                        'a40001', 
-                        'asteroids-atlas', 
-                        0, 
-                        0, 
-                        9999, 
-                        new gameUtils.FramesInfo("expl_02_", 0, 23, "", 4), 
-                        new gameUtils.FramesInfo("a4", 0, 14, "", 4)
-                    )); 
-                    break;
-                
+                case 1: spawningGroups.asteroids.add(new Projectile('a10001', 'asteroids-atlas', 0, 0, 9999, true)); break;
+                case 2: spawningGroups.asteroids.add(new Projectile('a30001', 'asteroids-atlas', 0, 0, 9999, true)); break;
+                case 3: spawningGroups.asteroids.add(new Projectile('a40001', 'asteroids-atlas', 0, 0, 9999, true)); break;
                 default: break;
             }
         }
@@ -186,21 +147,11 @@ var spawning =
         {
             // Get random spawn information
             var randSpawnX = game.rnd.integerInRange(spawningVars.minX, spawningVars.maxX);
-            var randDieX = game.rnd.integerInRange(spawningVars.minX, spawningVars.maxX);
-            var randDuration = game.rnd.integerInRange(spawningVars.asteroidDurationMin, spawningVars.asteroidDurationMax);
-            var randDelay = game.rnd.integerInRange(spawningVars.minDelay, spawningVars.maxDelay);
+            var randAngle = game.rnd.integerInRange(spawningVars.asteroidAngleMin, spawningVars.asteroidAngleMax);
+            var randSpeed = game.rnd.integerInRange(spawningVars.asteroidSpeedMin, spawningVars.asteroidSpeedMax);
             
-            // Reset the asteroid
-            randAsteroid.reset(randSpawnX, spawningVars.spawnY);
-            
-            // Make the asteroid tween to the bottom of the screen
-            var asteroidTween = game.add.tween(randAsteroid).to({x: randDieX, y: spawningVars.dieY}, randDuration, Phaser.Easing.Bounce.Out, true, randDelay);
-            
-            // Make sure that the finished tween sets the asteroid to not exist anymore
-            asteroidTween.onComplete.add( function() { randAsteroid.exists = false; });
-            
-            // Play animation
-            randAsteroid.play('floating');
+            // Fire the asteroid
+            randAsteroid.fire(randSpawnX, spawningVars.spawnY, randAngle, randSpeed, 0, 0);
         }
 
     },
@@ -225,10 +176,7 @@ var spawning =
         var randPowerupType = 0;
         
         // Make enemy group
-        spawningGroups.powerups = game.add.group();
-        spawningGroups.powerups.exists = false;
-        spawningGroups.powerups.enableBody = true;
-        spawningGroups.powerups.physicsBodyType = Phaser.Physics.ARCADE;
+        spawningGroups.powerups = new Phaser.Group(game, game.world, "powerups", false, true, Phaser.Physics.ARCADE);
         
         // Create random enemies and add them to the group
         for(var i = 0; i < maxPowerups; i++)
@@ -272,22 +220,42 @@ var spawning =
         {
             // Get random spawn information
             var randSpawnX = game.rnd.integerInRange(spawningVars.minX, spawningVars.maxX);
-            var randDieX = game.rnd.integerInRange(spawningVars.minX, spawningVars.maxX);
-            var randDuration = game.rnd.integerInRange(spawningVars.powerupDurationMin, spawningVars.powerupDurationMax);
-            var randDelay = game.rnd.integerInRange(spawningVars.minDelay, spawningVars.maxDelay);
+            var randAngle = game.rnd.integerInRange(spawningVars.powerupAngleMin, spawningVars.powerupAngleMax);
+            var randSpeed = game.rnd.integerInRange(spawningVars.powerupSpeedMin, spawningVars.powerupSpeedMax);
             
-            // Reset powerup
-            randPowerup.reset(randSpawnX, spawningVars.spawnY);
-            
-            // Make the powerup tween to the bottom of the screen
-            var powerupTween = game.add.tween(randPowerup).to({x: randDieX, y: spawningVars.dieY}, randDuration, Phaser.Easing.Sinusoidal.In, true, randDelay);
-            
-            // Make sure that the finished tween sets the powerup to not exist anymore
-            powerupTween.onComplete.add( function() { randPowerup.exists = false; });
+            // Fire the powerup
+            randPowerup.fire(randSpawnX, spawningVars.spawnY, randAngle, randSpeed, 0, 0);
         }
         
-    }
+    },
     
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**==========================================================================================================================
+    * @name MAKE POWERUPS
+    * 
+    * @description Creates a group of explosions that will spawn when an asteroid or a ship is exploded (should be ran after
+    * asteroid and enemy groups have been formed)
+    * 
+    * @param {Phaser.GameState} gameState - The main game state that will spawn these 
+    *///=========================================================================================================================
+    makeExplosions : function(gameState)
+    {
+        // Helper values
+        var maxExplosions = spawningGroups.asteroids.length + spawningGroups.enemies.length + 1;
+        
+        // Make explosion group
+        spawningGroups.explosions = game.add.group();
+        spawningGroups.explosions.createMultiple(maxExplosions, 'kaboom');
+        
+        // Create random explosions and add them to the group
+        spawningGroups.explosions.forEach(function(explosion)
+        {   
+            // Create explosion animation
+            var explosionAnim = explosion.animations.add('kaboom');
+        }, gameState);
+    }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 };

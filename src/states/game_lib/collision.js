@@ -41,22 +41,14 @@ var collision =
         // Apply damage
         projectile.applyDamage(enemy);
         
-        console.log("An enemy ship ran into another projectile!");
+        // Kill the projectile
+        projectile.die();
         
         // Increase score if the enemy died
         if(enemy.isDead())
         {
-            // Kill enemy and projectile
+            // Kill enemy
             enemy.die();
-            
-            if(projectile.isObstacle)
-            {
-                projectile.explode();
-            }
-            else
-            {
-                projectile.kill();
-            }
         
             // Update score
             game.state.states['Game'].updateScore(collisionVars.enemyPoints, false);
@@ -65,28 +57,21 @@ var collision =
     
     playerShip_projectile: function(player, projectile)
     {
-        console.log(player);
-        
+        // Apply damage
         projectile.applyDamage(player);
+        
+        // Kill the projectile
+        projectile.die();
         
         console.log("An player ship ran into another projectile!");
         
+        // Update health bar of player
         game.state.states['Game'].updateStatusBar("health", player.health, player.maxHealth);
         
         if(player.isDead())
         {
-            // Kill the player and the projectile
+            // Kill the player
             player.die();
-            
-            if(projectile.isObstacle)
-            {
-                projectile.explode();
-            }
-            else
-            {
-                projectile.kill();
-            }
-            
             
             // Take a screenshot of the screen to "fake" a pop-up and pass this to the options state
             game.state.states['GameOver'].canvasImage = gameUtils.getCanvasScreenshot();
@@ -108,6 +93,13 @@ var collision =
         
         // Kill the powerup
         powerup.kill();
+    },
+    
+    projectile_projectile: function(thisProjectile, thatProjectile)
+    {
+        // Kill both projectiles
+        thisProjectile.die();
+        thatProjectile.die();
     }
 };
 

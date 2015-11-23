@@ -172,6 +172,9 @@ Splash.prototype =
         
         // Ships and Projectiles
         game.load.atlasJSONHash('ships-atlas', 'assets/images/game/ships-and-projectiles.png', 'assets/images/game/ships-and-projectiles.json');
+        
+        // Explosion
+        game.load.spritesheet('kaboom', 'assets/images/game/explode.png', 96, 96);
     },
     
     /**==========================================================================================================================

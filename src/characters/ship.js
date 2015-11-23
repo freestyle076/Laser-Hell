@@ -144,8 +144,14 @@ Ship.prototype.constructor = Ship;
     * @description Displays ship's explosion sprite, frees resources
     *///=========================================================================================================================
     Ship.prototype.die = function ()
-    {
-        this.animations.play('explosion');
+    {        
+        //  Create an explosion
+        var explosion = spawningGroups.explosions.getFirstExists(false);
+        explosion.reset(this.body.x, this.body.y);
+        explosion.play('kaboom', 30, false, true);
+        
+        // Kill ship
+        this.kill();
     };
 
 // PLAYER SHIP

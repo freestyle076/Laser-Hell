@@ -28,32 +28,12 @@
 *///=========================================================================================================================
 Powerup = function(textureKey, atlasKey, x, y) 
 {
-    // Set up attributes
-    this.textureKey = textureKey;
-    
     // Create projectile sprite
-    Phaser.Sprite.call(this, game, x, y, atlasKey, textureKey);
-    
-    // When the projectile is scaled from its default size it won't be automatically 'smoothed' as will retain its pixel crispness
-    this.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
-    
-    // Anchor in the middle
-    this.anchor.set(0.5);
-    
-    // They will check if the projectile is within the world bounds and if not kill it, freeing it up for use in the projectile pool again.
-    this.checkWorldBounds = true;
-    this.outOfBoundsKill = true;
-    this.exists = false;
-    
-    // Tells the projectile to rotate to face the direction it is moving in, as it moves.
-    this.tracking = false;
-    
-    // How fast the projectile should grow in size as it travels
-    this.scaleSpeed = 0;
+    Projectile.call(this, textureKey, atlasKey, x, y, 0, false);
 };
 
-// Inherits from sprite
-Powerup.prototype = Object.create(Phaser.Sprite.prototype);
+// Inherits from projectile
+Powerup.prototype = Object.create(Projectile.prototype);
 
 // Specify constructor of projectile
 Powerup.prototype.constructor = Powerup;
@@ -96,7 +76,7 @@ HealthPowerup.prototype.constructor = HealthPowerup;
 * 
 * @param {Ship} sourceShip - Ship that collected the powerup
 *///=========================================================================================================================
-HealthPowerup.applyPowerup = function(sourceShip)
+HealthPowerup.prototype.applyPowerup = function(sourceShip)
 {
     sourceShip.heal(this.health);
 };
@@ -139,7 +119,7 @@ CooldownPowerup.prototype.constructor = CooldownPowerup;
 * 
 * @param {Ship} sourceShip - Ship that collected the powerup
 *///=========================================================================================================================
-CooldownPowerup.applyPowerup = function(sourceShip)
+CooldownPowerup.prototype.applyPowerup = function(sourceShip)
 {
     sourceShip.heat(-this.cooldown);
 };
@@ -187,7 +167,7 @@ UpgradePowerup.prototype.constructor = UpgradePowerup;
 * 
 * @param {Ship} sourceShip - Ship that collected the powerup
 *///=========================================================================================================================
-UpgradePowerup.applyPowerup = function(sourceShip)
+UpgradePowerup.prototype.applyPowerup = function(sourceShip)
 {
     if(this.skillIndex < sourceShip.skills.length)
     {

@@ -63,26 +63,30 @@ Game.prototype =
         
         // Check player and asteroid projectiles against enemies
         // Check enemy projectiles against player
-        /*spawningGroups.enemies.forEachExists(function(enemy)
+        spawningGroups.enemies.forEachExists(function(enemy)
         {
             // Player projectiles
             game.physics.arcade.overlap(enemy, thisPlayerShip.skills[0], collision.enemyShip_projectile, null, this);
             game.physics.arcade.overlap(enemy, thisPlayerShip.skills[1], collision.enemyShip_projectile, null, this);
-            
-            // Asteroids that exist
-            game.physics.arcade.overlap(enemy, spawningGroups.asteroids.children.filter(function(child) { return child.exists; }), collision.enemyShip_projectile, null, this);
             
             // Enemy projectiles
             game.physics.arcade.overlap(thisPlayerShip, enemy.skills[0], collision.playerShip_projectile, null, this);
         });
         
         // Check player and powerup collision
-        game.physics.arcade.overlap(thisPlayerShip, spawningGroups.powerups.children.filter(function(child) { return child.exists; }), collision.playerShip_powerup, null, this);
-        
-        // Check player and asteroid collision
-        game.physics.arcade.overlap(thisPlayerShip, spawningGroups.asteroids.children.filter(function(child) { return child.exists; }), collision.playerShip_projectile, null, this);
-        game.physics.arcade.overlap(thisPlayerShip, spawningGroups.asteroids.children.filter(function(child) { return child.exists; }), collision.playerShip_projectile, null, this);*/
+        spawningGroups.powerups.forEachExists(function(powerup)
+        {
+           game.physics.arcade.overlap(thisPlayerShip, powerup, collision.playerShip_powerup, null, this);
+        });
+
+        // Check player projectile and asteroid collision
+        spawningGroups.asteroids.forEachExists(function(asteroid)
+        {
+            game.physics.arcade.overlap(thisPlayerShip.skills[0], asteroid, collision.projectile_projectile, null, this);
+            game.physics.arcade.overlap(thisPlayerShip.skills[1], asteroid, collision.projectile_projectile, null, this);
+        });
     },
+        
     
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -275,8 +279,8 @@ Game.prototype =
         var enemySpawnRate = 2000;
         var maxAsteroids = 15;
         var asteroidSpawnRate = 500;
-        var maxPowerups = 10;
-        var powerupSpawnRate = 15000;
+        var maxPowerups = 20;
+        var powerupSpawnRate = 2000;
         var healingAmount = 100;
         var coolingAmount = 100;
          
@@ -284,6 +288,7 @@ Game.prototype =
         spawning.makeEnemies(maxEnemies, enemySpawnRate, this);
         spawning.makeAsteroids(maxAsteroids, asteroidSpawnRate, this);
         spawning.makePowerups(maxPowerups, powerupSpawnRate, this, healingAmount, coolingAmount);
+        spawning.makeExplosions(this);
     },
     
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

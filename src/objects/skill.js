@@ -23,9 +23,8 @@
 * @param {int} maxProjectiles - The number of projectiles created for this skill pool
 * @param {int} bulletSpeed - Speed the projectile travels
 * @param {int} fireRate - Rate that the projectile fires
-* @param {FramesInfo} explosionFramesInfo - Frame information for the explosion object
 *///=========================================================================================================================
-Skill = function(textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate, explosionFramesInfo) 
+Skill = function(textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate) 
 {
     // had to remove parent to get group to construct. was game.world
     // Create a group of these projectiles with Arcade Physics enabled on it
@@ -43,7 +42,7 @@ Skill = function(textureKey, projectileGroupName, damage, maxProjectiles, bullet
     // Create pool of projectiles
     for (var i = 0; i < maxProjectiles; i++)
     {
-        this.add(new Projectile(textureKey, "ships-atlas", 0, 0, damage, explosionFramesInfo), true);
+        this.add(new Projectile(textureKey, "ships-atlas", 0, 0, damage, false), true);
     }
 
     return this;
@@ -70,11 +69,10 @@ Skill.prototype.constructor = Skill;
 * @param {int} maxProjectiles - The number of projectiles created for this skill pool
 * @param {int} bulletSpeed - Speed the projectile travels
 * @param {int} fireRate - Rate that the projectile fires
-* @param {FramesInfo} explosionFramesInfo - Frame information for the explosion object
 *///=========================================================================================================================
-PlayerPrimarySkill = function(textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate, explosionFramesInfo) 
+PlayerPrimarySkill = function(textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate) 
 {
-    Skill.call(this, textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate, explosionFramesInfo);
+    Skill.call(this, textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate);
 };
 
 // Specify constructor of the player's primary skill
@@ -162,11 +160,10 @@ PlayerPrimarySkill.prototype.upgrade = function()
 * @param {int} maxProjectiles - The number of projectiles created for this skill pool
 * @param {int} bulletSpeed - Speed the projectile travels
 * @param {int} fireRate - Rate that the projectile fires
-* @param {FramesInfo} explosionFramesInfo - Frame information for the explosion object
 *///=========================================================================================================================
-PlayerSecondarySkill = function(textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate, explosionFramesInfo) 
+PlayerSecondarySkill = function(textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate) 
 {
-    Skill.call(this, textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate, explosionFramesInfo);
+    Skill.call(this, textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate);
 };
 
 // Specify constructor of the player's secondary skill
@@ -220,9 +217,9 @@ PlayerSecondarySkill.prototype.upgrade = function()
         var y = sourceShip.y - 15;
 
         // Get next few projectiles and fire them around
-        this.getFirstExists(false).fire(x, y, 225, this.bulletSpeed, 0, -200);
+        this.getFirstExists(false).fire(x, y, 225, this.bulletSpeed, 0, 0);
         this.getFirstExists(false).fire(x, y, 270, this.bulletSpeed, 0, 0);
-        this.getFirstExists(false).fire(x, y, 315, this.bulletSpeed, 0, 200);
+        this.getFirstExists(false).fire(x, y, 315, this.bulletSpeed, 0, 0);
 
         // Update the next time we can fire
         this.nextFire = this.game.time.time + this.fireRate;
@@ -251,11 +248,10 @@ PlayerSecondarySkill.prototype.upgrade = function()
 * @param {int} maxProjectiles - The number of projectiles created for this skill pool
 * @param {int} bulletSpeed - Speed the projectile travels
 * @param {int} fireRate - Rate that the projectile fires
-* @param {FramesInfo} explosionFramesInfo - Frame information for the explosion object
 *///=========================================================================================================================
-DestroyerSkill = function(textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate, explosionFramesInfo) 
+DestroyerSkill = function(textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate) 
 {
-    Skill.call(this, textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate, explosionFramesInfo);
+    Skill.call(this, textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate);
     
     // Set all of the generated projectiles to scale as time passes
     this.setAll('scaleSpeed', 0.05);
@@ -311,11 +307,10 @@ DestroyerSkill.prototype.fire = function(sourceShip)
 * @param {int} maxProjectiles - The number of projectiles created for this skill pool
 * @param {int} bulletSpeed - Speed the projectile travels
 * @param {int} fireRate - Rate that the projectile fires
-* @param {FramesInfo} explosionFramesInfo - Frame information for the explosion object
 *///=========================================================================================================================
-SlasherSkill = function(textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate, explosionFramesInfo) 
+SlasherSkill = function(textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate) 
 {
-    Skill.call(this, textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate, explosionFramesInfo);
+    Skill.call(this, textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate);
     
     // Make a pattern for the projectile that will vary the gravity of the projectile in a pattern
     this.pattern = Phaser.ArrayUtils.numberArrayStep(-800, 800, 200);
@@ -382,11 +377,10 @@ SlasherSkill.prototype.fire = function(sourceShip)
 * @param {int} maxProjectiles - The number of projectiles created for this skill pool
 * @param {int} bulletSpeed - Speed the projectile travels
 * @param {int} fireRate - Rate that the projectile fires
-* @param {FramesInfo} explosionFramesInfo - Frame information for the explosion object
 *///=========================================================================================================================
-TankerSkill = function(textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate, explosionFramesInfo) 
+TankerSkill = function(textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate) 
 {
-    Skill.call(this, textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate, explosionFramesInfo);
+    Skill.call(this, textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate);
 };
 
 // Specify constructor of the tanker's skill

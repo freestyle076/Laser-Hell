@@ -1,4 +1,4 @@
-﻿// ================================================================================================================================
+// ================================================================================================================================
 // ship.js
 // -------------------------------------------------------------------------------------------------------------------------------
 // @author Angela Gross and Kyle Handy
@@ -144,14 +144,9 @@ Ship.prototype.constructor = Ship;
     * @description Displays ship's explosion sprite, frees resources
     *///=========================================================================================================================
     Ship.prototype.die = function ()
-    {        
-        //  Create an explosion
-        var explosion = spawningGroups.explosions.getFirstExists(false);
-        explosion.reset(this.body.x, this.body.y);
-        explosion.play('kaboom', 30, false, true);
-        
-        // Kill ship
+    {
         this.kill();
+        //this.animations.play('explosion');
     };
 
 // PLAYER SHIP
@@ -245,7 +240,7 @@ Ship.prototype.constructor = Ship;
         this.move(this.gameState.wKey.isDown, this.gameState.dKey.isDown, this.gameState.sKey.isDown, this.gameState.aKey.isDown);
 
         // cool weapon
-        this.heat(-0.5);
+        this.heat(-0.2);
 
 
     };

@@ -196,7 +196,7 @@ Game.prototype =
             this.primarySkillGraphics.drawRoundedRect(this.primaryGlassPanel.x, this.primaryGlassPanel.y, this.primaryGlassPanel.targetWidth, this.primaryGlassPanel.targetHeight, 4);
 
             // increase weapon heat
-            this.playerShip.heat(8);
+            this.playerShip.heat(9);
         }
         else
         {
@@ -242,8 +242,6 @@ Game.prototype =
         }
 
         // fire skill
-        
-        // TODO what about secondary weapon timer?
     },
     
     /**==========================================================================================================================

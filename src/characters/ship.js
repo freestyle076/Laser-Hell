@@ -173,7 +173,7 @@ Ship.prototype.constructor = Ship;
         
         // primary player ship skill
         var primaryDamage = 20;
-        var primaryMaxProjectiles = 30;
+        var primaryMaxProjectiles = 200;
         var primaryBulletSpeed = 400;
         var primaryFireRate = 1;
         var explosionFrames = new gameUtils.FramesInfo("expl_02_", 0, 23, "", 4);
@@ -189,7 +189,7 @@ Ship.prototype.constructor = Ship;
         
         // secondary player ship skill
         var secondaryDamage = 60;
-        var secondaryMaxProjectiles = 4;
+        var secondaryMaxProjectiles = 30;
         var secondaryBulletSpeed = 200;
         var secondaryFireRate = 2000;
         var playerSecondarySkill = new PlayerSecondarySkill(
@@ -254,16 +254,19 @@ Ship.prototype.constructor = Ship;
     *///=========================================================================================================================
     PlayerShip.prototype.heal = function (howMuch)
     {
+        console.log("healing ship: " + howMuch);
         this.health += howMuch;
-
+        console.log("after heal: " + this.health);
         if (this.health < 0)
         {
             this.health = 0;
+            console.log("health was negative, set to zero")
         }
 
         if (this.health > this.maxHealth)
         {
             this.health = this.maxHealth;
+            console.log("health was above max, set to max: " + this.health);
         }
 
         this.gameState.updateStatusBar('health', this.health, this.maxHealth);

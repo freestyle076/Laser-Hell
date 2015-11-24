@@ -69,7 +69,7 @@ Projectile.prototype.constructor = Projectile;
 Projectile.prototype.onProjectileOut = function(projectile)
 {
     // Kill if it is truly out of bounds (spawns above)
-    if(projectile.body.x + 200 > game.width || projectile.body.x < -200 || projectile.body.y > game.width + 200)
+    if (projectile.body.x > game.width + 200 || projectile.body.x < -200 || projectile.body.y > game.height + 200 || projectile.body.y < -200)
     {
         projectile.kill();
     }

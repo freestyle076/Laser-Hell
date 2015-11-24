@@ -58,6 +58,7 @@ HealthPowerup = function(x, y, health)
 {
     Powerup.call(this, 'health_powerup', 'powerups-atlas', x, y);
     
+    console.log("inside health powerup constructor, health: " + health);
     this.health = health;
 };
 
@@ -78,6 +79,7 @@ HealthPowerup.prototype.constructor = HealthPowerup;
 *///=========================================================================================================================
 HealthPowerup.prototype.applyPowerup = function(sourceShip)
 {
+    console.log("inside health powerup, health: " + this.health);
     sourceShip.heal(this.health);
 };
 

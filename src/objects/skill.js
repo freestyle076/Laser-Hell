@@ -124,6 +124,9 @@ PlayerPrimarySkill.prototype.upgrade = function()
         // Don't allow it to fire if it's before the cooldown
         if(this.game.time.time < this.nextFire) { return false; }
 
+        // don't allow it to fire if the ship heat is too high ( > 90% )
+        if (sourceShip.weaponHeat / sourceShip.maxWeaponHeat > .90) { return false; }
+
         // Originating x and y for the projectile
         var x = sourceShip.x;
         var y = sourceShip.y - 15;
@@ -254,7 +257,7 @@ DestroyerSkill = function(textureKey, projectileGroupName, damage, maxProjectile
     Skill.call(this, textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate);
     
     // Set all of the generated projectiles to scale as time passes
-    this.setAll('scaleSpeed', 0.05);
+    this.setAll('scaleSpeed', 0.025);
 };
 
 // Specify constructor of the destroyer's skill
@@ -282,7 +285,7 @@ DestroyerSkill.prototype.fire = function(sourceShip)
     var y = sourceShip.y + 20;
 
     // Get next projectile and fire it
-    this.getFirstExists(false).fire(x, y, 0, this.bulletSpeed, 0, 0);
+    this.getFirstExists(false).fire(x, y, 90, this.bulletSpeed, 0, 0);
 
     // Update the next time we can fire
     this.nextFire = this.game.time.time + this.fireRate;
@@ -313,8 +316,8 @@ SlasherSkill = function(textureKey, projectileGroupName, damage, maxProjectiles,
     Skill.call(this, textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate);
     
     // Make a pattern for the projectile that will vary the gravity of the projectile in a pattern
-    this.pattern = Phaser.ArrayUtils.numberArrayStep(-800, 800, 200);
-    this.pattern = this.pattern.concat(Phaser.ArrayUtils.numberArrayStep(800, -800, -200));
+    this.pattern = Phaser.ArrayUtils.numberArrayStep(-800, 600, 200);
+    this.pattern = this.pattern.concat(Phaser.ArrayUtils.numberArrayStep(800, -600, -200));
     this.patternIndex = 0;
 };
 
@@ -343,7 +346,7 @@ SlasherSkill.prototype.fire = function(sourceShip)
     var y = sourceShip.y + 20;
 
     // Get next projectile and fire it, using the pattern for the y gravity of the projectile
-    this.getFirstExists(false).fire(x, y, 0, this.bulletSpeed, 0, this.pattern[this.patternIndex]);
+    this.getFirstExists(false).fire(x, y, 90, this.bulletSpeed, this.pattern[this.patternIndex], 0); // currently this gravitates the projectile upwards, kinda cool
 
     // Move to the next pattern
     this.patternIndex++;
@@ -408,7 +411,7 @@ TankerSkill.prototype.fire = function(sourceShip)
     var y = sourceShip.y + 20;
 
     // Get next projectile and fire it
-    this.getFirstExists(false).fire(x, y, 0, this.bulletSpeed, 0, 0);
+    this.getFirstExists(false).fire(x, y, 90, this.bulletSpeed, 0, 8000);
 
     // Update the next time we can fire
     this.nextFire = this.game.time.time + this.fireRate;

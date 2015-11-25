@@ -42,8 +42,6 @@ Projectile = function(textureKey, atlasKey, x, y, damage, isObstacle)
     this.anchor.set(0.5);
     
     // Fires on out of bounds events so we can kill it when it's out of bounds, freeing it up for use in the projectile pool again.
-    this.checkWorldBounds = true;
-    this.events.onOutOfBounds.add(Projectile.prototype.onProjectileOut, game.state.states['Game']);
     this.exists = false;
     
     // Tells the projectile to rotate to face the direction it is moving in, as it moves.
@@ -60,20 +58,6 @@ Projectile.prototype = Object.create(Phaser.Sprite.prototype);
 Projectile.prototype.constructor = Projectile;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**==========================================================================================================================
-* @name ON PROJECTILE OUT
-* 
-* @description Kills the projectile if it goes left, right, or below the game bounds
-*///=========================================================================================================================
-Projectile.prototype.onProjectileOut = function(projectile)
-{
-    // Kill if it is truly out of bounds (spawns above)
-    if(projectile.body.x + 200 > game.width || projectile.body.x < -200 || projectile.body.y > game.width + 200)
-    {
-        projectile.kill();
-    }
-};
 
 /**==========================================================================================================================
 * @name FIRE
@@ -115,15 +99,23 @@ Projectile.prototype.update = function()
         this.rotation = Math.atan2(this.body.velocity.y, this.body.velocity.x);
     }
 
+    // Make the projectile bigger as time passes if needed
     if (this.scaleSpeed > 0)
     {
         this.scale.x += this.scaleSpeed;
         this.scale.y += this.scaleSpeed;
     }
     
+    // Rotate if it's an obstacle
     if(this.isObstacle)
     {
         this.angle += 1;
+    }
+    
+    // Kill if it is truly out of bounds (spawns above)
+    if(this.body.x + 200 > game.width || this.body.x < -200 || this.body.y > game.height + 200 || this.body.y < -200)
+    {
+        this.kill();
     }
 };
 

@@ -96,7 +96,7 @@ PlayerPrimarySkill.prototype.fire = function(sourceShip)
     if (this.game.time.time < this.nextFire) { return false; }
 
     // don't allow it to fire if the ship heat is too high ( > 90% )
-    if (sourceShip.weaponHeat / sourceShip.maxWeaponHeat > .90) { return false; }
+    if (sourceShip.weaponHeat / sourceShip.maxWeaponHeat > .95) { return false; }
 
     // Originating x and y for the projectile
     var x = sourceShip.x;

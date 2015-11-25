@@ -278,7 +278,7 @@ Game.prototype =
     addEnemiesAndObjects: function ()
     {
         // Helper variables to make and spawn enemies and objects
-        var maxEnemies = 10;
+        var maxEnemies = 2;
         var enemySpawnRate = 3000;
         var maxAsteroids = 15;
         var asteroidSpawnRate = 1500;

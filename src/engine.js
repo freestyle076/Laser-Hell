@@ -17,7 +17,8 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game'),
             playSound: true,
             playMusic: true
         },
-        musicPlayer;
+        musicPlayer,
+        soundPlayer;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

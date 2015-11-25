@@ -29,7 +29,7 @@
 Powerup = function(textureKey, atlasKey, x, y) 
 {
     // Create projectile sprite
-    Projectile.call(this, textureKey, atlasKey, x, y, 0, false);
+    Projectile.call(this, textureKey, atlasKey, x, y, 0, false, true);
 };
 
 // Inherits from projectile

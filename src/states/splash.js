@@ -76,7 +76,7 @@ Splash.prototype =
         this.addGameStates();
         
         // Start music
-        this.addMenuMusic();
+        this.addMusicAndSounds();
     },
    
     /**==========================================================================================================================
@@ -145,6 +145,8 @@ Splash.prototype =
         game.load.audio('menu-music', 'assets/sounds/music/menu-music.ogg');
         
         // Combat Sounds
+        game.load.audio('explosion-sound', 'assets/sounds/combat/explosion.ogg');
+        game.load.audio('laser-sound', 'assets/sounds/combat/laser.ogg');
     },
 
     /**==========================================================================================================================
@@ -224,14 +226,19 @@ Splash.prototype =
     },
    
     /**==========================================================================================================================
-    * @name ADD MENU MUSIC
+    * @name ADD MUSIC AND SOUNDS
     * 
     * @description Sets up the music player, adds the loaded game audio, and plays the menu music
     *///=========================================================================================================================
-    addMenuMusic: function() 
+    addMusicAndSounds: function() 
     {
         musicPlayer = game.sound;
         musicPlayer.play('menu-music', 1, true);
+        
+        soundPlayer = 
+        {
+            volume: 1
+        };
     }
 };
 

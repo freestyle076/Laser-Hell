@@ -185,10 +185,12 @@ Options.prototype =
         if(gameOptions.playSound)
         {
             target.text = 'Mute Sound';
+            soundPlayer.volume = 1;
         }
         else
         {
             target.text = 'Play Sound';
+            soundPlayer.volume = 0;
         }
     },
     

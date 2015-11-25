@@ -23,14 +23,16 @@
 * @param {float} x - x position of the projectile to spawn
 * @param {float} y - y position of the projectile to spawn
 * @param {float} damage - Damage that the projectile does
-* @param {bool} isObstacle- Whether or not it's an obstacle
+* @param {bool} isObstacle - [Optional] Whether or not it's an obstacle
+* @param {bool} isPowerup - [Optional] Whether or not it's a powerup
 *///=========================================================================================================================
-Projectile = function(textureKey, atlasKey, x, y, damage, isObstacle) 
+Projectile = function(textureKey, atlasKey, x, y, damage, isObstacle, isPowerup) 
 {
     // Set up attributes
     this.textureKey = textureKey;
     this.damage = damage;
-    this.isObstacle = isObstacle;
+    this.isObstacle = isObstacle || false;
+    this.isPowerup = isPowerup || false;
     
     // Create projectile sprite
     Phaser.Sprite.call(this, game, x, y, atlasKey, textureKey);
@@ -85,6 +87,12 @@ Projectile.prototype.fire = function(x, y, angle, speed, gx, gy)
     this.angle = angle + 90;
 
     this.body.gravity.set(gx, gy);
+    
+    // Play sound if it's a bullet
+    if(!this.isObstacle && !this.isPowerup)
+    {
+        musicPlayer.play('laser-sound', soundPlayer.volume, false);
+    }
 };
 
 /**==========================================================================================================================
@@ -147,6 +155,7 @@ Projectile.prototype.die = function()
         var explosion = spawningGroups.explosions.getFirstExists(false);
         explosion.reset(this.body.x, this.body.y);
         explosion.play('kaboom', 30, false, true);
+        musicPlayer.play('explosion-sound', soundPlayer.volume, false);
     }
 };
 

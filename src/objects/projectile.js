@@ -113,7 +113,7 @@ Projectile.prototype.update = function()
     }
 
     // Kill if it is truly out of bounds (spawns above)
-    if(this.body.x + 200 > game.width || this.body.x < -200 || this.body.y > game.height + 200 || this.body.y < -200)
+    if(this.body.x > game.width + 200 || this.body.x < -200 || this.body.y > game.height + 200 || this.body.y < -200)
     {
         this.kill();
     }

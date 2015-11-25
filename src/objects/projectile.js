@@ -105,13 +105,13 @@ Projectile.prototype.update = function()
         this.scale.x += this.scaleSpeed;
         this.scale.y += this.scaleSpeed;
     }
-    
+
     // Rotate if it's an obstacle
     if(this.isObstacle)
     {
         this.angle += 1;
     }
-    
+
     // Kill if it is truly out of bounds (spawns above)
     if(this.body.x + 200 > game.width || this.body.x < -200 || this.body.y > game.height + 200 || this.body.y < -200)
     {

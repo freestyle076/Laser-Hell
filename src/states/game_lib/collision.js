@@ -48,8 +48,16 @@ var collision =
     *///=========================================================================================================================
     enemyShip_projectile: function(enemy, projectile)
     {
+        console.log("==================BEFORE=");
+        console.log("Enemy.health: " + enemy.health);
+        console.log("Projectile.damage: " + projectile.damage);
+        
         // Apply damage
         projectile.applyDamage(enemy);
+        
+        console.log("==================AFTER=");
+        console.log("Enemy.health: " + enemy.health);
+        console.log("Projectile.damage: " + projectile.damage);
         
         // Kill the projectile
         projectile.die();

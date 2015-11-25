@@ -164,14 +164,11 @@ Splash.prototype =
         // Asteroids
         game.load.atlasJSONHash('asteroids-atlas', 'assets/images/game/asteroids.png', 'assets/images/game/asteroids.json');
         
-        // Projectiles
-        game.load.atlasJSONHash('projectiles-atlas', 'assets/images/game/projectiles.png', 'assets/images/game/projectiles.json');
-        
         // Pickups
         game.load.atlasJSONHash('powerups-atlas', 'assets/images/game/powerups.png', 'assets/images/game/powerups.json');
         
         // Ships and Projectiles
-        game.load.atlasJSONHash('ships-atlas', 'assets/images/game/ships-and-projectiles.png', 'assets/images/game/ships-and-projectiles.json');
+        game.load.atlasJSONHash('ships-and-projectiles-atlas', 'assets/images/game/ships-and-projectiles.png', 'assets/images/game/ships-and-projectiles.json');
         
         // Explosion
         game.load.spritesheet('kaboom', 'assets/images/game/explode.png', 96, 96);

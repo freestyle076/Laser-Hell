@@ -42,7 +42,7 @@ Skill = function(textureKey, projectileGroupName, damage, maxProjectiles, bullet
     // Create pool of projectiles
     for (var i = 0; i < maxProjectiles; i++)
     {
-        this.add(new Projectile(textureKey, "ships-atlas", 0, 0, damage, false), true);
+        this.add(new Projectile(textureKey, "ships-and-projectiles-atlas", 0, 0, damage, false), true);
     }
 
     return this;

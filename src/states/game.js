@@ -165,8 +165,8 @@ Game.prototype =
         var primaryKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         primaryKey.onDown.add(this.primaryFireKeyOnDown, this);
 
-        // ALT -> Secondary Fire
-        var secondaryKey = game.input.keyboard.addKey(Phaser.Keyboard.ALT);
+        // E -> Secondary Fire
+        var secondaryKey = game.input.keyboard.addKey(Phaser.Keyboard.E);
         secondaryKey.onDown.add(this.secondaryFireKeyOnDown, this);
     },
 

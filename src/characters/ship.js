@@ -29,7 +29,7 @@ Ship = function (game, x, y, mainSprite, maxHealth, speed, skills, group) {
 
     // Calls Phaser.Sprite constructor
     // Requires existing loaded image with key: spriteKey
-    Phaser.Sprite.call(this, game, x, y, 'ships-atlas', mainSprite);
+    Phaser.Sprite.call(this, game, x, y, 'ships-and-projectiles-atlas', mainSprite);
 
     this.anchor.setTo(0.5, 0.5);
 
@@ -145,8 +145,14 @@ Ship.prototype.constructor = Ship;
     *///=========================================================================================================================
     Ship.prototype.die = function ()
     {
+        // Spawn explosion
+        var explosion = spawningGroups.explosions.getFirstExists(false);
+        explosion.reset(this.body.x, this.body.y);
+        explosion.play('kaboom', 30, false, true);
+        musicPlayer.play('explosion-sound', soundPlayer.volume, false);
+
+        // Kill ship
         this.kill();
-        //this.animations.play('explosion');
     };
 
 // PLAYER SHIP

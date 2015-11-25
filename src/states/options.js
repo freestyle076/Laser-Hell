@@ -71,14 +71,14 @@ Options.prototype =
     {
         // WASD Key Sprite
        var wasdKeys = game.add.sprite(0, 0, 'ui-atlas', 'wasd-keys', this.hud);
-       wasdKeys.scale.setTo(1.4, 1.4);
+       wasdKeys.scale.setTo(1.8, 1.8);
        wasdKeys.anchor.setTo(0.5);
        wasdKeys.x = optionsPanelCenter.x;
        wasdKeys.y = optionsPanelCenter.y - 180;
        
        // ALT and Space Key Sprite
        var altSpaceKeys = game.add.sprite(0, 0, 'ui-atlas', 'alt-space-keys', this.hud);
-       altSpaceKeys.scale.setTo(1.4, 1.4);
+       altSpaceKeys.scale.setTo(1.8, 1.8);
        altSpaceKeys.anchor.setTo(0.5);
        altSpaceKeys.x = optionsPanelCenter.x;
        altSpaceKeys.y = optionsPanelCenter.y - 180 + wasdKeys.height;

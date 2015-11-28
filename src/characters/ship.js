@@ -152,7 +152,7 @@ Ship.prototype.constructor = Ship;
     /**==========================================================================================================================
     * @name DIE
     *
-    * @description Displays ship's explosion sprite, frees resources
+    * @description Displays ship's explosion sprite, removes from game world
     *///=========================================================================================================================
     Ship.prototype.die = function ()
     {
@@ -164,6 +164,9 @@ Ship.prototype.constructor = Ship;
 
         // Kill ship
         this.kill();
+
+        // reset health in case this ship object is recycled
+        this.shipHealth = this.maxHealth;
     };
 
 // PLAYER SHIP

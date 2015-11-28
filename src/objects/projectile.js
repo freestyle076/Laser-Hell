@@ -136,7 +136,7 @@ Projectile.prototype.update = function()
 *///=========================================================================================================================
 Projectile.prototype.applyDamage = function(damagedShip)
 {
-    damagedShip.takeDamage(this.damage);
+    damagedShip.heal(-this.damage);
 };
 
 /**==========================================================================================================================

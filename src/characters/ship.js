@@ -68,6 +68,32 @@ Ship.prototype.constructor = Ship;
     // --------------------------------------------------------------------------------------------------------------------------
 
     /**==========================================================================================================================
+    * @name HEAL
+    *  
+    * @param {float} howMuch - amount to modify ship's shipHealth by
+    *
+    * @description adds howMuch to the ship's shipHealth member
+    *///=========================================================================================================================
+    Ship.prototype.heal = function (howMuch)
+    {
+        // modify ship's health
+        this.shipHealth += howMuch;
+
+        // if below or at zero die 
+        if (this.shipHealth <= 0)
+        {
+            this.shipHealth = 0;
+        }
+
+        // if above max health set to max health
+        if (this.shipHealth > this.maxHealth)
+        {
+            this.shipHealth = this.maxHealth;
+        }
+
+    };
+
+    /**==========================================================================================================================
     * @name IS DEAD
     *
     * @description Checks if the ship is dead
@@ -122,20 +148,6 @@ Ship.prototype.constructor = Ship;
             this.y += this.speed;
         }
     };
-
-
-    /**==========================================================================================================================
-    * @name TAKE DAMAGE
-    *
-    * @description Reduces the ship's shipHealth
-    *
-    * @param {float} damage - amount by which to lower ship's shipHealth
-    *///=========================================================================================================================
-    Ship.prototype.takeDamage = function (damage)
-    {
-        this.shipHealth -= damage;
-    };
-
 
     /**==========================================================================================================================
     * @name DIE
@@ -230,7 +242,7 @@ Ship.prototype.constructor = Ship;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // SHIP FUNCTIONS
+    // PLAYER SHIP FUNCTIONS
     // --------------------------------------------------------------------------------------------------------------------------
 
     /**==========================================================================================================================
@@ -246,31 +258,6 @@ Ship.prototype.constructor = Ship;
 
         // cool weapon
         this.heat(-0.2);
-
-
-    };
-        
-    /**==========================================================================================================================
-    * @name HEAL
-    *  
-    * @param {float} howMuch - amount to modify ships shipHealth by
-    *
-    * @description adds howMuch to the ship's shipHealth member
-    *///=========================================================================================================================
-    PlayerShip.prototype.heal = function (howMuch)
-    {
-        this.shipHealth += howMuch;
-        if (this.shipHealth < 0)
-        {
-            this.shipHealth = 0;
-        }
-
-        if (this.shipHealth > this.maxHealth)
-        {
-            this.shipHealth = this.maxHealth;
-        }
-
-        this.gameState.updateStatusBar('health', this.shipHealth, this.maxHealth);
     };
 
     /**==========================================================================================================================

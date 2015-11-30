@@ -35,9 +35,6 @@ EnemyShip = function (game, x, y, mainSprite, explosionFrames, maxHealth, speed,
     this.bottomBoundary = game.height * .3;
     this.rightBoundary = game.width;
 
-    // start direction
-    this.currentDirection = gameUtils.getStartDirection();
-
     this.exists = false;
 }
 
@@ -63,6 +60,11 @@ EnemyShip.prototype.constructor = EnemyShip;
     EnemyShip.prototype.destroyerHealth = 75;
     EnemyShip.prototype.tankerHealth = 250;
     EnemyShip.prototype.slasherHealth = 100;
+
+    EnemyShip.prototype.seekPlayer = function ()
+    {
+        
+    };
 
 
 // DESTROYER
@@ -105,6 +107,9 @@ Destroyer = function (game, x, y, group)
     // call super class constructor
     EnemyShip.call(this, game, x, y, mainSprite, maxHealth, speed, [destroyerSkill], group);
 
+    // yHover variable, ships hover position
+    this.yHover = Math.random() * this.bottomBoundary; 
+    this.goingRight = false; //horizontal direction
     // scale destroyer sprite
     this.scale.setTo(0.5, 0.5);
 }
@@ -118,8 +123,24 @@ Destroyer.prototype.constructor = Destroyer;
     *///=========================================================================================================================
     Destroyer.prototype.act = function ()
     {
-        // choose hover height at construction
-        // hover in a manner that gravitates towards player
+        var isDown = false;
+        var isUp = false;
+
+        // if above (less than) yHover go down
+        if (this.body.y < this.yHover)
+        {
+            // move down
+            isDown = true;
+        }
+
+        // if below (greater than) yHover go up
+        if (this.body.y < this.yHover)
+        {
+            // move down
+            isUp = true;
+        }
+
+        
 
         //this.move(false, false, true, false);
         this.skills[0].fire(this);

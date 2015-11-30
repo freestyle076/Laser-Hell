@@ -27,6 +27,10 @@ var collision =
     *///=========================================================================================================================
     enemyShip_playerShip: function(enemy, player)
     {
+        
+        // set health status bar of player to 0
+        game.state.states['Game'].updateStatusBar('health', 0, player.maxHealth);
+
         // Kill enemy and player
         enemy.die();
         player.die();
@@ -48,16 +52,16 @@ var collision =
     *///=========================================================================================================================
     enemyShip_projectile: function(enemy, projectile)
     {
-        console.log("==================BEFORE=");
-        console.log("Enemy.health: " + enemy.health);
-        console.log("Projectile.damage: " + projectile.damage);
+        //console.log("==================BEFORE=");
+        //console.log("Enemy.health: " + enemy.health);
+        //console.log("Projectile.damage: " + projectile.damage);
         
         // Apply damage
         projectile.applyDamage(enemy);
         
-        console.log("==================AFTER=");
-        console.log("Enemy.health: " + enemy.health);
-        console.log("Projectile.damage: " + projectile.damage);
+        //console.log("==================AFTER=");
+        //console.log("Enemy.health: " + enemy.health);
+        //console.log("Projectile.damage: " + projectile.damage);
         
         // Kill the projectile
         projectile.die();
@@ -86,15 +90,16 @@ var collision =
         
         // Kill the projectile
         projectile.die();
-        
+
         // Update health bar of player
-        game.state.states['Game'].updateStatusBar("health", player.health, player.maxHealth);
+        game.state.states['Game'].updateStatusBar('health', player.shipHealth, player.maxHealth);
         
+        // if the player is zero health then timeout to game over
         if(player.isDead())
         {
-            // Kill the player
+            // explode and remove player ship
             player.die();
-            
+
             // Set a short timeout so you can see the explosions
             setTimeout(function() 
             {

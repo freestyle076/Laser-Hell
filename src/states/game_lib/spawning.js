@@ -64,9 +64,9 @@ var spawning =
             
             switch(randEnemyType)
             {
-                case 1: spawningGroups.enemies.add(new Destroyer(game, 0, 0)); break;
+                case 1: spawningGroups.enemies.add(new Slasher(game, 0, 0)); break;
                 case 2: spawningGroups.enemies.add(new Slasher(game, 0, 0)); break;
-                case 3: spawningGroups.enemies.add(new Tanker(game, 0, 0)); break;
+                case 3: spawningGroups.enemies.add(new Slasher(game, 0, 0)); break;
                 default: break;
             }
         }

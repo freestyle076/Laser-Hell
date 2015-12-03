@@ -55,7 +55,8 @@ var collision =
         //console.log("==================BEFORE=");
         //console.log("Enemy.health: " + enemy.health);
         //console.log("Projectile.damage: " + projectile.damage);
-        
+        console.log("collision");
+
         // Apply damage
         projectile.applyDamage(enemy);
         

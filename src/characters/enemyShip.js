@@ -55,15 +55,83 @@ EnemyShip.prototype.constructor = EnemyShip;
     *///=========================================================================================================================
     EnemyShip.prototype.act = function ()
     {
-        
-    };
-    EnemyShip.prototype.destroyerHealth = 75;
-    EnemyShip.prototype.tankerHealth = 250;
-    EnemyShip.prototype.slasherHealth = 100;
+        // movement variables
+        var down = false;
+        var up = false;
+        var right = false;
+        var left = false;
 
-    EnemyShip.prototype.seekPlayer = function ()
+        // horizontal movement decision
+        // 0: none; 1: left; 2: right;
+        var horizontalDecision = this.horizontalMovement();
+
+        // decode horizontal decision return
+        switch (horizontalDecision)
+        {
+            case 1: left = true; break;
+            case 2: right = true; break;
+        }
+
+        // vertical movement decision
+        // 0: none; 1: up; 2: down;
+        var verticalDecision = this.verticalMovement();
+
+        // decode vertical decision return
+        switch (verticalDecision)
+        {
+            case 1: up = true; break;
+            case 2: down = true; break;
+        }
+
+        // move according to horizontal/vertical decisions
+        this.move(up, right, down, left);
+
+        // fire if decided to fire
+        if (this.shouldFire()) this.skills[0].fire(this);
+
+    };
+
+    /**==========================================================================================================================
+    * @name HORIZONTAL MOVEMENT
+    *  
+    * @description ABSTRACT determines which horizontal movement action the ship should take
+    *
+    * @returns {int} - 0 for no movement, 1 for left, 2 for right
+    *///=========================================================================================================================
+    EnemyShip.prototype.horizontalMovement = function () { };
+
+    /**==========================================================================================================================
+    * @name VERTICAL MOVEMENT
+    *  
+    * @description ABSTRACT determines which vertical movement action the ship should take
+    *
+    * @returns {int} - 0 for no movement, 1 for up, 2 for down
+    *///=========================================================================================================================
+    EnemyShip.prototype.verticalMovement = function () { };
+
+    /**==========================================================================================================================
+    * @name SHOULD FIRE
+    *  
+    * @description ABSTRACT determines if the ship should fire, does not consider if the ship CAN fire
+    *
+    * @returns {bool} - true if should fire, false otherwise
+    *///=========================================================================================================================
+    EnemyShip.prototype.shouldFire = function () { };
+
+    /**==========================================================================================================================
+    * @name PLAYER IS TO LEFT
+    *  
+    * @description determines if the player ship's x position is less than this ship's x position
+    *
+    * @returns {bool} - true if player ship is to left of enemy ship, false otherwise
+    *///=========================================================================================================================
+    EnemyShip.prototype.playerIsToLeft = function ()
     {
+        // player ship's x position
+        var playerX = game.state.states['Game'].playerShip.x;
         
+        // return whether player x is less than this ship's x
+        return (playerX < this.x);
     };
 
 
@@ -107,44 +175,79 @@ Destroyer = function (game, x, y, group)
     // call super class constructor
     EnemyShip.call(this, game, x, y, mainSprite, maxHealth, speed, [destroyerSkill], group);
 
-    // yHover variable, ships hover position
+    // yHover variable, ship's vertical hover position
     this.yHover = Math.random() * this.bottomBoundary; 
-    this.goingRight = false; //horizontal direction
+    this.goingRight = false; //horizontal direction tracker
+
+    // firing range, the max difference between player ship x and destroyer x for deciding to fire
+    this.firingRange = 10;
+
     // scale destroyer sprite
     this.scale.setTo(0.5, 0.5);
 }
 Destroyer.prototype = Object.create(EnemyShip.prototype);
 Destroyer.prototype.constructor = Destroyer;
 
+
     /**==========================================================================================================================
-    * @name ACT
+    * @name HORIZONTAL MOVEMENT
     *  
-    * @description determines how the enemy ship should act and performs the action
+    * @description OVERRIDE determines which horizontal movement action the ship should take
+    *
+    * @returns {int} - 0 for no movement, 1 for left, 2 for right
     *///=========================================================================================================================
-    Destroyer.prototype.act = function ()
+    Destroyer.prototype.horizontalMovement = function ()
     {
-        var isDown = false;
-        var isUp = false;
+        // default to going right
+        this.goingRight = false;
 
-        // if above (less than) yHover go down
-        if (this.body.y < this.yHover)
+        // seek the player
+        if (this.playerIsToLeft()) return 1;
+
+        else
         {
-            // move down
-            isDown = true;
+            this.goingRight = true;
+            return 2;
         }
+    };
 
-        // if below (greater than) yHover go up
-        if (this.body.y < this.yHover)
-        {
-            // move down
-            isUp = true;
-        }
+    /**==========================================================================================================================
+    * @name VERTICAL MOVEMENT
+    *  
+    * @description OVERRIDE determines which vertical movement action the ship should take
+    *
+    * @returns {int} - 0 for no movement, 1 for up, 2 for down
+    *///=========================================================================================================================
+    Destroyer.prototype.verticalMovement = function ()
+    {
+        // if lower than yHover go up
+        if (this.y > this.yHover) return 1;
 
-        
+        // else if higher than yHover go down
+        else if (this.y < this.yHover) return 2;
 
-        //this.move(false, false, true, false);
-        this.skills[0].fire(this);
-    }
+        // else stay put
+        else return 0;
+    };
+
+    /**==========================================================================================================================
+    * @name SHOULD FIRE
+    *  
+    * @description determines if the ship should fire, does not consider if the ship CAN fire
+    *
+    * @returns {bool} - true if should fire, false otherwise
+    *///=========================================================================================================================
+    Destroyer.prototype.shouldFire = function ()
+    {
+        // player's X position
+        var playerX = game.state.states['Game'].playerShip.x;
+
+        // return true if x difference is within firingRange
+        if (Math.abs(playerX - this.x) <= this.firingRange) return true;
+
+        // else return false
+        else return false;
+    };
 
 // SLASHER
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -172,7 +275,7 @@ Slasher = function (game, x, y, skills, group)
     var damage = 10;
     var maxProjectiles = 50;
     var bulletSpeed = 500;
-    var fireRate = 300;
+    var fireRate = 3000;
     var explosionFrames = new gameUtils.FramesInfo("expl_02_", 0, 23, "", 4);
     var slasherSkill = new SlasherSkill(
         "green_laser_01",
@@ -194,18 +297,40 @@ Slasher.prototype = Object.create(EnemyShip.prototype);
 Slasher.prototype.constructor = Slasher;
 
     /**==========================================================================================================================
-    * @name ACT
+    * @name HORIZONTAL MOVEMENT
     *  
-    * @description determines how the enemy ship should act and performs the action
+    * @description OVERRIDE determines which horizontal movement action the ship should take
+    *
+    * @returns {int} - 0 for no movement, 1 for left, 2 for right
     *///=========================================================================================================================
-    Slasher.prototype.act = function ()
+    Slasher.prototype.horizontalMovement = function ()
     {
-        // move in jagged pattern upright,upleft,downright,downleft 
-        // choosing horizontal directions towards the player
+        return 0;
+    };
 
-        //this.move(false, false, true, false);
-        this.skills[0].fire(this);
-    }
+    /**==========================================================================================================================
+    * @name VERTICAL MOVEMENT
+    *  
+    * @description OVERRIDE determines which vertical movement action the ship should take
+    *
+    * @returns {int} - 0 for no movement, 1 for up, 2 for down
+    *///=========================================================================================================================
+    Slasher.prototype.verticalMovement = function ()
+    {
+        return 0;
+    };
+
+    /**==========================================================================================================================
+    * @name SHOULD FIRE
+    *  
+    * @description determines if the ship should fire, does not consider if the ship CAN fire
+    *
+    * @returns {bool} - true if should fire, false otherwise
+    *///=========================================================================================================================
+    Slasher.prototype.shouldFire = function ()
+    {
+        return true;
+    };
 
 // TANKER
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

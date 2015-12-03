@@ -316,8 +316,13 @@ SlasherSkill = function(textureKey, projectileGroupName, damage, maxProjectiles,
     Skill.call(this, textureKey, projectileGroupName, damage, maxProjectiles, bulletSpeed, fireRate);
     
     // Make a pattern for the projectile that will vary the gravity of the projectile in a pattern
-    this.pattern = Phaser.ArrayUtils.numberArrayStep(-800, 600, 200);
-    this.pattern = this.pattern.concat(Phaser.ArrayUtils.numberArrayStep(800, -600, -200));
+    this.pattern = Phaser.ArrayUtils.numberArrayStep(-400, 300, 100);
+    //this.pattern = this.pattern.concat(Phaser.ArrayUtils.numberArrayStep(400, -300, -100));
+
+    // between bullet fire rate to seperate bullets of a single burst
+    this.intermediateFireRate = 100;
+
+    // index of gravity pattern
     this.patternIndex = 0;
 };
 
@@ -339,26 +344,29 @@ SlasherSkill.prototype.constructor = SlasherSkill;
 SlasherSkill.prototype.fire = function(sourceShip)
 {
     // Don't allow it to fire if it's before the cooldown
-    if(this.game.time.time < this.nextFire) { return false; }
+    if (this.game.time.time < this.nextFire) { return false; }
 
     // Originating x and y for the projectile
     var x = sourceShip.x;
     var y = sourceShip.y + 20;
 
+    console.log("firing with pattern: " + this.patternIndex)
     // Get next projectile and fire it, using the pattern for the y gravity of the projectile
     this.getFirstExists(false).fire(x, y, 90, this.bulletSpeed, this.pattern[this.patternIndex], 0); // currently this gravitates the projectile upwards, kinda cool
 
     // Move to the next pattern
     this.patternIndex++;
 
-    // Reset if at the end of the pattern
+    // if at the end of the pattern reset index and set next fire
     if (this.patternIndex === this.pattern.length)
     {
+        // reset index
         this.patternIndex = 0;
-    }
 
-    // Update the next time we can fire
-    this.nextFire = this.game.time.time + this.fireRate;
+        // Update the next time we can fire
+        // do this only at the end of the pattern array so that each fire is a burst of bullets
+        this.nextFire = this.game.time.time + this.fireRate;
+    }
 
     return true;
 };

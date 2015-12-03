@@ -58,7 +58,7 @@ HealthPowerup = function(x, y, health)
 {
     Powerup.call(this, 'health_powerup', 'powerups-atlas', x, y);
     
-    this.health = health;
+    this.healthAmount = health;
 };
 
 // Inherits from powerup
@@ -78,7 +78,10 @@ HealthPowerup.prototype.constructor = HealthPowerup;
 *///=========================================================================================================================
 HealthPowerup.prototype.applyPowerup = function(sourceShip)
 {
-    sourceShip.heal(this.health);
+    sourceShip.heal(this.healthAmount);
+
+    // Update health bar of player
+    game.state.states['Game'].updateStatusBar('health', sourceShip.shipHealth, sourceShip.maxHealth);
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

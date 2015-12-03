@@ -76,6 +76,7 @@ Ship.prototype.constructor = Ship;
     *///=========================================================================================================================
     Ship.prototype.heal = function (howMuch)
     {
+        console.log("ship being healed: " + howMuch);
         // modify ship's health
         this.shipHealth += howMuch;
 
@@ -120,31 +121,47 @@ Ship.prototype.constructor = Ship;
     {
         // check all 8 directions, most complex (hard to satisfy) first
         if (isUp && isRight) {
+            this.body.x += this.speed / 1.5;
+            this.body.y -= this.speed / 1.5;
+
             this.x += this.speed / 1.5;
             this.y -= this.speed / 1.5;
         }
         else if (isUp && isLeft) {
+            this.body.x -= this.speed / 1.5;
+            this.body.y -= this.speed / 1.5;
+
             this.x -= this.speed / 1.5;
             this.y -= this.speed / 1.5;
         }
         else if (isDown && isLeft) {
+            this.body.x -= this.speed / 1.5;
+            this.body.y += this.speed / 1.5;
+
             this.x -= this.speed / 1.5;
             this.y += this.speed / 1.5;
         }
         else if (isDown && isRight) {
+            this.body.x += this.speed / 1.5;
+            this.body.y += this.speed / 1.5;
+
             this.x += this.speed / 1.5;
             this.y += this.speed / 1.5;
         }
         else if (isRight) {
+            this.body.x += this.speed;
             this.x += this.speed;
         }
         else if (isUp) {
+            this.body.y -= this.speed;
             this.y -= this.speed;
         }
         else if (isLeft) {
+            this.body.x -= this.speed;
             this.x -= this.speed;
         }
         else if (isDown) {
+            this.body.y += this.speed;
             this.y += this.speed;
         }
     };
@@ -260,7 +277,7 @@ Ship.prototype.constructor = Ship;
         this.move(this.gameState.wKey.isDown, this.gameState.dKey.isDown, this.gameState.sKey.isDown, this.gameState.aKey.isDown);
 
         // cool weapon
-        this.heat(-0.2);
+        this.heat(-0.3);
     };
 
     /**==========================================================================================================================

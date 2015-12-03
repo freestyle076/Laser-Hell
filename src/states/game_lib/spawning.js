@@ -15,7 +15,7 @@ var spawningGroups = { enemies: null, asteroids: null, powerups: null, explosion
 // Associated variables 
 var spawningVars = 
 {
-    spawnY : 50,
+    spawnY : -50,
     minX : 5,
     maxX : game.width - 50,
     asteroidAngleMin: 45,
@@ -49,7 +49,7 @@ var spawning =
     {
         // Helper values
         var numEnemyTypes = 3;
-        var randEnemyType = 0;
+        var enemyType = 0;
         
         // Make enemy group
         spawningGroups.enemies = game.add.group();
@@ -60,13 +60,13 @@ var spawning =
         // Create random enemies and add them to the group
         for(var i = 0; i < maxEnemies; i++)
         {
-            randEnemyType = game.rnd.integerInRange(1, numEnemyTypes);
+            enemyType = i % 3;
             
-            switch(randEnemyType)
+            switch (enemyType)
             {
-                case 1: spawningGroups.enemies.add(new Slasher(game, 0, 0)); break;
+                case 0: spawningGroups.enemies.add(new Destroyer(game, 0, 0)); break;
+                case 1: spawningGroups.enemies.add(new Tanker(game, 0, 0)); break;
                 case 2: spawningGroups.enemies.add(new Slasher(game, 0, 0)); break;
-                case 3: spawningGroups.enemies.add(new Slasher(game, 0, 0)); break;
                 default: break;
             }
         }

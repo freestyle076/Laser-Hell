@@ -132,9 +132,9 @@ PlayerPrimarySkill.prototype.upgrade = function()
         var y = sourceShip.y - 15;
 
         // Get next few projectiles and fire them around
-        this.getFirstExists(false).fire(x, y, 225, this.bulletSpeed, 0, 0);
+        this.getFirstExists(false).fire(x, y, 260, this.bulletSpeed, 0, 0);
         this.getFirstExists(false).fire(x, y, 270, this.bulletSpeed, 0, 0);
-        this.getFirstExists(false).fire(x, y, 315, this.bulletSpeed, 0, 0);
+        this.getFirstExists(false).fire(x, y, 280, this.bulletSpeed, 0, 0);
 
         // Update the next time we can fire
         this.nextFire = this.game.time.time + this.fireRate;
@@ -220,9 +220,9 @@ PlayerSecondarySkill.prototype.upgrade = function()
         var y = sourceShip.y - 15;
 
         // Get next few projectiles and fire them around
-        this.getFirstExists(false).fire(x, y, 225, this.bulletSpeed, 0, 0);
+        this.getFirstExists(false).fire(x, y, 250, this.bulletSpeed, 0, 0);
         this.getFirstExists(false).fire(x, y, 270, this.bulletSpeed, 0, 0);
-        this.getFirstExists(false).fire(x, y, 315, this.bulletSpeed, 0, 0);
+        this.getFirstExists(false).fire(x, y, 290, this.bulletSpeed, 0, 0);
 
         // Update the next time we can fire
         this.nextFire = this.game.time.time + this.fireRate;
@@ -317,7 +317,6 @@ SlasherSkill = function(textureKey, projectileGroupName, damage, maxProjectiles,
     
     // Make a pattern for the projectile that will vary the gravity of the projectile in a pattern
     this.pattern = Phaser.ArrayUtils.numberArrayStep(-400, 300, 100);
-    //this.pattern = this.pattern.concat(Phaser.ArrayUtils.numberArrayStep(400, -300, -100));
 
     // between bullet fire rate to seperate bullets of a single burst
     this.intermediateFireRate = 100;
@@ -350,7 +349,6 @@ SlasherSkill.prototype.fire = function(sourceShip)
     var x = sourceShip.x;
     var y = sourceShip.y + 20;
 
-    console.log("firing with pattern: " + this.patternIndex)
     // Get next projectile and fire it, using the pattern for the y gravity of the projectile
     this.getFirstExists(false).fire(x, y, 90, this.bulletSpeed, this.pattern[this.patternIndex], 0); // currently this gravitates the projectile upwards, kinda cool
 

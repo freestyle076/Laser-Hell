@@ -56,9 +56,6 @@ Game.prototype =
     *///=========================================================================================================================
     update: function()
     {
-        // Make enemies act
-        spawningGroups.enemies.callAllExists('act', true);
-        
         // Get player ship so we can still get it out of scope
         var thisPlayerShip = this.playerShip;
         
@@ -92,6 +89,9 @@ Game.prototype =
             // Player
             game.physics.arcade.overlap(thisPlayerShip, asteroid, collision.playerShip_projectile, null, this);
         });
+
+        // Make enemies act
+        spawningGroups.enemies.callAllExists('act', true);
     },
         
     
@@ -257,9 +257,9 @@ Game.prototype =
     addPlayerShip: function () 
     {
         // visible parameters
-        var playerMaxHealth = 100;
+        var playerMaxHealth = 150;
         var playerMaxWeaponHeat = 100;
-        var playerSpeed = 7;
+        var playerSpeed = 3.5;
         var startX = 400;
         var startY = 400;
 
@@ -278,8 +278,8 @@ Game.prototype =
     addEnemiesAndObjects: function ()
     {
         // Helper variables to make and spawn enemies and objects
-        var maxEnemies = 2;
-        var enemySpawnRate = 3000;
+        var maxEnemies = 12;
+        var enemySpawnRate = 2500;
         var maxAsteroids = 15;
         var asteroidSpawnRate = 1500;
         var maxPowerups = 20;
